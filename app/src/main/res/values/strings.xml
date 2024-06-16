@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Group Eventer</string>
+    <string name="event_list">События</string>
+    <string name="my_time">Мое время</string>
+    <string name="settings">Настройки</string>
+    <string name="auth">Авторизация</string>
+    <string name="tutorial">Обучение</string>
+    <string name="home">Домашний экран</string>
+</resources>
