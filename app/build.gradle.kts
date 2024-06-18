@@ -58,6 +58,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // firebase
     implementation(platform(libs.firebase.bom))
@@ -68,7 +69,6 @@ dependencies {
 
     // navigation, compose
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.material)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 

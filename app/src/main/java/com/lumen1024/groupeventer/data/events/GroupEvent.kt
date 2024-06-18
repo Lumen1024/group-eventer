@@ -1,4 +1,7 @@
-package com.lumen1024.groupeventer.data
+package com.lumen1024.groupeventer.data.events
+
+import com.lumen1024.groupeventer.data.Comment
+import com.lumen1024.groupeventer.data.TimeRange
 
 data class GroupEvent(
     val id: String = "",

@@ -2,19 +2,19 @@ package com.lumen1024.groupeventer.screen.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -23,9 +23,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -34,15 +34,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
-import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.firestore
 import com.lumen1024.groupeventer.MainViewModel
-import com.lumen1024.groupeventer.data.GroupEvent
-import com.lumen1024.groupeventer.events.EventsScreen
+import com.lumen1024.groupeventer.data.events.GroupEvent
 import com.lumen1024.groupeventer.screen.Screen
+import com.lumen1024.groupeventer.screen.home.events.EventsScreen
 
 @Composable
-fun HomeScreen(viewmodel: MainViewModel = viewModel()) {
+fun HomeScreen(upNavController: NavController,viewmodel: MainViewModel = viewModel()) {
     val navController = rememberNavController()
     val fabVisibility = remember { mutableStateOf(true) }
     val dialogVisibility = remember { mutableStateOf(false) }
@@ -75,7 +74,7 @@ fun HomeScreen(viewmodel: MainViewModel = viewModel()) {
         ) {
             composable(Screen.EventList.route) { EventsScreen() }
             composable(Screen.MyTime.route) { ProfileScreen() }
-            composable(Screen.Settings.route) { SettingsScreen() }
+            composable(Screen.Settings.route) { SettingsScreen(navController = upNavController) }
         }
     }
 }
@@ -103,10 +102,12 @@ fun AddDialog(
             TextButton(
                 onClick = {
                     val db = Firebase.firestore
-                    db.collection("events").add(GroupEvent(
+                    db.collection("events").add(
+                        GroupEvent(
                         name = "ded",
                         description = "lolik",
-                    ))
+                    )
+                    )
                     onConfirmation()
                 }
             ) {
@@ -126,9 +127,10 @@ fun AddDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(modifier: Modifier = Modifier) {
-    TopAppBar(title = { Text(text = "ded") })
+    //TopAppBar(title = { Text(text = "ded") })
 }
 
 @Composable
@@ -139,15 +141,15 @@ fun MainBottomBar(navController: NavHostController, fabVisibility: MutableState<
         Screen.Settings,
     )
 
-    BottomNavigation {
+    NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         items.forEach { screen ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 icon = {
                     when (screen) {
                         is Screen.EventList -> Icon(
-                            Icons.AutoMirrored.Filled.List,
+                            Icons.Default.Home,
                             ""
                         )
 

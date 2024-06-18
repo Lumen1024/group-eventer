@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.data
+package com.lumen1024.groupeventer.helper
 
 import java.time.Instant
 import java.time.ZoneId

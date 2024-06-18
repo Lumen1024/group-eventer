@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.events
+package com.lumen1024.groupeventer.screen.home.events
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.data.GroupEvent
-import com.lumen1024.groupeventer.data.TimeRangeFormatter
+import com.lumen1024.groupeventer.data.events.GroupEvent
+import com.lumen1024.groupeventer.helper.TimeRangeFormatter
 import com.lumen1024.groupeventer.helper.quantityStringResource
 
 @Composable
@@ -33,30 +33,19 @@ fun EventsScreen(viewModel: EventsViewModel = viewModel()) {
     ) {
         items(state.value.eventList)
         {
-            EventCard(event = it)
+            GroupEventCard(event = it)
         }
 
     }
 }
 
-/*
-    todo: EventCard
-    card color depends of status
-    timing:
-        name
-        time range
-        duration
-        user range answer indicator
-    voting:
-
-*/
 @Composable
 fun EventCard(event: GroupEvent) {
     val timeFrom = TimeRangeFormatter.format(event.acceptedRange.start)
     val timeTo = TimeRangeFormatter.format(
         event.acceptedRange.end
     )
-    val duration = quantityStringResource(id = R.plurals.hour, quantity = 1) //pluralFormat(LocalContext.current, 3, "hour", Locale(androidx.compose.ui.text.intl.Locale.current.toLanguageTag()))
+    val duration = quantityStringResource(id = R.plurals.hour, quantity = 1)
 
     Card(
         modifier = Modifier
@@ -66,7 +55,7 @@ fun EventCard(event: GroupEvent) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(8.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

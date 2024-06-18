@@ -1,21 +1,47 @@
 package com.lumen1024.groupeventer.screen.home
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.lumen1024.groupeventer.data.AuthService
+import com.lumen1024.groupeventer.screen.Screen
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val authService: AuthService
+) : ViewModel() {
+
+    fun logout(navController: NavController) {
+        viewModelScope.launch {
+            authService.logout()
+            navController.navigate(Screen.Auth.route)
+        }
+    }
+}
 
 @Composable
-fun SettingsScreen() {
-    Box(modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center){
-        Icon(imageVector = Icons.Filled.Settings, contentDescription = "", modifier = Modifier.size(200.dp))
+fun SettingsScreen(
+    navController: NavController,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = { viewModel.logout(navController) })
+        {
+            Text(text = "Logout")
+        }
     }
 }
