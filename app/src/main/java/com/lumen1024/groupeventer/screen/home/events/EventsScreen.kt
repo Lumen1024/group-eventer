@@ -28,7 +28,7 @@ fun EventsScreen(viewModel: EventsViewModel = viewModel()) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 5.dp, top = 10.dp, end = 5.dp),
+            .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(state.value.eventList)

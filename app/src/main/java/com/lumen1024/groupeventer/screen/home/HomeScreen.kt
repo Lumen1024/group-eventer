@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -35,13 +34,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.lumen1024.groupeventer.MainViewModel
 import com.lumen1024.groupeventer.data.events.GroupEvent
 import com.lumen1024.groupeventer.screen.Screen
 import com.lumen1024.groupeventer.screen.home.events.EventsScreen
 
 @Composable
-fun HomeScreen(upNavController: NavController,viewmodel: MainViewModel = viewModel()) {
+fun HomeScreen(upNavController: NavController) {
     val navController = rememberNavController()
     val fabVisibility = remember { mutableStateOf(true) }
     val dialogVisibility = remember { mutableStateOf(false) }

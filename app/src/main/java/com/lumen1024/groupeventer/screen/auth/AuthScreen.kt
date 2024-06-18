@@ -28,9 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.screen.components.EmailTextField
-import com.lumen1024.groupeventer.screen.components.NameTextField
-import com.lumen1024.groupeventer.screen.components.PasswordTextField
+import com.lumen1024.groupeventer.components.EmailTextField
+import com.lumen1024.groupeventer.components.NameTextField
+import com.lumen1024.groupeventer.components.PasswordTextField
 
 @Composable
 fun AuthScreen(

@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.lumen1024.groupeventer.screen.auth.AuthScreen
 import com.lumen1024.groupeventer.screen.auth.AuthViewModel
 import com.lumen1024.groupeventer.screen.home.HomeScreen
+import com.lumen1024.groupeventer.screen.splash.SplashScreen
 
 @Composable
 fun MainNavGraph() {

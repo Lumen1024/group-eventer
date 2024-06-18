@@ -1,12 +1,14 @@
 package com.lumen1024.groupeventer.screen.home.events
 
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
@@ -17,8 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,9 +28,8 @@ import com.lumen1024.groupeventer.data.events.GroupEvent
 
 @Composable
 fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
-
     Card(modifier = modifier) {
-        Column(modifier = modifier.padding(10.dp)) {
+        Column(modifier = modifier.padding(20.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -42,14 +43,10 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                     Icon(Icons.Default.Person, contentDescription = "", modifier = modifier.size(16.dp))
                     Text(text = "3/5", modifier = Modifier.padding(end = 20.dp))
                     Text(text = "Голосование", modifier = Modifier.padding(end = 5.dp))
-                    Canvas(modifier = Modifier.size(20.dp)) {
-                        drawCircle(
-                            color = Color(0xFF4ED239),
-                            radius = 8.dp.toPx(),
-                            center = center,
-                            style = Fill
-                        )
-                    }
+                    Box(modifier = Modifier
+                        .size(16.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF4ED239)))
                 }
             }
             Text(text = event.name, modifier = Modifier.padding(vertical = 20.dp), fontSize = 20.sp, color = Color.Black)

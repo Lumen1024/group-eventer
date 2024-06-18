@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +16,8 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = Pink80
 )
 
+
+
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
@@ -32,6 +33,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+
 
 @Composable
 fun GroupEventerTheme(

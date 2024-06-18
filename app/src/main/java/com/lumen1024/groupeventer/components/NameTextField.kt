@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.screen.components
+package com.lumen1024.groupeventer.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons

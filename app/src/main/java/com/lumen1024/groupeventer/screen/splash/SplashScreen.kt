@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.screen
+package com.lumen1024.groupeventer.screen.splash
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.lumen1024.groupeventer.data.AuthService
+import com.lumen1024.groupeventer.screen.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
