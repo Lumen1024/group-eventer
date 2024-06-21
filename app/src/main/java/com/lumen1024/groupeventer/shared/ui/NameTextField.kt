@@ -1,24 +1,44 @@
 package com.lumen1024.groupeventer.shared.ui
 
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.ImeAction
 import com.lumen1024.groupeventer.R
+import com.lumen1024.groupeventer.pages.auth.model.NameErrorState
 
 @Composable
-fun NameTextField(value: String, onChange: (it: String) -> Unit) {
-    TextField(
+fun NameTextField(
+    value: String,
+    onChange: (it: String) -> Unit,
+    nameErrorState: NameErrorState,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         label = { Text(text = stringResource(R.string.name)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Person, "Email") },
-        modifier = Modifier.height(56.dp),
+        modifier = Modifier,
         onValueChange = onChange,
         value = value,
+        singleLine = true,
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+        isError = nameErrorState != NameErrorState.Normal,
+        supportingText = {
+            when(nameErrorState)
+            {
+                NameErrorState.Normal -> {}
+                NameErrorState.Empty -> Text(stringResource(R.string.empty_field))
+            }
+        }
     )
 }

@@ -5,4 +5,11 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="name">Name</string>
+
+    <string name="wrong_format_email">Wrong email format</string>
+    <string name="incorrect_credential">Incorrect password or email</string>
+    <string name="unknown_auth_exception">Unknown authentication exception</string>
+    <string name="short_password">You password is too short</string>
+    <string name="email_already_exist">User with this email already exist</string>
+    <string name="empty_field">This field must be filled</string>
 </resources>

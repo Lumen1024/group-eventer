@@ -17,13 +17,9 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,76 +34,76 @@ import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 fun AuthScreen(
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-
-    val isRegister = selectedTabIndex == 1
-
-    val isLoading = viewModel.isLoading.collectAsState()
-
-    val handleAuth = {
-        if (isRegister) {
-            viewModel.handleRegister(email, name, password)
-        } else {
-            viewModel.handleLogin(email, password)
-        }
-    }
+    val state = viewModel.state.collectAsState()
+    val focusManager = LocalFocusManager.current
 
     Column {
         TabRow(
-            selectedTabIndex = selectedTabIndex
+            selectedTabIndex = if (state.value.isLogin) 0 else 1
         ) {
-            Tab(selected = false, onClick = { selectedTabIndex = 0 }) {
+            Tab(selected = false, onClick = { viewModel.onTabClicked(0) }) {
                 Text(
                     text = stringResource(R.string.sign_in),
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
             }
-            Tab(selected = false, onClick = { selectedTabIndex = 1 }) {
+            Tab(selected = false, onClick = { viewModel.onTabClicked(1) }) {
                 Text(text = stringResource(R.string.sign_up))
             }
         }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(15.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
 
 
-                if (isRegister) {
-                    NameTextField(value = name, onChange = { name = it })
-                }
+            if (!state.value.isLogin) {
+                NameTextField(
+                    value = state.value.name, onChange = {
+                        viewModel.onNameEdit(it)
+                    },
+                    state.value.nameErrorState,
+                    focusManager
+                )
 
-                EmailTextField(value = email, onChange = { email = it })
-                PasswordTextField(value = password, onChange = { password = it })
+            }
 
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Default.Build, "")
-                }
+            EmailTextField(
+                modifier = Modifier.padding(vertical = 10.dp),
+                value = state.value.email,
+                onChange = { viewModel.onEmailEdit(it) },
+                emailErrorState = state.value.emailErrorState,
+                focusManager = focusManager
+            )
+            PasswordTextField(
+                value = state.value.password,
+                onChange = { viewModel.onPasswordEdit(it) },
+                passwordErrorState = state.value.passwordErrorState
+            )
 
-                Button(onClick = handleAuth, enabled = !isLoading.value) {
-                    if (isLoading.value) {
-                        CircularProgressIndicator()
-                    } else {
-                        Text(
-                            modifier = Modifier
-                                .width(224.dp)
-                                .padding(4.dp),
-                            textAlign = TextAlign.Center,
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            text = stringResource(if (isRegister) R.string.sign_in else R.string.sign_up)
-                        )
-                    }
+            IconButton(onClick = { viewModel.googleClicked() }) {
+                Icon(imageVector = Icons.Default.Build, "")
+            }
+
+            Button(onClick = { viewModel.onConfirmClicked() }, enabled = !state.value.isLoading) {
+                if (state.value.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(
+                        modifier = Modifier
+                            .width(224.dp)
+                            .padding(4.dp),
+                        textAlign = TextAlign.Center,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        text = stringResource(if (state.value.isLogin) R.string.sign_in else R.string.sign_up)
+                    )
                 }
             }
+
         }
     }
 }
