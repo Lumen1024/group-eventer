@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,12 +60,15 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                         modifier = modifier.size(16.dp)
                     )
                     Text(text = "3/5", modifier = Modifier.padding(end = 20.dp))
-                    Text(text = "Голосование", modifier = Modifier.padding(end = 5.dp))
+                    Text(
+                        text = "Голосование",
+                        modifier = Modifier.padding(end = 5.dp),
+                    )
                     Box(
                         modifier = Modifier
                             .size(16.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFF4ED239))
+                            .background(Color(0xFF4CAF50))
                     )
                 }
             }
@@ -72,7 +76,7 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                 text = event.name,
                 modifier = Modifier.padding(vertical = 20.dp),
                 fontSize = 20.sp,
-                color = Color.Black
+                fontWeight = FontWeight.Medium
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
