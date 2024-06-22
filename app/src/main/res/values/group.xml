@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="group_aborted">Group creation was aborted</string>
+    <string name="group_already_exists">A group with this name already exists</string>
+    <string name="canceled">The operation was canceled by the user</string>
+    <string name="group_invalid_argument">Incorrect group data specified</string>
+    <string name="group_permission_denied">You are not authorized to create groups</string>
+    <string name="unauthenticated">Authorization is required to perform this action</string>
+    <string name="group_unavailable">It is currently not possible to create a group</string>
+    <string name="group_unknown">An error occurred while creating the group</string>
+</resources>

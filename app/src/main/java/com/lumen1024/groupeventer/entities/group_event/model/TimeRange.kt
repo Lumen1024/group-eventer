@@ -4,8 +4,12 @@ import java.time.Instant
 import java.time.Duration
 
 data class TimeRange(
-    val start: Instant = Instant.now(),
-    val end: Instant = Instant.now().plusSeconds(3600),
-) { // todo: if firebase crash move to ext
-    val duration: Duration get() = Duration.between(this.start, this.end)
+    val start: String = Instant.now().toString(),
+    val end: String = Instant.now().plusSeconds(3600).toString(),
+) {
+    val duration: Duration
+        get() = Duration.between(
+            Instant.parse(this.start),
+            Instant.parse(this.end)
+        )
 }

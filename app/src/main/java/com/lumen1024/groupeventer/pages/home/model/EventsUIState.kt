@@ -14,5 +14,5 @@ val mockEvents = listOf(
 
 data class EventsUIState(
     val currentGroup: Group = Group(),
-    val eventList: List<GroupEvent> = mockEvents
+    val eventList: List<GroupEvent> = emptyList()
 )

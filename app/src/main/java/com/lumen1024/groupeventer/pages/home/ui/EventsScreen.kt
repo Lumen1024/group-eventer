@@ -9,12 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lumen1024.groupeventer.entities.group_event.ui.GroupEventCard
 import com.lumen1024.groupeventer.pages.home.model.EventsViewModel
 
 @Composable
-fun EventsScreen(viewModel: EventsViewModel = viewModel()) {
+fun EventsScreen(viewModel: EventsViewModel = hiltViewModel()) {
     val state = viewModel.uiState.collectAsState()
     LazyColumn(
         modifier = Modifier

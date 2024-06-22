@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="group_aborted">Добавление группы было отменено</string>
+    <string name="group_already_exists">Группа с таким названием уже существует</string>
+    <string name="canceled">Операция отменена пользователем</string>
+    <string name="group_invalid_argument">Указаны неверные данные для группы</string>
+    <string name="group_permission_denied">У вас нет разрешений на добавление групп</string>
+    <string name="unauthenticated">Для добавления группы требуется авторизация</string>
+    <string name="group_unavailable">В данный момент невозможно добавить группу</string>
+    <string name="group_unknown">При добавлении группы произошла ошибка</string>
+</resources>

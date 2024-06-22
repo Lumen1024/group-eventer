@@ -29,12 +29,13 @@ import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
 import com.lumen1024.groupeventer.shared.lib.quantityStringResource
+import java.time.Instant
 
 @Composable
 fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
-    val timeFrom = TimeRangeFormatter.format(event.acceptedRange.start)
+    val timeFrom = TimeRangeFormatter.format(Instant.parse(event.acceptedRange.start))
     val timeTo = TimeRangeFormatter.format(
-        event.acceptedRange.end
+        Instant.parse(event.acceptedRange.end)
     )
     val duration = quantityStringResource(id = R.plurals.hour, quantity = 1)
 

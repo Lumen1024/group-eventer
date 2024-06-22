@@ -18,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authService: AuthService, @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
+    private val authService: AuthService
 ) : ViewModel() {
 
     lateinit var navController: NavController
