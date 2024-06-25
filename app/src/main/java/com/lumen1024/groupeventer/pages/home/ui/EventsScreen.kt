@@ -10,7 +10,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lumen1024.groupeventer.entities.group_event.ui.GroupEventCard
 import com.lumen1024.groupeventer.pages.home.model.EventsViewModel
 
@@ -23,7 +22,7 @@ fun EventsScreen(viewModel: EventsViewModel = hiltViewModel()) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(state.value.eventList)
+        items(state.value.eventList, key = {event -> event.id})
         {
             GroupEventCard(event = it)
         }

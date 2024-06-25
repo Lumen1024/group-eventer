@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -15,14 +14,12 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -32,16 +29,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.shared.config.Screen
 
 @Composable
 fun HomeScreen(upNavController: NavController) {
     val navController = rememberNavController()
     val fabVisibility = remember { mutableStateOf(true) }
-    val dialogVisibility = remember { mutableStateOf(false) }
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             MainTopBar()
@@ -52,7 +45,7 @@ fun HomeScreen(upNavController: NavController) {
         floatingActionButton = {
             if (fabVisibility.value)
                 FloatingActionButton(onClick = {
-                    dialogVisibility.value = true
+                    // todo
                 }) {
                     Icon(Icons.Default.Add, "")
                 }
@@ -60,9 +53,6 @@ fun HomeScreen(upNavController: NavController) {
 
 
     ) { innerPadding ->
-        if (dialogVisibility.value) {
-            AddDialog(onDismissRequest = { dialogVisibility.value = false })
-        }
         NavHost(
             navController,
             startDestination = Screen.EventList.route,
@@ -73,54 +63,6 @@ fun HomeScreen(upNavController: NavController) {
             composable(Screen.Settings.route) { SettingsScreen(navController = upNavController) }
         }
     }
-}
-
-@Composable
-fun AddDialog(
-    onDismissRequest: () -> Unit = {},
-    onConfirmation: () -> Unit = {},
-    icon: ImageVector = Icons.Default.Add,
-) {
-    AlertDialog(
-        icon = {
-            Icon(icon, contentDescription = "Example Icon")
-        },
-        title = {
-            Text(text = "ded")
-        },
-        text = {
-            Text(text = "dd")
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    val db = Firebase.firestore
-                    db.collection("events").add(
-                        GroupEvent(
-                            name = "ded",
-                            description = "lolik",
-                        )
-                    )
-                    onConfirmation()
-                }
-            ) {
-                Text("Confirm")
-
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Dismiss")
-            }
-        }
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

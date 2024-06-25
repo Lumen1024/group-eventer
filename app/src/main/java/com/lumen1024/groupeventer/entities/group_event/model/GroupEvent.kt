@@ -6,7 +6,7 @@ import java.io.Serializable
 data class GroupEvent(
     val id: String = "",
 
-    val status: GroupEventStatus = GroupEventStatus.Timing,
+    val status: GroupEventStatus = GroupEventStatus.Prepare,
     val name: String = "Новое событие",
     val description: String = "",
 
@@ -21,9 +21,9 @@ data class GroupEvent(
 )
 
 enum class GroupEventStatus {
-    Timing,
+    Prepare,
     Voting,
-    Memory,
+    Ended,
 }
 
 enum class PeopleStatus {
