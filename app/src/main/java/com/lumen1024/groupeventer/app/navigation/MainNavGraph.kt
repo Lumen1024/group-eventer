@@ -5,8 +5,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.lumen1024.groupeventer.pages.auth.ui.AuthScreen
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
+import com.lumen1024.groupeventer.pages.auth.ui.AuthScreen
 import com.lumen1024.groupeventer.pages.home.ui.HomeScreen
 import com.lumen1024.groupeventer.pages.splash.ui.SplashScreen
 import com.lumen1024.groupeventer.shared.config.Screen
@@ -17,8 +17,6 @@ fun MainNavGraph() {
 
     NavHost(navController = navController, startDestination = Screen.Splash.route) {
         composable(Screen.Splash.route) { SplashScreen(navController) }
-
-
         composable(Screen.Auth.route) {
             val vm: AuthViewModel = hiltViewModel()
             vm.navController = navController

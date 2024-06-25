@@ -2,25 +2,32 @@ package com.lumen1024.groupeventer.pages.home.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -29,6 +36,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.lumen1024.groupeventer.pages.events.ui.EventsScreen
+import com.lumen1024.groupeventer.pages.groups.ui.GroupsScreen
+import com.lumen1024.groupeventer.pages.profile.ui.ProfileScreen
 import com.lumen1024.groupeventer.shared.config.Screen
 
 @Composable
@@ -55,12 +65,12 @@ fun HomeScreen(upNavController: NavController) {
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = Screen.EventList.route,
+            startDestination = Screen.Events.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(Screen.EventList.route) { EventsScreen() }
-            composable(Screen.MyTime.route) { ProfileScreen() }
-            composable(Screen.Settings.route) { SettingsScreen(navController = upNavController) }
+            composable(Screen.Groups.route) { GroupsScreen() }
+            composable(Screen.Events.route) { EventsScreen() }
+            composable(Screen.Profile.route) { ProfileScreen() }
         }
     }
 }
@@ -68,36 +78,35 @@ fun HomeScreen(upNavController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(modifier: Modifier = Modifier) {
-    //TopAppBar(title = { Text(text = "ded") })
+    TopAppBar(title = { Text(text = "Типо тайтл", color = Color.White) }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary))
 }
 
 @Composable
 fun MainBottomBar(navController: NavHostController, fabVisibility: MutableState<Boolean>) {
     val items = listOf(
-        Screen.EventList,
-        Screen.MyTime,
-        Screen.Settings,
+        Screen.Groups,
+        Screen.Events,
+        Screen.Profile,
     )
-
-    NavigationBar {
+    NavigationBar(modifier = Modifier.padding(15.dp).clip(RoundedCornerShape(100.dp))) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         items.forEach { screen ->
             NavigationBarItem(
                 icon = {
                     when (screen) {
-                        is Screen.EventList -> Icon(
-                            Icons.Default.Home,
+                        is Screen.Groups -> Icon(
+                            Icons.Default.Groups,
                             ""
                         )
 
-                        is Screen.MyTime -> Icon(
-                            Icons.Filled.Face,
+                        is Screen.Events -> Icon(
+                            Icons.AutoMirrored.Filled.List,
                             ""
                         )
 
-                        is Screen.Settings -> Icon(
-                            Icons.Filled.Settings,
+                        is Screen.Profile -> Icon(
+                            Icons.Filled.Person,
                             ""
                         )
 

@@ -1,12 +1,6 @@
-package com.lumen1024.groupeventer.pages.home.ui
+package com.lumen1024.groupeventer.pages.groups.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+class GroupsViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
 
@@ -31,17 +25,8 @@ class SettingsViewModel @Inject constructor(
 }
 
 @Composable
-fun SettingsScreen(
-    navController: NavController,
-    viewModel: SettingsViewModel = hiltViewModel(),
+fun GroupsScreen(
+    viewModel: GroupsViewModel = hiltViewModel(),
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = { viewModel.logout(navController) })
-        {
-            Text(text = "Logout")
-        }
-    }
+
 }

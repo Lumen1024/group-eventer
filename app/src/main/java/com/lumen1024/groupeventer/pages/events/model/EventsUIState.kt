@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.pages.home.model
+package com.lumen1024.groupeventer.pages.events.model
 
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent

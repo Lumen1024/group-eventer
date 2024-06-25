@@ -1,15 +1,12 @@
-package com.lumen1024.groupeventer.pages.home.model
+package com.lumen1024.groupeventer.pages.events.model
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
-import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupException
 import com.lumen1024.groupeventer.entities.group.model.mapGroupExceptionToMessage
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
