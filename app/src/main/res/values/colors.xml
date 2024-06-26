@@ -3,4 +3,6 @@
     <color name="status_prepare">#43A047</color>
     <color name="status_voting">#FDD835</color>
     <color name="status_ended">#546E7A</color>
+
+    <color name="splash_bg">#FFFFFF</color>
 </resources>

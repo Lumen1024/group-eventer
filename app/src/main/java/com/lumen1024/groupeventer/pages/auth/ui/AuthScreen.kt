@@ -71,7 +71,6 @@ fun AuthScreen(
                         state.value.nameErrorState,
                         focusManager
                     )
-
                 }
 
                 EmailTextField(

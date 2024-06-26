@@ -17,7 +17,7 @@
             android:name=".app.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.GroupEventer"
+            android:theme="@style/Theme.AnimatedSplash.MySplash"
             tools:ignore="RedundantLabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
