@@ -1,12 +1,12 @@
 package com.lumen1024.groupeventer.pages.events.model
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.GroupException
 import com.lumen1024.groupeventer.entities.group.model.mapGroupExceptionToMessage
+import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +33,7 @@ class EventsViewModel @Inject constructor(
             if (groups.isFailure) {
                 val exception = groups.exceptionOrNull()!!;
                 if (exception is GroupException) {
-                    toast(context.resources.getString(exception.mapGroupExceptionToMessage()))
+                    context.showToast(context.resources.getString(exception.mapGroupExceptionToMessage()))
                 }
                 return@launch
             }
@@ -41,9 +41,5 @@ class EventsViewModel @Inject constructor(
             _uiState.value = uiState.value.copy(
                 eventList = groups.getOrNull()!!.flatMap { group -> group.events })
         }
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }
