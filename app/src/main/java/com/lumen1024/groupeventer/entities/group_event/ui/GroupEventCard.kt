@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
-import com.lumen1024.groupeventer.shared.lib.quantityStringResource
 import com.lumen1024.groupeventer.shared.ui.EventStatusIndicator
 import java.time.Instant
 
@@ -33,7 +33,7 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
     val timeTo = TimeRangeFormatter.format(
         Instant.parse(event.acceptedRange.end)
     )
-    val duration = quantityStringResource(id = R.plurals.hour, quantity = 1)
+    val duration = pluralStringResource(id = R.plurals.hour,1)
 
     Card(modifier = modifier) {
         Column(modifier = modifier.padding(20.dp)) {
