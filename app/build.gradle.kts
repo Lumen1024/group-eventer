@@ -24,6 +24,20 @@ android {
         }
     }
 
+    flavorDimensions += "bundles"
+    productFlavors {
+        create("full") {
+            dimension = "bundles"
+            isDefault = true
+        }
+        create("dev") {
+            dimension = "bundles"
+            versionNameSuffix = "-dev"
+            resourceConfigurations.clear()
+            resourceConfigurations += listOf("en", "xxhdpi")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
