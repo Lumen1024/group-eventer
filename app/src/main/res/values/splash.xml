@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <style name="Theme.AnimatedSplash.MySplash" parent="Theme.SplashScreen">
+    <style name="Theme.GroupEventer.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_bg</item>
         <item name="postSplashScreenTheme">@style/Theme.GroupEventer</item>
 
