@@ -29,11 +29,11 @@ import java.time.Instant
 
 @Composable
 fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
-    val timeFrom = TimeRangeFormatter.format(Instant.parse(event.acceptedRange.start))
-    val timeTo = TimeRangeFormatter.format(
+    val timeFrom = TimeRangeFormatter.formatDayMonthTime(Instant.parse(event.acceptedRange.start))
+    val timeTo = TimeRangeFormatter.formatDayMonthTime(
         Instant.parse(event.acceptedRange.end)
     )
-    val duration = pluralStringResource(id = R.plurals.hour,1)
+    val duration = pluralStringResource(id = R.plurals.hour, 1)
 
     Card(modifier = modifier) {
         Column(modifier = modifier.padding(20.dp)) {

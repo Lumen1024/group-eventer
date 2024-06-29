@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.pages.events.model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
@@ -31,8 +32,10 @@ class EventsViewModel @Inject constructor(
             val groups = groupRepository.getGroups()
 
             if (groups.isFailure) {
-                val exception = groups.exceptionOrNull()!!;
+                val exception = groups.exceptionOrNull()
+
                 if (exception is GroupException) {
+                    Log.e(this::class.java.toString(), exception.stackTraceToString())
                     context.showToast(context.resources.getString(exception.mapGroupExceptionToMessage()))
                 }
                 return@launch
