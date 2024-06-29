@@ -1,12 +1,15 @@
 package com.lumen1024.groupeventer.entities.group.model
 
-import com.google.firebase.firestore.DocumentId
+import androidx.compose.ui.graphics.Color
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
+import java.util.UUID
 
 data class Group(
-    @DocumentId
-    val id: String? = null,
+    val id: String = UUID.randomUUID().toString(),
+    val name: String = "",
+    val color: Color = Color.White,
+    val description: String = "",
 
     val events: List<GroupEvent> = emptyList(),
-    val people: List<Long> = emptyList()
+    val people: List<String> = emptyList()
 )
