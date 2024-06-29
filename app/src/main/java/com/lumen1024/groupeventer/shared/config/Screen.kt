@@ -13,6 +13,7 @@ sealed class Screen(open val route: String) {
     data object Tutorial : Screen("tutorial")
     data object Home : Screen("home")
 
+    
     sealed class BottomBarScreen(
         override val route: String,
         @StringRes val title:  Int,
@@ -22,6 +23,4 @@ sealed class Screen(open val route: String) {
         data object Events : BottomBarScreen("events", R.string.events_screen, Icons.AutoMirrored.Filled.List)
         data object Profile : BottomBarScreen("settings", R.string.profile_screen, Icons.Filled.Person)
     }
-
-
 }
