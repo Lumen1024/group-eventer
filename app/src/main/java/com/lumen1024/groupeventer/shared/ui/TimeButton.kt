@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.ui.time
+package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape

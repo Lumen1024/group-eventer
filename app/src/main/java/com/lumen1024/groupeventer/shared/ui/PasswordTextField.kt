@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.ui.text_field
+package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons

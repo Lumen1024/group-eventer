@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.ui.time
+package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
