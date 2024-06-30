@@ -1,7 +1,6 @@
 package com.lumen1024.groupeventer.pages.auth.model
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     @ApplicationContext val context: Context,
-    private val authService: AuthService
+    private val authService: AuthService,
 ) : ViewModel() {
 
     lateinit var navController: NavController

@@ -20,8 +20,9 @@ import com.lumen1024.groupeventer.pages.auth.model.NameErrorState
 fun NameTextField(
     value: String,
     onChange: (it: String) -> Unit,
+    placeholder: @Composable (() -> Unit)? = null,
     nameErrorState: NameErrorState = NameErrorState.Normal,
-    focusManager: FocusManager? = null
+    focusManager: FocusManager? = null,
 ) {
     OutlinedTextField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -31,11 +32,11 @@ fun NameTextField(
         onValueChange = onChange,
         value = value,
         singleLine = true,
+        placeholder = placeholder,
         keyboardActions = KeyboardActions(onNext = { focusManager?.moveFocus(FocusDirection.Down) }),
         isError = nameErrorState != NameErrorState.Normal,
         supportingText = {
-            when(nameErrorState)
-            {
+            when (nameErrorState) {
                 NameErrorState.Normal -> {}
                 NameErrorState.Empty -> Text(stringResource(R.string.empty_field))
             }

@@ -5,7 +5,7 @@ interface GroupRepository {
     suspend fun addGroup(group: Group)
 
     suspend fun getGroup(groupId: String): Result<Group>
-    suspend fun getGroups(): Result<List<Group>>
+    suspend fun getGroups(groupIds: List<String> = emptyList()): Result<List<Group>>
 
     suspend fun updateGroup(groupId: String, data: Map<String, Any>): Result<Void>
 

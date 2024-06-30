@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -41,6 +40,7 @@ fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
 ) {
     val groups = viewModel.groups.collectAsState()
+    val userData = viewModel.userData.collectAsState()
 
     val addDialogOpen = remember { mutableStateOf(false) }
 
@@ -60,7 +60,6 @@ fun GroupsScreen(
             }
         }
     ) {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,9 +68,15 @@ fun GroupsScreen(
         ) {
             items(groups.value, key = { group -> group.id })
             {
-                GroupCard(it)
+                GroupCard(
+                    it,
+                    hidden = userData.value?.groups?.get(it.id)
+                        ?: false,
+                    onHide = { viewModel.toggleGroupHide(it.id) }
+                )
             }
         }
+
         if (addDialogOpen.value)
             AddGroupDialog(
                 onDismiss = { addDialogOpen.value = false },
@@ -93,12 +98,13 @@ fun AddGroupDialog(
     val handleNameErrors = {
         nameError = if (name.isEmpty()) NameErrorState.Empty else NameErrorState.Normal
     }
-    val handlePasswordErrors ={
-        passwordError = if (password.isEmpty()) PasswordErrorState.Empty else PasswordErrorState.Normal
+    val handlePasswordErrors = {
+        passwordError =
+            if (password.isEmpty()) PasswordErrorState.Empty else PasswordErrorState.Normal
     }
 
 
-    val handleErrors =  {
+    val handleErrors = {
 
         handleNameErrors()
         handlePasswordErrors

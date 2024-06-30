@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,14 @@ import com.lumen1024.groupeventer.shared.config.Screen
 fun MainNavGraph() {
     val navController = rememberNavController()
     val authorised = Firebase.auth.currentUser != null
+
+    LaunchedEffect(Unit) {
+        Firebase.auth.addAuthStateListener { auth ->
+            if (auth.currentUser === null) {
+                navController.navigate(Screen.Auth.route)
+            }
+        }
+    }
 
     NavHost(
         navController = navController,

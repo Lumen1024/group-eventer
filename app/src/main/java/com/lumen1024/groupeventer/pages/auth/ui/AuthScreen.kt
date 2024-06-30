@@ -33,7 +33,7 @@ import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -68,8 +68,8 @@ fun AuthScreen(
                         value = state.value.name, onChange = {
                             viewModel.onNameEdit(it)
                         },
-                        state.value.nameErrorState,
-                        focusManager
+                        nameErrorState = state.value.nameErrorState,
+                        focusManager = focusManager
                     )
                 }
 

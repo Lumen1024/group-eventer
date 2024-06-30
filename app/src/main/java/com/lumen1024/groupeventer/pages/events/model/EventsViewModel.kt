@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
-import com.lumen1024.groupeventer.entities.group.model.GroupException
-import com.lumen1024.groupeventer.entities.group.model.mapGroupExceptionToMessage
+import com.lumen1024.groupeventer.entities.group.model.GroupRepositoryException
+import com.lumen1024.groupeventer.entities.group.model.toMessage
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EventsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val groupRepository: FirebaseGroupRepository
+    private val groupRepository: FirebaseGroupRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -34,9 +34,9 @@ class EventsViewModel @Inject constructor(
             if (groups.isFailure) {
                 val exception = groups.exceptionOrNull()
 
-                if (exception is GroupException) {
+                if (exception is GroupRepositoryException) {
                     Log.e(this::class.java.toString(), exception.stackTraceToString())
-                    context.showToast(context.resources.getString(exception.mapGroupExceptionToMessage()))
+                    context.showToast(context.resources.getString(exception.toMessage()))
                 }
                 return@launch
             }
