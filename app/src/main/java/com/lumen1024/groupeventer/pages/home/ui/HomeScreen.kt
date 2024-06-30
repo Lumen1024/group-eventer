@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -20,10 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -46,25 +40,18 @@ import com.lumen1024.groupeventer.shared.config.Screen
 @Composable
 fun HomeScreen(upNavController: NavController) {
     val navController = rememberNavController()
-    val fabVisibility = remember { mutableStateOf(true) }
+    //val currentScreenRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     Scaffold(modifier = Modifier
         .fillMaxSize()
         .statusBarsPadding()
-        .navigationBarsPadding().background(Color.Cyan),
+        .navigationBarsPadding()
+        .background(Color.Cyan),
         topBar = {
-            MainTopBar()
+
         },
         bottomBar = {
-            MainBottomBar(navController, fabVisibility)
+            MainBottomBar(navController)
         },
-        floatingActionButton = {
-            if (fabVisibility.value)
-                FloatingActionButton(onClick = {
-                    // todo
-                }) {
-                    Icon(Icons.Default.Add, "")
-                }
-        }
 
 
     ) { innerPadding ->
@@ -73,7 +60,8 @@ fun HomeScreen(upNavController: NavController) {
             startDestination = Screen.BottomBarScreen.Events.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(Screen.BottomBarScreen.Groups.route, ) { GroupsScreen() }
+
+            composable(Screen.BottomBarScreen.Groups.route) { GroupsScreen() }
             composable(Screen.BottomBarScreen.Events.route) { EventsScreen() }
             composable(Screen.BottomBarScreen.Profile.route) { ProfileScreen() }
         }
@@ -90,7 +78,7 @@ fun MainTopBar(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MainBottomBar(navController: NavHostController, fabVisibility: MutableState<Boolean>) {
+fun MainBottomBar(navController: NavHostController) {
     val items = listOf(
         Screen.BottomBarScreen.Groups,
         Screen.BottomBarScreen.Events,
@@ -104,7 +92,7 @@ fun MainBottomBar(navController: NavHostController, fabVisibility: MutableState<
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         items.forEach { screen ->
-            AddNavigationBarItem(screen, currentDestination, fabVisibility, navController)
+            AddNavigationBarItem(screen, currentDestination, navController)
         }
     }
 }
@@ -113,7 +101,6 @@ fun MainBottomBar(navController: NavHostController, fabVisibility: MutableState<
 private fun RowScope.AddNavigationBarItem(
     screen: Screen.BottomBarScreen,
     currentDestination: NavDestination?,
-    fabVisibility: MutableState<Boolean>,
     navController: NavHostController
 ) {
     NavigationBarItem(
@@ -126,8 +113,6 @@ private fun RowScope.AddNavigationBarItem(
         label = { Text(stringResource(screen.title)) },
         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
         onClick = {
-
-            fabVisibility.value = (screen.route == Screen.BottomBarScreen.Events.route)
             navController.navigate(screen.route) {
                 // Pop up to the start destination of the graph to
                 // avoid building up a large stack of destinations
@@ -143,6 +128,5 @@ private fun RowScope.AddNavigationBarItem(
                 restoreState = true
             }
         },
-        alwaysShowLabel = false
     )
 }

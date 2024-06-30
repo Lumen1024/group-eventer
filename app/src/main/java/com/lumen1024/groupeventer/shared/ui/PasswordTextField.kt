@@ -27,7 +27,7 @@ import com.lumen1024.groupeventer.pages.auth.model.PasswordErrorState
 fun PasswordTextField(
     value: String,
     onChange: (it: String) -> Unit,
-    passwordErrorState: PasswordErrorState
+    passwordErrorState: PasswordErrorState = PasswordErrorState.Normal
 ) {
     var hided by remember {
         mutableStateOf(true)
