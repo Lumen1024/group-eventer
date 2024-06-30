@@ -1,7 +1,7 @@
 package com.lumen1024.groupeventer.entities.group_event.model
 
 import com.lumen1024.groupeventer.entities.comment.model.Comment
-import java.io.Serializable
+import com.lumen1024.groupeventer.shared.model.TimeRange
 
 data class GroupEvent(
     val id: String = "",
