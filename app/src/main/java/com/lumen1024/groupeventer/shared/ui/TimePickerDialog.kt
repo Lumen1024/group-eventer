@@ -1,8 +1,6 @@
 package com.lumen1024.groupeventer.shared.ui
 
-import android.icu.text.DateFormat
 import android.icu.util.Calendar
-import android.icu.util.TimeZone
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,11 +40,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.lumen1024.groupeventer.R
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,10 +86,10 @@ fun TimePickerDialog(
             )
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onCancel) {
-                Text("Cancel")
+                Text(stringResource(id = android.R.string.cancel))
             }
             TextButton(onClick = ::onConfirmClicked) {
-                Text("OK")
+                Text(stringResource(id = android.R.string.ok))
             }
         },
     ) {
