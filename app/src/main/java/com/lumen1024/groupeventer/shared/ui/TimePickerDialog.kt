@@ -74,6 +74,7 @@ fun TimePickerDialog(
         cal.isLenient = false
 
         onConfirm(cal)
+        onCancel()
     }
 
     // TimePicker does not provide a default TimePickerDialog, so we use our own PickerDialog:

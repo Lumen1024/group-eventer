@@ -3,12 +3,11 @@ package com.lumen1024.groupeventer.shared.lib
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 class TimeRangeFormatter {
     companion object {
         private const val DAY_MONTH_PATTERN: String = "dd MMM"
-        private val DAY_MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter
+        private val ZONED_DAY_MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter
             .ofPattern(DAY_MONTH_PATTERN)
             .withZone(ZoneId.systemDefault())
 
@@ -22,17 +21,17 @@ class TimeRangeFormatter {
             .withZone(ZoneId.systemDefault())
 
         private const val DAY_MONTH_TIME_PATTERN: String = "dd MMM HH:mm"
-        private val DAY_MONTH_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter
+        private val ZONED_DAY_MONTH_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter
             .ofPattern(DAY_MONTH_TIME_PATTERN)
             .withZone(ZoneId.systemDefault())
 
 
-        fun formatDayMonth(instant: Instant): String {
-            return DAY_MONTH_FORMATTER.format(instant)
+        fun formatDayMonthWithZone(instant: Instant): String {
+            return ZONED_DAY_MONTH_FORMATTER.format(instant)
         }
 
-        fun formatDayMonthTime(instant: Instant): String {
-            return DAY_MONTH_TIME_FORMATTER.format(instant)
+        fun formatDayMonthTimeWithZone(instant: Instant): String {
+            return ZONED_DAY_MONTH_TIME_FORMATTER.format(instant)
         }
 
         fun formatTimeWithZone(instant: Instant): String {

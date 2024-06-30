@@ -2,43 +2,52 @@ package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.lumen1024.groupeventer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialog(
     onDateSelected: (millis: Long) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    yearRange: IntRange = DatePickerDefaults.YearRange,
+    initDisplayMode: DisplayMode = DisplayMode.Picker,
+    selectableDates: SelectableDates = DatePickerDefaults.AllDates,
 ) {
-    val datePickerState = rememberDatePickerState(selectableDates = object : SelectableDates {
-        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-            return utcTimeMillis <= System.currentTimeMillis()
-        }
-    })
+    val datePickerState = rememberDatePickerState(
+        yearRange = yearRange,
+        selectableDates = selectableDates,
+        initialDisplayMode = initDisplayMode
+    )
 
     val selectedDate = datePickerState.selectedDateMillis ?: 0
 
     androidx.compose.material3.DatePickerDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
-            Button(onClick = {
-                onDateSelected(selectedDate)
-                onDismiss()
-            }
-
+            Button(
+                onClick = {
+                    onDateSelected(selectedDate)
+                    onDismiss()
+                }
             ) {
-                Text(text = "OK")
+                Text(text = stringResource(android.R.string.cancel))
             }
         },
         dismissButton = {
-            Button(onClick = {
-                onDismiss()
-            }) {
-                Text(text = "Cancel")
+            Button(
+                onClick = {
+                    onDismiss()
+                }
+            ) {
+                Text(text = stringResource(android.R.string.ok))
             }
         }
     ) {

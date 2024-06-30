@@ -16,11 +16,16 @@ sealed class Screen(open val route: String) {
     
     sealed class BottomBarScreen(
         override val route: String,
-        @StringRes val title:  Int,
-        val icon : ImageVector,
+        @StringRes val title: Int,
+        val icon: ImageVector,
     ) : Screen(route) {
-        data object Groups : BottomBarScreen("profile", R.string.groups_screen, Icons.Default.Groups)
-        data object Events : BottomBarScreen("events", R.string.events_screen, Icons.AutoMirrored.Filled.List)
-        data object Profile : BottomBarScreen("settings", R.string.profile_screen, Icons.Filled.Person)
+        data object Groups :
+            BottomBarScreen("profile", R.string.groups_screen, Icons.Default.Groups)
+
+        data object Events :
+            BottomBarScreen("events", R.string.events_screen, Icons.AutoMirrored.Filled.List)
+
+        data object Profile :
+            BottomBarScreen("settings", R.string.profile_screen, Icons.Filled.Person)
     }
 }
