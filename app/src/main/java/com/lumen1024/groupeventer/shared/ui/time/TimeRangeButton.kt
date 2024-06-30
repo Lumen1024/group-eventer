@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.ui
+package com.lumen1024.groupeventer.shared.ui.time
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row

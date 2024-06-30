@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.ui
+package com.lumen1024.groupeventer.shared.ui.time
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.lumen1024.groupeventer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
