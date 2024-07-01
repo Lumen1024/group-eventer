@@ -40,7 +40,7 @@ fun Avatar(modifier: Modifier = Modifier, url: Any?) {
                 modifier = Modifier.fillMaxSize(),
                 model = url,
                 contentDescription = "User avatar",
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Crop,
                 loading = {
                     if (isFirstLoad) {
                         CircularProgressIndicator()
