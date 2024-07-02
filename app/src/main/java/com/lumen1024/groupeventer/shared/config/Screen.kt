@@ -34,4 +34,6 @@ sealed class Screen(open val route: String) {
             override val label: Int = R.string.profile_screen
         }
     }
+
+    data object CreateEvent : Screen("create-event")
 }
