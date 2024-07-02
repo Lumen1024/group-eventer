@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.pages.home.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -8,8 +7,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,28 +17,28 @@ import com.lumen1024.groupeventer.pages.profile.ui.ProfileScreen
 import com.lumen1024.groupeventer.shared.config.Screen
 
 @Composable
-fun HomeScreen(mainNavController: NavController) {
-    val homeNavController = rememberNavController()
-
-
-
+fun HomeScreen(
+    mainNavController: NavHostController
+) {
+    val navController = rememberNavController()
     Scaffold(modifier = Modifier
         .fillMaxSize()
         .statusBarsPadding()
-        .navigationBarsPadding()
-        .background(Color.Cyan),
+        .navigationBarsPadding(),
         bottomBar = {
-            HomeNavBar(homeNavController)
+            HomeNavBar(navController)
         },
     ) { innerPadding ->
+
         NavHost(
-            homeNavController,
-            startDestination = Screen.BottomBarScreen.Events.route,
+            navController,
+            startDestination = Screen.Home.Events.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(Screen.BottomBarScreen.Groups.route) { GroupsScreen() }
-            composable(Screen.BottomBarScreen.Events.route) { EventsScreen() }
-            composable(Screen.BottomBarScreen.Profile.route) { ProfileScreen() }
+            composable(Screen.Home.Groups.route) { GroupsScreen() }
+            composable(Screen.Home.Events.route) { EventsScreen(mainNavController) }
+            composable(Screen.Home.Profile.route) { ProfileScreen(mainNavController) }
         }
     }
+
 }

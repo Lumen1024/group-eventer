@@ -22,7 +22,7 @@ fun EmailTextField(
     modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
-    emailErrorState: EmailErrorState,
+    emailErrorState: EmailErrorState = EmailErrorState.Normal,
     focusManager: FocusManager
 ) {
     OutlinedTextField(

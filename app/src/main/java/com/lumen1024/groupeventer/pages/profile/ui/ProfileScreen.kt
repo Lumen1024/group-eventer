@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.entities.user.ui.Username
 import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
+import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.ui.Avatar
 
 @Composable
 fun ProfileScreen(
+    mainNavController: NavHostController,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val username by viewModel.username.collectAsState()
@@ -60,7 +63,7 @@ fun ProfileScreen(
                 onEdited = handleEdit
             )
         }
-        Button(onClick = { viewModel.logout() }) {
+        Button(onClick = { viewModel.logout(); mainNavController.navigate(Screen.Auth.route) }) {
             Text("Logout")
         }
     }

@@ -8,24 +8,30 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.lumen1024.groupeventer.R
 
+interface HaveIcon {
+    val icon: ImageVector
+}
+interface HaveLabel {
+    @get:StringRes
+    val label :  Int
+}
+
 sealed class Screen(open val route: String) {
     data object Auth : Screen("auth")
     data object Tutorial : Screen("tutorial")
     data object Home : Screen("home")
-
-    
-    sealed class BottomBarScreen(
-        override val route: String,
-        @StringRes val title: Int,
-        val icon: ImageVector,
-    ) : Screen(route) {
-        data object Groups :
-            BottomBarScreen("profile", R.string.groups_screen, Icons.Default.Groups)
-
-        data object Events :
-            BottomBarScreen("events", R.string.events_screen, Icons.AutoMirrored.Filled.List)
-
-        data object Profile :
-            BottomBarScreen("settings", R.string.profile_screen, Icons.Filled.Person)
+    {
+        data object Groups : Screen("groups"), HaveLabel, HaveIcon {
+            override val icon: ImageVector = Icons.Default.Groups
+            override val label: Int = R.string.groups_screen
+        }
+        data object Events : Screen("Events"), HaveLabel, HaveIcon {
+            override val icon: ImageVector = Icons.AutoMirrored.Filled.List
+            override val label: Int = R.string.events_screen
+        }
+        data object Profile : Screen("settings"), HaveLabel, HaveIcon {
+            override val icon: ImageVector = Icons.Default.Person
+            override val label: Int = R.string.profile_screen
+        }
     }
 }

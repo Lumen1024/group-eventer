@@ -18,6 +18,11 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -25,31 +30,49 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
+import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.ui.EmailTextField
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 
 @Composable
 fun AuthScreen(
+    mainNavController: NavHostController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
+
+
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    val isLoading = viewModel.isLoading.collectAsState()
+    val nameError by viewModel.nameError.collectAsState()
+    val passwordError by viewModel.passwordError.collectAsState()
+    val emailError by viewModel.emailError.collectAsState()
+
+    var name by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+
+    val navigateHome by viewModel.navigateHome.collectAsState()
+    if (navigateHome)
+        mainNavController.navigate(Screen.Home.route)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             TabRow(
-                selectedTabIndex = if (state.value.isLogin) 0 else 1
+                selectedTabIndex = selectedTabIndex
             ) {
-                Tab(selected = false, onClick = { viewModel.onTabClicked(0) }) {
+                Tab(selected = false, onClick = { selectedTabIndex = 0 }) {
                     Text(
                         text = stringResource(R.string.sign_in),
                         modifier = Modifier.padding(vertical = 20.dp)
                     )
                 }
-                Tab(selected = false, onClick = { viewModel.onTabClicked(1) }) {
+                Tab(selected = false, onClick = { selectedTabIndex = 1 }) {
                     Text(text = stringResource(R.string.sign_up))
                 }
             }
@@ -61,29 +84,27 @@ fun AuthScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
-                if (!state.value.isLogin) {
+                if (selectedTabIndex == 1) {
                     NameTextField(
-                        value = state.value.name, onChange = {
-                            viewModel.onNameEdit(it)
+                        value = name, onChange = {
+                            name = it
                         },
-                        nameErrorState = state.value.nameErrorState,
+                        nameErrorState = nameError,
                         focusManager = focusManager
                     )
                 }
 
                 EmailTextField(
                     modifier = Modifier.padding(vertical = 10.dp),
-                    value = state.value.email,
-                    onChange = { viewModel.onEmailEdit(it) },
-                    emailErrorState = state.value.emailErrorState,
+                    value = email,
+                    onChange = { email = it },
+                    emailErrorState = emailError,
                     focusManager = focusManager
                 )
                 PasswordTextField(
-                    value = state.value.password,
-                    onChange = { viewModel.onPasswordEdit(it) },
-                    passwordErrorState = state.value.passwordErrorState
+                    value = password,
+                    onChange = { password = it },
+                    passwordErrorState = passwordError
                 )
 
                 IconButton(onClick = { viewModel.googleClicked() }) {
@@ -91,10 +112,15 @@ fun AuthScreen(
                 }
 
                 Button(
-                    onClick = { viewModel.onConfirmClicked() },
-                    enabled = !state.value.isLoading
+                    onClick = {
+                        if (selectedTabIndex == 0)
+                            viewModel.handleLogin(email,password)
+                        else
+                            viewModel.handleRegister(email,name,password)
+                    },
+                    enabled = !isLoading.value
                 ) {
-                    if (state.value.isLoading) {
+                    if (isLoading.value) {
                         CircularProgressIndicator()
                     } else {
                         Text(
@@ -103,7 +129,7 @@ fun AuthScreen(
                                 .padding(4.dp),
                             textAlign = TextAlign.Center,
                             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            text = stringResource(if (state.value.isLogin) R.string.sign_in else R.string.sign_up)
+                            text = stringResource(if (isLoading.value) R.string.sign_in else R.string.sign_up)
                         )
                     }
                 }

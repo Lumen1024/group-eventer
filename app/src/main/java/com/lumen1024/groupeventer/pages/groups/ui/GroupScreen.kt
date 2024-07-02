@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.pages.groups.ui
 
+import android.R
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -111,10 +112,10 @@ fun AddGroupDialog(
     }
     PickerDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Create Group") }, // todo res
+        title = { Text(text = "Add group") }, // todo res
         buttons = {
             TextButton(onClick = { onDismiss() }) {
-                Text(text = stringResource(android.R.string.cancel)) // todo res
+                Text(text = stringResource(R.string.cancel)) // todo res
             }
             TextButton(
                 onClick = {
@@ -124,7 +125,7 @@ fun AddGroupDialog(
                         onDismiss()
                     }
                 }) {
-                Text(text = stringResource(android.R.string.ok)) // todo res
+                Text(text = stringResource(R.string.ok)) // todo res
             }
         }
     ) {
