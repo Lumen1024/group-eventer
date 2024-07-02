@@ -58,13 +58,13 @@ fun AuthScreen(
             TabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
-                Tab(selected = false, onClick = { selectedTabIndex = 0 }) {
+                Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }) {
                     Text(
                         text = stringResource(R.string.sign_in),
                         modifier = Modifier.padding(vertical = 20.dp)
                     )
                 }
-                Tab(selected = false, onClick = { selectedTabIndex = 1 }) {
+                Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }) {
                     Text(text = stringResource(R.string.sign_up))
                 }
             }
