@@ -1,8 +1,22 @@
 package com.lumen1024.groupeventer.pages.auth.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -54,7 +68,9 @@ fun AuthScreen(
     var email by remember { mutableStateOf("") }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             TabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
@@ -71,13 +87,20 @@ fun AuthScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp),
+                    .fillMaxHeight()
+                    .padding(8.dp)
+                    .width(256.dp)
+                    .animateContentSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (selectedTabIndex == 1) {
+                AnimatedVisibility(
+                    selectedTabIndex == 1,
+                    enter = fadeIn() + slideInVertically() + expandVertically(clip = false),
+                    exit = fadeOut() + slideOutVertically() + shrinkVertically(clip = false)
+                ) {
                     NameTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = name, onChange = {
                             name = it
                         },
@@ -87,13 +110,14 @@ fun AuthScreen(
                 }
 
                 EmailTextField(
-                    modifier = Modifier.padding(vertical = 10.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     value = email,
                     onChange = { email = it },
                     emailErrorState = emailError,
                     focusManager = focusManager
                 )
                 PasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     value = password,
                     onChange = { password = it },
                     passwordErrorState = passwordError
@@ -104,6 +128,7 @@ fun AuthScreen(
                 }
 
                 Button(
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         if (selectedTabIndex == 0)
                             viewModel.handleLogin(email, password)
@@ -115,14 +140,35 @@ fun AuthScreen(
                     if (isLoading.value) {
                         CircularProgressIndicator()
                     } else {
-                        Text(
-                            modifier = Modifier
-                                .width(224.dp)
-                                .padding(4.dp),
-                            textAlign = TextAlign.Center,
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            text = stringResource(if (isLoading.value) R.string.sign_in else R.string.sign_up)
-                        )
+                        AnimatedContent(
+                            targetState = selectedTabIndex,
+                            transitionSpec = {
+                                if (targetState > initialState) {
+                                    // If the target number is larger, it slides up and fades in
+                                    // while the initial (smaller) number slides up and fades out.
+                                    (slideInVertically { height -> height } + fadeIn()).togetherWith(
+                                        slideOutVertically { height -> -height } + fadeOut())
+                                } else {
+                                    // If the target number is smaller, it slides down and fades in
+                                    // while the initial number slides down and fades out.
+                                    (slideInVertically { height -> -height } + fadeIn()).togetherWith(
+                                        slideOutVertically { height -> height } + fadeOut())
+                                }.using(
+                                    // Disable clipping since the faded slide-in/out should
+                                    // be displayed out of bounds.
+                                    SizeTransform(clip = false)
+                                )
+                            }
+                        ) { selected ->
+                            Text(
+                                modifier = Modifier
+                                    .padding(4.dp),
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                text = stringResource(if (selected == 0) R.string.sign_in else R.string.sign_up)
+                            )
+                        }
+
                     }
                 }
             }

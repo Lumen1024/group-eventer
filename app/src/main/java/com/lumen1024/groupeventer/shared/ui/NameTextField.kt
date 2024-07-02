@@ -18,6 +18,7 @@ import com.lumen1024.groupeventer.pages.auth.model.NameErrorState
 
 @Composable
 fun NameTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
     placeholder: @Composable (() -> Unit)? = null,
@@ -28,7 +29,7 @@ fun NameTextField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         label = { Text(text = stringResource(R.string.name)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Person, "Email") },
-        modifier = Modifier,
+        modifier = modifier,
         onValueChange = onChange,
         value = value,
         singleLine = true,

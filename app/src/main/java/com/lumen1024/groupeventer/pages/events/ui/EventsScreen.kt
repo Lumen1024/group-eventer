@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.entities.group_event.ui.GroupEventCard
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 
@@ -43,7 +42,8 @@ fun EventsScreen(
         modifier = Modifier.navigationBarsPadding(),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                isSheetOpen = true
+                //isSheetOpen = true
+                viewModel.addEvent()
             }) {
                 Icon(Icons.Default.Add, "")
             }

@@ -3,9 +3,11 @@ package com.lumen1024.groupeventer.pages.events.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lumen1024.groupeventer.app.navigation.MainNavigator
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
+import com.lumen1024.groupeventer.shared.config.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class EventsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val groupRepository: FirebaseGroupRepository,
+    private val mainNavigator: MainNavigator,
 ) : ViewModel() {
 
     private val groups = emptyList<Group>()
@@ -28,5 +31,10 @@ class EventsViewModel @Inject constructor(
         viewModelScope.launch {
 
         }
+    }
+
+    fun addEvent()
+    {
+        mainNavigator.navigate(Screen.CreateEvent)
     }
 }

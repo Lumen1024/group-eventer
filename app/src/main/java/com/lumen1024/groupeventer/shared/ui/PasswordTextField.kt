@@ -25,6 +25,7 @@ import com.lumen1024.groupeventer.pages.auth.model.PasswordErrorState
 
 @Composable
 fun PasswordTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
     passwordErrorState: PasswordErrorState = PasswordErrorState.Normal
@@ -36,7 +37,7 @@ fun PasswordTextField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         label = { Text(text = stringResource(R.string.password)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, "Password") },
-        modifier = Modifier,
+        modifier = modifier,
         onValueChange = onChange,
         singleLine = true,
         value = value,
