@@ -33,8 +33,7 @@ import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun EventsScreen(
-    mainNavController: NavHostController,
-    viewModel: EventsViewModel = hiltViewModel()
+    viewModel: EventsViewModel = hiltViewModel(),
 ) {
     val events = viewModel.events.collectAsState()
 
@@ -44,7 +43,7 @@ fun EventsScreen(
         modifier = Modifier.navigationBarsPadding(),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-               isSheetOpen = true
+                isSheetOpen = true
             }) {
                 Icon(Icons.Default.Add, "")
             }
@@ -56,7 +55,7 @@ fun EventsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(events.value, key = {event -> event.id})
+            items(events.value, key = { event -> event.id })
             {
                 GroupEventCard(
                     modifier = Modifier.clickable {

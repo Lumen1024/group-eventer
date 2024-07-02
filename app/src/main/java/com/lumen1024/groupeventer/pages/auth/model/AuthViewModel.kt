@@ -3,9 +3,11 @@ package com.lumen1024.groupeventer.pages.auth.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lumen1024.groupeventer.app.navigation.MainNavigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
+import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -17,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     @ApplicationContext val context: Context,
+    val navigator: MainNavigator,
     private val authService: AuthService,
 ) : ViewModel() {
 
@@ -32,11 +35,7 @@ class AuthViewModel @Inject constructor(
     private val _emailError = MutableStateFlow(EmailErrorState.Normal)
     val emailError = _emailError.asStateFlow()
 
-    private val _navigateHome = MutableStateFlow(false)
-    val navigateHome = _navigateHome.asStateFlow()
-
     fun googleClicked() {
-
     }
 
     fun handleLogin(email: String, password: String) {
@@ -47,10 +46,12 @@ class AuthViewModel @Inject constructor(
             _isLoading.value = true
 
             val r = authService.login(email, password)
+
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-             else _navigateHome.value = true
+            else navigator.navigate(Screen.Home)
 
             _isLoading.value = false
+
         }
     }
 
@@ -63,7 +64,7 @@ class AuthViewModel @Inject constructor(
 
             val r = authService.register(email, name, password)
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-            else _navigateHome.value = true
+            else navigator.navigate(Screen.Home)
 
             _isLoading.value = false
         }

@@ -37,7 +37,7 @@ class GroupsViewModel @Inject constructor(
         getGroups()
     }
 
-    fun getGroups() {
+    private fun getGroups() {
         viewModelScope.launch {
             if (firebase.auth.currentUser !== null) {
                 val userData = userRepository.getData(firebase.auth.currentUser!!.uid)

@@ -7,37 +7,36 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.lumen1024.groupeventer.pages.events.ui.EventsScreen
 import com.lumen1024.groupeventer.pages.groups.ui.GroupsScreen
 import com.lumen1024.groupeventer.pages.profile.ui.ProfileScreen
 import com.lumen1024.groupeventer.shared.config.Screen
+import com.lumen1024.groupeventer.shared.ui.DelegatedNavigation
 
 @Composable
 fun HomeScreen(
-    mainNavController: NavHostController
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val navController = rememberNavController()
-    Scaffold(modifier = Modifier
-        .fillMaxSize()
-        .statusBarsPadding()
-        .navigationBarsPadding(),
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         bottomBar = {
-            HomeNavBar(navController)
+            HomeNavBar(navigator = viewModel.navigator)
         },
     ) { innerPadding ->
 
-        NavHost(
-            navController,
-            startDestination = Screen.Home.Events.route,
-            Modifier.padding(innerPadding)
+        DelegatedNavigation(
+            navigator = viewModel.navigator,
+            modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.Groups.route) { GroupsScreen() }
-            composable(Screen.Home.Events.route) { EventsScreen(mainNavController) }
-            composable(Screen.Home.Profile.route) { ProfileScreen(mainNavController) }
+            composable(Screen.Home.Events.route) { EventsScreen() }
+            composable(Screen.Home.Profile.route) { ProfileScreen() }
         }
     }
 

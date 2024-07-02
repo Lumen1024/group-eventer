@@ -30,21 +30,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
-import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.ui.EmailTextField
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 
 @Composable
 fun AuthScreen(
-    mainNavController: NavHostController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
-
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
@@ -56,10 +52,6 @@ fun AuthScreen(
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-
-    val navigateHome by viewModel.navigateHome.collectAsState()
-    if (navigateHome)
-        mainNavController.navigate(Screen.Home.route)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -114,9 +106,9 @@ fun AuthScreen(
                 Button(
                     onClick = {
                         if (selectedTabIndex == 0)
-                            viewModel.handleLogin(email,password)
+                            viewModel.handleLogin(email, password)
                         else
-                            viewModel.handleRegister(email,name,password)
+                            viewModel.handleRegister(email, name, password)
                     },
                     enabled = !isLoading.value
                 ) {
@@ -133,7 +125,6 @@ fun AuthScreen(
                         )
                     }
                 }
-
             }
         }
     }

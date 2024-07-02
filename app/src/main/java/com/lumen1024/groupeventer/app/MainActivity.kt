@@ -6,6 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.groupeventer.app.navigation.MainNavGraph
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
@@ -27,7 +32,13 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             GroupEventerTheme {
-                MainNavGraph()
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surface)
+                ) {
+                    MainNavGraph()
+                }
             }
         }
     }

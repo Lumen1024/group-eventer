@@ -8,21 +8,17 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import com.lumen1024.groupeventer.app.navigation.HomeNavigator
 import com.lumen1024.groupeventer.shared.config.HaveIcon
 import com.lumen1024.groupeventer.shared.config.HaveLabel
 import com.lumen1024.groupeventer.shared.config.Screen
 
 
 @Composable
-fun HomeNavBar(navController: NavHostController) {
+fun HomeNavBar(navigator: HomeNavigator) {
     val items = listOf(
         Screen.Home.Groups,
         Screen.Home.Events,
@@ -31,10 +27,8 @@ fun HomeNavBar(navController: NavHostController) {
     NavigationBar(
         modifier = Modifier
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
         items.forEach { screen ->
-            AddNavigationBarItem(screen, currentDestination, navController)
+            AddNavigationBarItem(screen, navigator)
         }
     }
 }
@@ -42,11 +36,11 @@ fun HomeNavBar(navController: NavHostController) {
 @Composable
 private fun RowScope.AddNavigationBarItem(
     screen: Screen,
-    currentDestination: NavDestination?,
-    navController: NavHostController
+    navigator: HomeNavigator,
 ) {
     val icon = if (screen is HaveIcon) screen.icon else Icons.Default.Circle
     val label = if (screen is HaveLabel) stringResource(screen.label) else ""
+    val dest = navigator.destination.collectAsState()
 
     NavigationBarItem(
         icon = {
@@ -56,16 +50,16 @@ private fun RowScope.AddNavigationBarItem(
             )
         },
         label = { Text(label) },
-        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+        selected = dest.value == screen.route,
         onClick = {
-            navController.navigate(screen.route) {
+            navigator.navigate(screen, true) {
                 // Pop up to the start destination of the graph to
                 // avoid building up a large stack of destinations
                 // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-
-                }
+//                popUpTo(navController.graph.findStartDestination().id) {
+//                    saveState = true
+//
+//                }
                 // Avoid multiple copies of the same destination when
                 // reselecting the same item
                 launchSingleTop = true
