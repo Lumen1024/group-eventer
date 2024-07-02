@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
+import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import com.lumen1024.groupeventer.shared.ui.EventStatusIndicator
 
 @Composable
@@ -44,7 +45,7 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.Face,
-                        contentDescription = "",
+                        contentDescription = "Avatar",
                         modifier = modifier.size(24.dp)
                     )
                     Text(text = "Михаил", modifier = Modifier.padding(horizontal = 5.dp))
@@ -52,7 +53,7 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.Person,
-                        contentDescription = "",
+                        contentDescription = "People count",
                         modifier = modifier.size(16.dp)
                     )
                     Text(text = "3/5", modifier = Modifier.padding(end = 20.dp))
@@ -78,7 +79,7 @@ fun GroupEventCard(event: GroupEvent, modifier: Modifier = Modifier) {
                     text = "$timeFrom - $timeTo"
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Schedule, "", modifier = modifier.size(16.dp))
+                    Icon(Icons.Default.Schedule, "Time", modifier = modifier.size(16.dp))
                     Text(text = duration, modifier = Modifier.padding(horizontal = 5.dp))
                 }
             }
@@ -92,5 +93,8 @@ fun GroupEventCardPreview() {
     val data = GroupEvent(
 
     )
-    GroupEventCard(event = data)
+    GroupEventerTheme {
+        GroupEventCard(event = data)
+    }
+
 }
