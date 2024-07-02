@@ -106,7 +106,7 @@ class ProfileViewModel @Inject constructor(
             authService.logout()
 
             if (!authService.checkAuthorized()) {
-                navigator.navigate(Screen.Auth)
+                navigator.navigate(Screen.Auth, true)
             }
         }
     }

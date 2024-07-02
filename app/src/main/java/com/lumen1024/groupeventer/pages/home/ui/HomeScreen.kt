@@ -8,7 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.lumen1024.groupeventer.pages.events.ui.EventsScreen
 import com.lumen1024.groupeventer.pages.groups.ui.GroupsScreen
@@ -32,7 +31,8 @@ fun HomeScreen(
 
         DelegatedNavigation(
             navigator = viewModel.navigator,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            route = Screen.Home.route
         ) {
             composable(Screen.Home.Groups.route) { GroupsScreen() }
             composable(Screen.Home.Events.route) { EventsScreen() }

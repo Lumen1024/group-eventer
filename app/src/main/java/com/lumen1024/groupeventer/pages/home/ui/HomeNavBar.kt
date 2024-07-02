@@ -12,8 +12,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.lumen1024.groupeventer.app.navigation.HomeNavigator
-import com.lumen1024.groupeventer.shared.config.HaveIcon
-import com.lumen1024.groupeventer.shared.config.HaveLabel
+import com.lumen1024.groupeventer.shared.config.HasIcon
+import com.lumen1024.groupeventer.shared.config.HasLabel
 import com.lumen1024.groupeventer.shared.config.Screen
 
 
@@ -38,8 +38,8 @@ private fun RowScope.AddNavigationBarItem(
     screen: Screen,
     navigator: HomeNavigator,
 ) {
-    val icon = if (screen is HaveIcon) screen.icon else Icons.Default.Circle
-    val label = if (screen is HaveLabel) stringResource(screen.label) else ""
+    val icon = if (screen is HasIcon) screen.icon else Icons.Default.Circle
+    val label = if (screen is HasLabel) stringResource(screen.label) else ""
     val dest = navigator.destination.collectAsState()
 
     NavigationBarItem(

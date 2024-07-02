@@ -4,8 +4,7 @@ import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.shared.model.RepositoryException
 
 class GroupRepositoryException(code: Code, message: String?) :
-    RepositoryException(code, message) {
-}
+    RepositoryException(code, message)
 
 fun GroupRepositoryException.toMessage(): Int {
     return when (this.code) {

@@ -8,5 +8,4 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val navigator: HomeNavigator,
-) : ViewModel() {
-}
+) : ViewModel()

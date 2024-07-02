@@ -9,19 +9,13 @@ import javax.inject.Inject
 
 abstract class Navigator(val startDestination: Screen) {
 
-    private val _destination = MutableStateFlow(startDestination.route)
+    private val _destination = MutableStateFlow<String?>(null)
     val destination = _destination.asStateFlow()
     var builder: NavOptionsBuilder.() -> Unit = {}
     var popUpStart = false
 
-    private val listeners: MutableSet<(Screen) -> Unit> = mutableSetOf()
-
-    fun addListener(listener: (Screen) -> Unit) {
-        listeners.add(listener)
-    }
-
-    fun removeListener(listener: (Screen) -> Unit) {
-        listeners.remove(listener)
+    fun setDestination(screen: Screen) {
+        _destination.value = screen.route
     }
 
     fun navigate(
@@ -32,10 +26,6 @@ abstract class Navigator(val startDestination: Screen) {
         this.builder = builder
         this.popUpStart = popUpStart
         _destination.value = screen.route
-
-        for (listener in listeners) {
-            listener(screen)
-        }
     }
 }
 

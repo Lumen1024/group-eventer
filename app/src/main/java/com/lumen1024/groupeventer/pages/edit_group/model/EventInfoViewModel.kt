@@ -7,7 +7,4 @@ import javax.inject.Inject
 @HiltViewModel
 class EventInfoViewModel @Inject constructor(
 
-) : ViewModel() {
-
-
-}
+) : ViewModel()

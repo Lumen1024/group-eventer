@@ -121,7 +121,7 @@ fun AddGroupDialog(
                 onClick = {
                     handleErrors()
                     if (name.isNotEmpty() && password.isNotEmpty()) {
-                        onConfirm(name, password);
+                        onConfirm(name, password)
                         onDismiss()
                     }
                 }) {

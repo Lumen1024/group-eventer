@@ -36,6 +36,7 @@ class AuthViewModel @Inject constructor(
     val emailError = _emailError.asStateFlow()
 
     fun googleClicked() {
+        handleLogin("test@test.test", "12345678")
     }
 
     fun handleLogin(email: String, password: String) {
@@ -48,7 +49,7 @@ class AuthViewModel @Inject constructor(
             val r = authService.login(email, password)
 
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-            else navigator.navigate(Screen.Home)
+            else navigator.navigate(Screen.Home, true)
 
             _isLoading.value = false
 
@@ -64,7 +65,7 @@ class AuthViewModel @Inject constructor(
 
             val r = authService.register(email, name, password)
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-            else navigator.navigate(Screen.Home)
+            else navigator.navigate(Screen.Home, true)
 
             _isLoading.value = false
         }
