@@ -111,12 +111,12 @@ fun RowScope.StatusSelectItem(
         if (selected == status) {
             Text(
                 text = status.name,
-                color = MaterialTheme.colorScheme.contentColorFor(backgroundColor)
+                color = contentColorFor(backgroundColor)
             )
         } else {
             Icon(
                 imageVector = status.getIcon(),
-                tint = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.surface),
+                tint = contentColorFor(MaterialTheme.colorScheme.surface),
                 contentDescription = ""
             )
         }
