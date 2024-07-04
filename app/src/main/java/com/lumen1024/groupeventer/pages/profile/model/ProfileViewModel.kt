@@ -11,6 +11,7 @@ import com.lumen1024.groupeventer.app.navigation.MainNavigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
+import com.lumen1024.groupeventer.entities.user.model.UserService
 import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.entities.user.model.UserRepository
 import com.lumen1024.groupeventer.shared.config.Screen
@@ -30,14 +31,9 @@ class ProfileViewModel @Inject constructor(
     private val firebase: Firebase,
     private val authService: AuthService,
     private val userRepository: UserRepository,
+    val userService: UserService,
 ) : ViewModel() {
     private val avatarsRef = firebase.storage.reference.child("avatars")
-
-    private val _username = MutableStateFlow(firebase.auth.currentUser?.displayName)
-    val username = _username.asStateFlow()
-
-    private val _avatarUrl = MutableStateFlow(firebase.auth.currentUser?.photoUrl)
-    val avatarUrl = _avatarUrl.asStateFlow()
 
     private val _userData = MutableStateFlow<UserData?>(null)
     val groups = _userData.asStateFlow()
@@ -56,7 +52,7 @@ class ProfileViewModel @Inject constructor(
 
     fun updateName(name: String) {
         viewModelScope.launch {
-            _username.value = firebase.auth.currentUser?.displayName.toString()
+//            _username.value = firebase.auth.currentUser?.displayName.toString()
 
             val result = authService.updateUser(name = name)
             val exception = result.exceptionOrNull()
@@ -67,14 +63,14 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            _username.value = firebase.auth.currentUser?.displayName.toString()
+//            _username.value = firebase.auth.currentUser?.displayName.toString()
         }
     }
 
     fun updateAvatar(avatarUrl: Uri) {
         viewModelScope.launch {
             if (firebase.auth.currentUser !== null) {
-                _avatarUrl.value = avatarUrl
+//                _avatarUrl.value = avatarUrl
 
                 try {
                     val uploadTask =
@@ -92,7 +88,7 @@ class ProfileViewModel @Inject constructor(
                         }
                     }
 
-                    _avatarUrl.value = Uri.parse(firebase.auth.currentUser?.photoUrl.toString())
+//                    _avatarUrl.value = Uri.parse(firebase.auth.currentUser?.photoUrl.toString())
                 } catch (e: Exception) {
                     context.showToast("Error when setting avatar")
                 }

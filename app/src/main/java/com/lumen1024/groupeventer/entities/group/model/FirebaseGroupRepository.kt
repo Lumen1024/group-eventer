@@ -4,21 +4,24 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
 import com.lumen1024.groupeventer.shared.model.RepositoryException
+import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import com.lumen1024.groupeventer.shared.model.toRepositoryException
+import com.lumen1024.groupeventer.shared.model.toRepositoryObjectChange
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseGroupRepository @Inject constructor(
     private val firebase: Firebase,
 ) : GroupRepository {
+    private val collection = firebase.firestore.collection("groups")
+
     override suspend fun addGroup(group: Group) {
-        firebase.firestore.collection("groups").add(group).await()
+        collection.add(group).await()
     }
 
     override suspend fun getGroup(groupId: String): Result<Group> {
         try {
-            val group = firebase.firestore
-                .collection("groups")
+            val group = collection
                 .document(groupId)
                 .get()
                 .await()
@@ -50,11 +53,9 @@ class FirebaseGroupRepository @Inject constructor(
 
     override suspend fun getGroups(groupIds: List<String>): Result<List<Group>> {
         try {
-            val collectionRef = firebase.firestore.collection("groups")
-
             val groupsQuery =
-                if (groupIds.isNotEmpty()) collectionRef.whereIn("id", groupIds)
-                else collectionRef
+                if (groupIds.isNotEmpty()) collection.whereIn("id", groupIds)
+                else collection
 
             val groups = groupsQuery
                 .get()
@@ -80,8 +81,7 @@ class FirebaseGroupRepository @Inject constructor(
     ): Result<Void> {
         return try {
             Result.success(
-                firebase.firestore
-                    .collection("groups")
+                collection
                     .document(groupId)
                     .update(data)
                     .await()
@@ -103,7 +103,7 @@ class FirebaseGroupRepository @Inject constructor(
     override suspend fun removeGroup(groupId: String): Result<Void> {
         return try {
             Result.success(
-                firebase.firestore.collection("groups")
+                collection
                     .document(groupId)
                     .delete()
                     .await()
@@ -120,6 +120,25 @@ class FirebaseGroupRepository @Inject constructor(
                 )
             )
         }
+    }
+
+    override fun listenChanges(
+        groupIds: List<String>,
+        callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
+    ): () -> Unit {
+        if (groupIds.isEmpty()) {
+            throw Exception("Ids list must not be empty")
+        }
+
+        val registration = collection.whereIn("id", groupIds).addSnapshotListener { snapshot, e ->
+            if (e !== null) {
+                return@addSnapshotListener
+            }
+
+            callback(snapshot!!.documentChanges.map { it.toRepositoryObjectChange() })
+        }
+
+        return { registration.remove() }
     }
 
     override fun listenGroupChanges(groupId: String, callback: (Group) -> Unit) {

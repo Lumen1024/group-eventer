@@ -60,7 +60,6 @@ fun DelegatedNavigation(
     }
 
     LaunchedEffect(destination) {
-        Log.d("W", "${currentRoute.toString()} - ${destination.toString()}")
         if (currentRoute === null || destination === null || currentRoute === destination) {
             return@LaunchedEffect
         }

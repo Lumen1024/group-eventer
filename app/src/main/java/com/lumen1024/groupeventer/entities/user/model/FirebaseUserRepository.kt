@@ -3,18 +3,22 @@ package com.lumen1024.groupeventer.entities.user.model
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import com.lumen1024.groupeventer.shared.model.RepositoryException
+import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import com.lumen1024.groupeventer.shared.model.toRepositoryException
+import com.lumen1024.groupeventer.shared.model.toRepositoryObjectChange
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseUserRepository @Inject constructor(
     private val firebase: Firebase,
 ) : UserRepository {
+    private val collection = firebase.firestore.collection("users")
+
     override suspend fun getData(userId: String): Result<UserData> {
         try {
-            val userData = firebase.firestore
-                .collection("users")
+            val userData = collection
                 .document(userId)
                 .get()
                 .await()
@@ -25,8 +29,7 @@ class FirebaseUserRepository @Inject constructor(
 
                 val newUserData = UserData(id = userId)
 
-                firebase.firestore
-                    .collection("users")
+                collection
                     .document(userId)
                     .set(newUserData)
                     .await()
@@ -59,8 +62,7 @@ class FirebaseUserRepository @Inject constructor(
     override suspend fun updateData(userId: String, data: Map<String, Any>): Result<Void> {
         return try {
             Result.success(
-                firebase.firestore
-                    .collection("users")
+                collection
                     .document(userId)
                     .update(data)
                     .await()
@@ -77,5 +79,20 @@ class FirebaseUserRepository @Inject constructor(
                 )
             )
         }
+    }
+
+    override fun listenChanges(
+        userId: String,
+        callback: (UserData?) -> Unit,
+    ): () -> Unit {
+        val registration = collection.document(userId).addSnapshotListener { snapshot, e ->
+            if (e !== null) {
+                return@addSnapshotListener
+            }
+
+            callback(snapshot!!.toObject())
+        }
+
+        return { registration.remove() }
     }
 }

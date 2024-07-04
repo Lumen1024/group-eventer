@@ -24,8 +24,7 @@ import com.lumen1024.groupeventer.shared.ui.Avatar
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val username by viewModel.username.collectAsState()
-    val avatarUrl by viewModel.avatarUrl.collectAsState()
+    val user by viewModel.userService.user.collectAsState()
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -52,10 +51,10 @@ fun ProfileScreen(
             Avatar(
                 modifier = Modifier
                     .clickable(role = Role.Button) { galleryLauncher.launch("image/*") },
-                url = avatarUrl
+                url = user?.avatarUrl
             )
             Username(
-                username = username ?: "",
+                username = user?.name ?: "",
                 showEdit = true,
                 onEdited = handleEdit
             )

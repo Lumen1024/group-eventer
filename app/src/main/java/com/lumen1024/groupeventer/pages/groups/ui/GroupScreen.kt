@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.pages.groups.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +44,11 @@ import com.lumen1024.groupeventer.shared.config.Screen
 fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.groups.collectAsState()
+    val groups by viewModel.userService.groups.collectAsState()
+    val userData by viewModel.userService.userData.collectAsState()
+
+    val userGroups by viewModel.userService.userData.collectAsState()
+
     var selected by remember { mutableStateOf<Group?>(null) }
 
     var addDialogOpen by remember { mutableStateOf(false) }
@@ -87,6 +92,9 @@ fun GroupsScreen(
             items(groups, key = { group -> group.id })
             {
                 GroupItem(
+                    onClick = {
+                        viewModel.toggleGroupHide(it.id)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
@@ -107,5 +115,3 @@ fun GroupsScreen(
         }
     }
 }
-
-

@@ -4,4 +4,9 @@ interface UserRepository {
     suspend fun getData(userId: String): Result<UserData>
 
     suspend fun updateData(userId: String, data: Map<String, Any>): Result<Void>
+
+    fun listenChanges(
+        userId: String,
+        callback: (UserData?) -> Unit,
+    ): () -> Unit
 }

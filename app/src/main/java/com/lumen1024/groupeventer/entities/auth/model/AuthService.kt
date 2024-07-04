@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.entities.auth.model
 
 import android.net.Uri
+import com.lumen1024.groupeventer.entities.user.model.User
 
 interface AuthService {
 
@@ -17,6 +18,8 @@ interface AuthService {
     ): Result<Unit>
 
     suspend fun logout()
+
+    fun listenChanges(callback: (User?) -> Unit): () -> Unit
 }
 
 
