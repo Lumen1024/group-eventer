@@ -68,7 +68,7 @@ fun Username(
                 if (showEdit) {
                     IconButton(onClick = { isEditing = !isEditing }) {
                         Icon(
-                            imageVector = Icons.Default.Edit,
+                            imageVector = Icons.Filled.Edit,
                             contentDescription = "Edit username"
                         )
                     }

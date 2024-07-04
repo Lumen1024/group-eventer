@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.entities.group.ui.GroupCard
+import com.lumen1024.groupeventer.entities.group.ui.GroupItem
 import com.lumen1024.groupeventer.pages.auth.model.NameErrorState
 import com.lumen1024.groupeventer.pages.auth.model.PasswordErrorState
 import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
@@ -69,11 +69,8 @@ fun GroupsScreen(
         ) {
             items(groups.value, key = { group -> group.id })
             {
-                GroupCard(
-                    it,
-                    hidden = userData.value?.groups?.get(it.id)
-                        ?: false,
-                    onHide = { viewModel.toggleGroupHide(it.id) }
+                GroupItem(
+                    it
                 )
             }
         }
