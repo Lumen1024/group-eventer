@@ -34,6 +34,7 @@ fun GroupItem(
     Row(
         modifier = Modifier
             .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp)
             .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -70,7 +71,7 @@ fun GroupCardPreview() {
             Modifier
                 .fillMaxSize()
                 .padding(18.dp)
-                .background(Color.Transparent), verticalArrangement = Arrangement.spacedBy(15.dp)
+                .background(Color.Transparent),
         ) {
             repeat(6) {
                 GroupItem(
@@ -79,7 +80,7 @@ fun GroupCardPreview() {
                         color = randomColor(),
                         people = listOf("ded", "ded")
                     ),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                 )
                 HorizontalDivider()
             }

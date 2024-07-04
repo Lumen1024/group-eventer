@@ -1,7 +1,6 @@
 package com.lumen1024.groupeventer.shared.model
 
 import android.app.Activity
-import android.graphics.Color
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -38,6 +38,16 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+val groupsColor = listOf(
+    Color(0xFFE53935),
+    Color(0xFFD81B60),
+    Color(0xFF5E35B1),
+    Color(0xFF039BE5),
+    Color(0xFF00897B),
+    Color(0xFF43A047),
+    Color(0xFFFFB300),
+)
+
 
 @Composable
 fun GroupEventerTheme(
@@ -61,7 +71,7 @@ fun GroupEventerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.TRANSPARENT
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }

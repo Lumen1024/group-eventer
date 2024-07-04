@@ -2,7 +2,6 @@ package com.lumen1024.groupeventer.pages.auth.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.expandVertically
@@ -74,14 +73,18 @@ fun AuthScreen(
             TabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
+                val tabModifier = Modifier.padding(vertical = 20.dp)
                 Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }) {
                     Text(
                         text = stringResource(R.string.sign_in),
-                        modifier = Modifier.padding(vertical = 20.dp)
+                        modifier = tabModifier
                     )
                 }
                 Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }) {
-                    Text(text = stringResource(R.string.sign_up))
+                    Text(
+                        modifier = tabModifier,
+                        text = stringResource(R.string.sign_up),
+                    )
                 }
             }
 
