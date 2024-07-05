@@ -25,7 +25,7 @@ class FirebaseUserRepository @Inject constructor(
                 .toObject(UserData::class.java)
 
             if (userData === null) {
-                // TODO remove?
+                // todo: remove? <-> @Answer: lumen1024 -> what is going on?
 
                 val newUserData = UserData(id = userId)
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseGroupRepository @Inject constructor(
-    private val firebase: Firebase,
+    firebase: Firebase,
 ) : GroupRepository {
     private val collection = firebase.firestore.collection("groups")
 
@@ -22,7 +22,7 @@ class FirebaseGroupRepository @Inject constructor(
     override suspend fun getGroup(groupId: String): Result<Group> {
         try {
             val group = collection
-                .document(groupId)
+                .document(groupId) // todo: use query by id field
                 .get()
                 .await()
                 .toObject(Group::class.java)

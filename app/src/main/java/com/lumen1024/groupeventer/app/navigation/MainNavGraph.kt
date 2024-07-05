@@ -17,7 +17,7 @@ fun MainNavGraph(
         navigator = viewModel.navigator
     ) {
         composable(Screen.Auth.route) { AuthScreen() }
-        composable(Screen.Tutorial.route) { /* todo */ }
+        composable(Screen.Tutorial.route) { TODO("Implement") }
         composable(Screen.Home.route) { HomeScreen() }
         composable(Screen.CreateEvent.route) { CreateEventScreen() }
     }

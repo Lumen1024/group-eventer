@@ -66,7 +66,7 @@ fun GroupEventCard(
                     ) {
                         val style = MaterialTheme.typography.bodySmall
                         Text(
-                            text = "от", // todo
+                            text = "от", // todo: res
                             fontStyle = style.fontStyle,
                             fontSize = style.fontSize,
                             fontWeight = style.fontWeight
@@ -75,12 +75,13 @@ fun GroupEventCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
+                            // todo: insert group data
                             Box(modifier = Modifier
                                 .clip(RoundedCornerShape(5.dp))
                                 .size(14.dp)
-                                .background(Color.Green)) // todo
+                                .background(Color.Green)) // here
                             Text(
-                                text = "Kotlin Group", // todo
+                                text = "Kotlin Group", // here
                                 fontStyle = style.fontStyle,
                                 fontSize = style.fontSize,
                                 fontWeight = style.fontWeight
@@ -113,12 +114,12 @@ fun GroupEventCard(
                         shape = RoundedCornerShape(16.dp)
                     ).padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
-                    Text(text = "22 июня 18:00")
+                    Text(text = "22 июня 18:00") // todo date
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = "3ч")
+                    Text(text = "3ч") // todo: insert duration
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,

@@ -6,6 +6,7 @@ import com.lumen1024.groupeventer.shared.model.RepositoryException
 class GroupRepositoryException(code: Code, message: String?) :
     RepositoryException(code, message)
 
+// todo: useless - cant use through exception creating
 fun GroupRepositoryException.toMessage(): Int {
     return when (this.code) {
         RepositoryException.Code.ABORTED -> R.string.group_aborted
