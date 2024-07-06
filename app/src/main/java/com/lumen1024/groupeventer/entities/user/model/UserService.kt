@@ -58,7 +58,7 @@ class UserService @Inject constructor(
 
     suspend fun createGroup(name: String, password: String, color: String): Result<Unit> {
         val dublicate = groupRepository.getGroup(name = name, password = null).getOrNull()
-         if (dublicate != null) return Result.failure(Throwable("ded")) // todo
+        if (dublicate != null) return Result.failure(Throwable("ded")) // todo
 
         val userData = userData.value
             ?: return Result.failure(Throwable("ded")) // todo
@@ -97,53 +97,43 @@ class UserService @Inject constructor(
         _user.value = user
     }
 
-    private fun listenUserDataChanges(): (() -> Unit)? {
-        if (_user.value === null) {
-            return null
-        }
-
-        return userRepository.listenChanges(_user.value!!.id) { data ->
+    private fun listenUserDataChanges(): (() -> Unit)? = user.value?.let {
+        return userRepository.listenChanges(it.id) { data ->
             _userData.value = data
-
             unsubscribeFromGroupChanges = listenGroupChanges()
         }
     }
 
-    private fun listenGroupChanges(): (() -> Unit)? {
-        if (userData.value?.groups === null) {
-            return null
+    /** Listen changes stored in [userData] groups ids.
+     *
+     * also return callback to remove this listener
+     * */
+    private fun listenGroupChanges(): (() -> Unit)? = userData.value?.groups?.let {
+        return groupRepository.listenChanges(it) {
+            changes -> processGroupsChange(changes)
         }
-
-        val groupIds = userData.value!!.groups
-
-        if (groupIds.isEmpty()) {
-            return null
-        }
-
-        return groupRepository.listenChanges(groupIds) { processGroupsChange(it) }
     }
 
+    /** Change inner field [groups] for every [RepositoryObjectChange] in list*/
     private fun processGroupsChange(repositoryObjectChanges: List<RepositoryObjectChange<Group?>>) {
-        for (change in repositoryObjectChanges) {
-            if (change.data === null) {
-                continue
-            }
+        repositoryObjectChanges
+            .filter { it.data != null }
+            .forEach { change ->
+                when (change.type) {
+                    RepositoryObjectChange.Type.ADDED,
+                    RepositoryObjectChange.Type.MODIFIED,
+                    -> {
+                        val index = _groups.indexOfFirst { group -> group.id === change.data!!.id }
 
-            when (change.type) {
-                RepositoryObjectChange.Type.ADDED,
-                RepositoryObjectChange.Type.MODIFIED,
-                -> {
-                    val index = _groups.indexOfFirst { group -> group.id === change.data!!.id }
-
-                    if (index == -1) {
-                        _groups.add(change.data!!)
-                    } else {
-                        _groups[index] = change.data!!
+                        if (index == -1) {
+                            _groups.add(change.data!!)
+                        } else {
+                            _groups[index] = change.data!!
+                        }
                     }
-                }
 
-                RepositoryObjectChange.Type.REMOVED -> _groups.remove(change.data!!)
+                    RepositoryObjectChange.Type.REMOVED -> _groups.remove(change.data!!)
+                }
             }
-        }
     }
 }
