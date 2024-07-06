@@ -9,7 +9,7 @@ data class UserGroup(
 
 data class UserData(
     val id: String = "",
-    val groups: Map<String, Boolean> = emptyMap(),
+    val groups: List<String> = emptyList(),
 )
 
 data class User(

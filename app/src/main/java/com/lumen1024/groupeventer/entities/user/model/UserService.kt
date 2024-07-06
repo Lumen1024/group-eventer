@@ -27,6 +27,63 @@ class UserService @Inject constructor(
     private val _groups = mutableStateListOf<Group>()
     val groups get() = MutableStateFlow(_groups.toImmutableList()).asStateFlow()
 
+    suspend fun joinGroup(name: String, password: String): Result<Unit> {
+        val group = groupRepository.getGroup(name, password).getOrNull()
+            ?: return Result.failure(Throwable("ded")) // todo
+        val userData = userData.value
+            ?: return Result.failure(Throwable("ded")) // todo
+
+        userRepository.updateData(
+            userId = userData.id,
+            data = mapOf(
+                "groups" to userData.groups.toMutableList().add(group.id)
+            )
+        ).also {
+            if (it.isFailure)
+                return Result.failure(Throwable("ded")) // todo
+        }
+
+        groupRepository.updateGroup(
+            groupId = group.id,
+            data = mapOf(
+                "people" to group.people.toMutableList().add(userData.id)
+            )
+        ).also {
+            if (it.isFailure)
+                return Result.failure(Throwable("ded")) // todo
+        }
+
+        return Result.success(Unit)
+    }
+
+    suspend fun createGroup(name: String, password: String, color: String): Result<Unit> {
+        val dublicate = groupRepository.getGroup(name = name, password = null).getOrNull()
+         if (dublicate != null) return Result.failure(Throwable("ded")) // todo
+
+        val userData = userData.value
+            ?: return Result.failure(Throwable("ded")) // todo
+
+        val group = Group(
+            name = name,
+            password = password,
+            admin = userData.id,
+        )
+
+        groupRepository.addGroup(group)
+
+        userRepository.updateData(
+            userId = userData.id,
+            data = mapOf(
+                "groups" to userData.groups.toMutableList().add(group.id)
+            )
+        ).also {
+            if (it.isFailure)
+                return Result.failure(Throwable("ded")) // todo
+        }
+
+        return Result.success(Unit)
+    }
+
     private var unsubscribeFromUserChanges: (() -> Unit)? = null
     private var unsubscribeFromUserDataChanges: (() -> Unit)? = null
     private var unsubscribeFromGroupChanges: (() -> Unit)? = null
@@ -57,7 +114,7 @@ class UserService @Inject constructor(
             return null
         }
 
-        val groupIds = userData.value!!.groups.keys.toList()
+        val groupIds = userData.value!!.groups
 
         if (groupIds.isEmpty()) {
             return null

@@ -5,9 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.lumen1024.groupeventer.shared.model.RepositoryException
-import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import com.lumen1024.groupeventer.shared.model.toRepositoryException
-import com.lumen1024.groupeventer.shared.model.toRepositoryObjectChange
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

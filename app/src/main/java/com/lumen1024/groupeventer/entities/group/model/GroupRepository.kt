@@ -13,6 +13,8 @@ interface GroupRepository {
 
     suspend fun removeGroup(groupId: String): Result<Void>
 
+    suspend fun getGroup(name: String, password: String?) : Result<Group>
+
     fun listenChanges(
         groupIds: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,

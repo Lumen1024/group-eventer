@@ -19,6 +19,7 @@ class FirebaseGroupRepository @Inject constructor(
         collection.add(group).await()
     }
 
+    @Deprecated("not work")
     override suspend fun getGroup(groupId: String): Result<Group> {
         try {
             val group = collection
@@ -49,6 +50,23 @@ class FirebaseGroupRepository @Inject constructor(
                 )
             )
         }
+    }
+
+    override suspend fun getGroup(name: String, password: String?): Result<Group> {
+        val query = collection
+            .whereEqualTo("name", name)
+            .apply { if (password.isNullOrEmpty()) whereEqualTo("password", password) }
+            .get()
+            .await()
+
+        if (query.isEmpty)
+            return Result.failure(GroupRepositoryException(
+                code = RepositoryException.Code.NOT_FOUND,
+                message = "" // todo
+            ))
+
+        val group = query.documents[0].toObject(Group::class.java)!! // up check
+        return Result.success(group)
     }
 
     override suspend fun getGroups(groupIds: List<String>): Result<List<Group>> {

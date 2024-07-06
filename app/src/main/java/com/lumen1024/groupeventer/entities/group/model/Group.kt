@@ -9,7 +9,9 @@ data class Group(
     val name: String = "",
     val color: String = "#EEEEEE",
     val description: String = "",
+    val password: String = "",
 
     val events: List<GroupEvent> = emptyList(),
     val people: List<String> = emptyList(),
+    val admin: String = ""
 )

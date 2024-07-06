@@ -32,6 +32,7 @@ open class RepositoryException(val code: Code, message: String? = null) :
         UNIMPLEMENTED,
         UNAVAILABLE,
         UNAUTHENTICATED,
+        NOT_FOUND
     }
 }
 
