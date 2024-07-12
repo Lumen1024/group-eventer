@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.lumen1024.groupeventer.R
+import kotlinx.serialization.Serializable
 
 interface HasIcon {
     val icon: ImageVector
@@ -17,39 +18,23 @@ interface HasLabel {
     val label: Int
 }
 
-sealed class Screen(open val route: String) {
-    data object Auth : Screen("auth")
-    data object Tutorial : Screen("tutorial")
-    data object Home : Screen("home") {
-        data object Groups : Screen("groups"), HasLabel, HasIcon {
-            override val icon: ImageVector = Icons.Default.Groups
-            override val label: Int = R.string.groups_screen
-        }
+sealed class Screen {
+    @Serializable data object Auth : Screen()
+    @Serializable data object Tutorial : Screen()
+    @Serializable data object CreateEvent : Screen()
 
-        data object Events : Screen("events"), HasLabel, HasIcon {
-            override val icon: ImageVector = Icons.AutoMirrored.Filled.List
-            override val label: Int = R.string.events_screen
-        }
-
-        data object Profile : Screen("settings"), HasLabel, HasIcon {
-            override val icon: ImageVector = Icons.Default.Person
-            override val label: Int = R.string.profile_screen
-        }
+    @Serializable data object Groups : Screen(), HasLabel, HasIcon {
+        override val icon: ImageVector = Icons.Default.Groups
+        override val label: Int = R.string.groups_screen
     }
 
-    data object CreateEvent : Screen("create-event")
+    @Serializable data object Events : Screen(), HasLabel, HasIcon {
+        override val icon: ImageVector = Icons.AutoMirrored.Filled.List
+        override val label: Int = R.string.events_screen
+    }
 
-    companion object {
-        fun fromStr(route: String): Screen? {
-            return when (route) {
-                "auth" -> Auth
-                "tutorial" -> Tutorial
-                "home" -> Home
-                "groups" -> Home.Groups
-                "events" -> Home.Events
-                "profile" -> Home.Profile
-                else -> null
-            }
-        }
+    @Serializable data object Profile : Screen(), HasLabel, HasIcon {
+        override val icon: ImageVector = Icons.Default.Person
+        override val label: Int = R.string.profile_screen
     }
 }

@@ -8,12 +8,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNavGraphViewModel @Inject constructor(
-    val navigator: MainNavigator,
+    private val navigator: Navigator,
     private val authService: AuthService,
 ) : ViewModel() {
 
-    fun getStartDestination(): String = if (authService.checkAuthorized())
-        Screen.Home.route
+    val navigationChannel = navigator.navigationChannel
+
+    fun getStartDestination(): Screen = if (authService.checkAuthorized())
+        Screen.Events
     else
-        Screen.Auth.route
+        Screen.Auth
 }

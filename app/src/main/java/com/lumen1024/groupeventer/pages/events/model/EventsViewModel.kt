@@ -3,7 +3,7 @@ package com.lumen1024.groupeventer.pages.events.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lumen1024.groupeventer.app.navigation.MainNavigator
+import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class EventsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val groupRepository: FirebaseGroupRepository,
-    private val mainNavigator: MainNavigator,
+    private val mainNavigator: Navigator,
 ) : ViewModel() {
 
     private val groups = emptyList<Group>()
@@ -35,6 +35,6 @@ class EventsViewModel @Inject constructor(
 
     fun addEvent()
     {
-        mainNavigator.navigate(Screen.CreateEvent)
+        mainNavigator.tryNavigateTo(Screen.CreateEvent)
     }
 }

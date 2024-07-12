@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.storage.storage
-import com.lumen1024.groupeventer.app.navigation.MainNavigator
+import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
-import com.lumen1024.groupeventer.entities.user.model.UserService
 import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.entities.user.model.UserRepository
+import com.lumen1024.groupeventer.entities.user.model.UserService
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    val navigator: MainNavigator,
+    private val navigator: Navigator,
     @ApplicationContext private val context: Context,
     private val firebase: Firebase,
     private val authService: AuthService,
@@ -102,7 +102,10 @@ class ProfileViewModel @Inject constructor(
             authService.logout()
 
             if (!authService.checkAuthorized()) {
-                navigator.navigate(Screen.Auth, true)
+                navigator.tryNavigateTo(
+                    route = Screen.Auth,
+                    // todo
+                )
             }
         }
     }

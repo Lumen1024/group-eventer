@@ -57,7 +57,7 @@ fun GroupsScreen(
                 title = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(Screen.Home.Groups.label),
+                        text = stringResource(Screen.Groups.label),
                         textAlign = TextAlign.Center
                     )
                 },

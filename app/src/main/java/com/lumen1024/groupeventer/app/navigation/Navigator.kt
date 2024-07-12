@@ -1,35 +1,78 @@
 package com.lumen1024.groupeventer.app.navigation
 
-import androidx.navigation.NavOptionsBuilder
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.shared.config.Screen
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 
-abstract class Navigator(val startDestination: Screen) {
+class Navigator {
 
-    private val _destination = MutableStateFlow<String?>(null)
-    val destination = _destination.asStateFlow()
-    var builder: NavOptionsBuilder.() -> Unit = {}
-    var popUpStart = false
+    val navigationChannel = Channel<NavigationIntent>(
+        capacity = Int.MAX_VALUE,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
 
-    fun setDestination(screen: Screen) {
-        _destination.value = screen.route
+    suspend fun navigateBack(route: Screen? = null, inclusive: Boolean = false) {
+        navigationChannel.send(
+            NavigationIntent.NavigateBack(
+                route = route,
+                inclusive = inclusive
+            )
+        )
     }
 
-    fun navigate(
-        screen: Screen,
-        popUpStart: Boolean = false,
-        builder: NavOptionsBuilder.() -> Unit = {},
+    fun tryNavigateBack(route: Screen? = null, inclusive: Boolean = false) {
+        navigationChannel.trySend(
+            NavigationIntent.NavigateBack(
+                route = route,
+                inclusive = inclusive
+            )
+        )
+    }
+
+    suspend fun navigateTo(
+        route: Screen,
+        popUpToRoute: Screen? = null,
+        inclusive: Boolean = false,
+        isSingleTop: Boolean = false
     ) {
-        this.builder = builder
-        this.popUpStart = popUpStart
-        _destination.value = screen.route
+        navigationChannel.send(
+            NavigationIntent.NavigateTo(
+                route = route,
+                popUpToRoute = popUpToRoute,
+                inclusive = inclusive,
+                isSingleTop = isSingleTop,
+            )
+        )
+    }
+
+    fun tryNavigateTo(
+        route: Screen,
+        popUpToRoute: Screen? = null,
+        inclusive: Boolean = false,
+        isSingleTop: Boolean = false
+    ) {
+        navigationChannel.trySend(
+            NavigationIntent.NavigateTo(
+                route = route,
+                popUpToRoute = popUpToRoute,
+                inclusive = inclusive,
+                isSingleTop = isSingleTop,
+            )
+        )
     }
 }
 
-class MainNavigator @Inject constructor(authService: AuthService) :
-    Navigator(if (authService.checkAuthorized()) Screen.Home else Screen.Auth)
+sealed class NavigationIntent {
+    data class NavigateBack(
+        val route: Screen? = null,
+        val inclusive: Boolean = false,
+    ) : NavigationIntent()
 
-class HomeNavigator @Inject constructor() : Navigator(Screen.Home.Events)
+    data class NavigateTo(
+        val route: Screen,
+        val popUpToRoute: Screen? = null,
+        val inclusive: Boolean = false,
+        val isSingleTop: Boolean = false,
+    ) : NavigationIntent()
+}
+

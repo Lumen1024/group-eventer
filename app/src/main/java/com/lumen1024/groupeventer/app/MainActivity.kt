@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.groupeventer.app.navigation.MainNavGraph
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.groupeventer.shared.model.ScaffoldController
+import com.lumen1024.groupeventer.shared.ui.DelegatedScaffold
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,7 +39,11 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    MainNavGraph()
+                    val scaffoldController = ScaffoldController()
+                    DelegatedScaffold(scaffoldController = scaffoldController) {
+                        MainNavGraph()
+                    }
+
                 }
             }
         }
