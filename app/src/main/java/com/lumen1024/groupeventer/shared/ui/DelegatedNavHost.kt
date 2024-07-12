@@ -1,8 +1,5 @@
 package com.lumen1024.groupeventer.shared.ui
 
-import android.util.Log
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +30,6 @@ fun DelegatedNavigation(
         startDestination = navigator.startDestination.route,
         builder = builder
     )
-
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
@@ -70,9 +66,12 @@ fun DelegatedNavigation(
             // avoid building up a large stack of destinations
             // on the back stack as users select items
             if (navigator.popUpStart)
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                navController.graph.findStartDestination().route?.let {
+                    popUpTo(it) {
+                        saveState = true
+                    }
                 }
+
         }
     }
 
