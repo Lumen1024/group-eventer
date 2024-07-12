@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -88,6 +89,7 @@ dependencies {
     // Navigation (Compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // Material extension
     implementation(libs.androidx.compose.icons)
