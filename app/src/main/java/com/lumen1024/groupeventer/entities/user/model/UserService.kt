@@ -28,40 +28,37 @@ class UserService @Inject constructor(
     val groups get() = MutableStateFlow(_groups.toImmutableList()).asStateFlow()
 
     suspend fun joinGroup(name: String, password: String): Result<Unit> {
-        val group = groupRepository.getGroup(name, password).getOrNull()
-            ?: return Result.failure(Throwable("ded")) // todo
         val userData = userData.value
             ?: return Result.failure(Throwable("ded")) // todo
+
+        val group = groupRepository.getGroup(name, password)
+            .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
 
         userRepository.updateData(
             userId = userData.id,
             data = mapOf(
                 "groups" to userData.groups.toMutableList().add(group.id)
             )
-        ).also {
-            if (it.isFailure)
-                return Result.failure(Throwable("ded")) // todo
-        }
+        ).onFailure { return Result.failure(it) }
+
 
         groupRepository.updateGroup(
             groupId = group.id,
             data = mapOf(
                 "people" to group.people.toMutableList().add(userData.id)
             )
-        ).also {
-            if (it.isFailure)
-                return Result.failure(Throwable("ded")) // todo
-        }
+        ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
     suspend fun createGroup(name: String, password: String, color: String): Result<Unit> {
-        val dublicate = groupRepository.getGroup(name = name, password = null).getOrNull()
-        if (dublicate != null) return Result.failure(Throwable("ded")) // todo
+        if (groupRepository.getGroup(name = name, password = null).isSuccess) {
+            return Result.failure(Throwable("Group with same name already exist"))
+        } // todo: move to addGroup
 
         val userData = userData.value
-            ?: return Result.failure(Throwable("ded")) // todo
+            ?: return Result.failure(Throwable("Not authorized")) // todo
 
         val group = Group(
             name = name,
@@ -76,10 +73,7 @@ class UserService @Inject constructor(
             data = mapOf(
                 "groups" to userData.groups.toMutableList().add(group.id)
             )
-        ).also {
-            if (it.isFailure)
-                return Result.failure(Throwable("ded")) // todo
-        }
+        ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
@@ -109,8 +103,8 @@ class UserService @Inject constructor(
      * also return callback to remove this listener
      * */
     private fun listenGroupChanges(): (() -> Unit)? = userData.value?.groups?.let {
-        return groupRepository.listenChanges(it) {
-            changes -> processGroupsChange(changes)
+        return groupRepository.listenChanges(it) { changes ->
+            processGroupsChange(changes)
         }
     }
 
@@ -121,8 +115,7 @@ class UserService @Inject constructor(
             .forEach { change ->
                 when (change.type) {
                     RepositoryObjectChange.Type.ADDED,
-                    RepositoryObjectChange.Type.MODIFIED,
-                    -> {
+                    RepositoryObjectChange.Type.MODIFIED -> {
                         val index = _groups.indexOfFirst { group -> group.id === change.data!!.id }
 
                         if (index == -1) {
