@@ -33,7 +33,7 @@ class Navigator {
         route: Screen,
         popUpToRoute: Screen? = null,
         inclusive: Boolean = false,
-        isSingleTop: Boolean = false
+        isSingleTop: Boolean = false,
     ) {
         navigationChannel.send(
             NavigationIntent.NavigateTo(
@@ -49,7 +49,7 @@ class Navigator {
         route: Screen,
         popUpToRoute: Screen? = null,
         inclusive: Boolean = false,
-        isSingleTop: Boolean = false
+        isSingleTop: Boolean = false,
     ) {
         navigationChannel.trySend(
             NavigationIntent.NavigateTo(
@@ -60,6 +60,8 @@ class Navigator {
             )
         )
     }
+
+    // TODO implement restore state
 }
 
 sealed class NavigationIntent {

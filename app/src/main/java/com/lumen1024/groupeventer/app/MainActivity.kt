@@ -8,11 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
 import com.lumen1024.groupeventer.app.navigation.MainNavGraph
+import com.lumen1024.groupeventer.shared.lib.LocalNavController
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import com.lumen1024.groupeventer.shared.model.ScaffoldController
 import com.lumen1024.groupeventer.shared.ui.DelegatedScaffold
@@ -39,11 +43,18 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
+                    val navController = rememberNavController()
                     val scaffoldController = ScaffoldController()
-                    DelegatedScaffold(scaffoldController = scaffoldController) {
-                        MainNavGraph()
-                    }
 
+                    CompositionLocalProvider(LocalNavController provides navController) {
+                        DelegatedScaffold(scaffoldController) {
+                            MainNavGraph(
+                                navController,
+                                scaffoldController,
+                                modifier = Modifier.padding(it)
+                            )
+                        }
+                    }
                 }
             }
         }

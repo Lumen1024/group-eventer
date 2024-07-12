@@ -10,14 +10,15 @@ import com.lumen1024.groupeventer.shared.model.ScaffoldController
 
 @Composable
 fun DelegatedScaffold(
-    modifier: Modifier = Modifier,
     scaffoldController: ScaffoldController,
-    content: @Composable (PaddingValues) -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable (PaddingValues) -> Unit,
 ) {
     val topBar by scaffoldController.topBar.collectAsState()
     val bottomBar by scaffoldController.bottomBar.collectAsState()
-    val floatingActionButton by scaffoldController.floatingButton.collectAsState()
+    val floatingActionButton by scaffoldController.floatingActionButton.collectAsState()
     Scaffold(
+        modifier = modifier,
         topBar = topBar ?: {},
         bottomBar = bottomBar ?: {},
         floatingActionButton = floatingActionButton ?: {},

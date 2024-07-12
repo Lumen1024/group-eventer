@@ -12,20 +12,36 @@ class ScaffoldController {
     private val _bottomBar = MutableStateFlow<(@Composable () -> Unit)?>(null)
     val bottomBar = _bottomBar.asStateFlow()
 
-    private val _floatingButton = MutableStateFlow<(@Composable () -> Unit)?>(null)
-    val floatingButton = _floatingButton.asStateFlow()
-
+    private val _floatingActionButton = MutableStateFlow<(@Composable () -> Unit)?>(null)
+    val floatingActionButton = _floatingActionButton.asStateFlow()
 
     fun topBar(content: @Composable () -> Unit) {
         if (topBar.value != content) _topBar.value = content
     }
 
-    fun floatingButton(content: @Composable () -> Unit) {
-        if (floatingButton.value != content) _floatingButton.value = content
-    }
-
     fun bottomBar(content: @Composable () -> Unit) {
         if (bottomBar.value != content) _bottomBar.value = content
+    }
+
+    fun floatingActionButton(content: @Composable () -> Unit) {
+        if (floatingActionButton.value != content) _floatingActionButton.value = content
+    }
+
+    fun setup(
+        topBar: @Composable () -> Unit = {},
+        bottomBar: @Composable () -> Unit = {},
+        floatingActionButton: @Composable () -> Unit = {},
+        clear: Boolean = true,
+    ) {
+        if (clear) {
+            this.topBar {}
+            this.bottomBar {}
+            this.floatingActionButton {}
+        }
+
+        this.topBar(topBar)
+        this.bottomBar(bottomBar)
+        this.floatingActionButton(floatingActionButton)
     }
 
     fun drawer(content: @Composable () -> Unit) {

@@ -25,7 +25,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -44,13 +43,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.R
+import com.lumen1024.groupeventer.app.config.bottomBarItems
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
+import com.lumen1024.groupeventer.shared.config.Screen
+import com.lumen1024.groupeventer.shared.model.ScaffoldController
 import com.lumen1024.groupeventer.shared.ui.EmailTextField
 import com.lumen1024.groupeventer.shared.ui.NameTextField
+import com.lumen1024.groupeventer.shared.ui.NavBar
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 
 @Composable
 fun AuthScreen(
+    scaffoldController: ScaffoldController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
@@ -66,10 +70,14 @@ fun AuthScreen(
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+    scaffoldController.setup()
+
+    Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             TabRow(
                 selectedTabIndex = selectedTabIndex
             ) {
