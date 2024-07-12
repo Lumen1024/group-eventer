@@ -2,14 +2,11 @@ package com.lumen1024.groupeventer.pages.groups.model
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import com.lumen1024.groupeventer.entities.user.model.UserService
 import com.lumen1024.groupeventer.entities.user.model.UserRepository
+import com.lumen1024.groupeventer.entities.user.model.UserService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,23 +18,19 @@ class GroupsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun toggleGroupHide(groupId: String) {
-        val hidden = userService.userData.value?.groups?.get(groupId)
-
-        if (firebase.auth.currentUser !== null && hidden !== null) {
-            viewModelScope.launch {
-                userRepository.updateData(
-                    firebase.auth.currentUser!!.uid, data = mapOf(
-                        "groups" to mapOf<String, Any>(
-                            groupId to !hidden
-                        )
-                    )
-                )
-            }
-        }
-    }
-
-    fun addGroup(name: String, password: String) {
-
+//        val hidden = userService.userData.value?.groups?.get(groupId)
+//
+//        if (firebase.auth.currentUser !== null && hidden !== null) {
+//            viewModelScope.launch {
+//                userRepository.updateData(
+//                    firebase.auth.currentUser!!.uid, data = mapOf(
+//                        "groups" to mapOf<String, Any>(
+//                            groupId to !hidden
+//                        )
+//                    )
+//                )
+//            }
+//        }
     }
 
 }

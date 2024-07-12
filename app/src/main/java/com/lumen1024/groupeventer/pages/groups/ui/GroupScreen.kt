@@ -33,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.ui.GroupItem
-import com.lumen1024.groupeventer.pages.events.ui.AddGroupDialog
-import com.lumen1024.groupeventer.pages.events.ui.GroupDetailsBottomSheet
 import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
 import com.lumen1024.groupeventer.shared.config.Screen
 
@@ -106,8 +104,7 @@ fun GroupsScreen(
 
         if (addDialogOpen) {
             AddGroupDialog(
-                onDismiss = { addDialogOpen = false },
-                onConfirm = { name, password -> viewModel.addGroup(name, password) }
+                onDismiss = { addDialogOpen = false }
             )
         }
         if (sheetOpen) {
