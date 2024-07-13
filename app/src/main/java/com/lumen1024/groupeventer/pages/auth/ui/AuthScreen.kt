@@ -43,18 +43,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.app.config.bottomBarItems
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
-import com.lumen1024.groupeventer.shared.config.Screen
-import com.lumen1024.groupeventer.shared.model.ScaffoldController
 import com.lumen1024.groupeventer.shared.ui.EmailTextField
 import com.lumen1024.groupeventer.shared.ui.NameTextField
-import com.lumen1024.groupeventer.shared.ui.NavBar
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 
 @Composable
 fun AuthScreen(
-    scaffoldController: ScaffoldController,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
@@ -69,9 +64,6 @@ fun AuthScreen(
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-
-
-    scaffoldController.setup()
 
     Column {
         Column(

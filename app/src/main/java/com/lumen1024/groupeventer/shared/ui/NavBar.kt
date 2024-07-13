@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.shared.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -13,19 +12,15 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
+import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.shared.config.HasIcon
 import com.lumen1024.groupeventer.shared.config.HasLabel
 import com.lumen1024.groupeventer.shared.config.Screen
-import com.lumen1024.groupeventer.shared.config.isEqualsToRoute
-import com.lumen1024.groupeventer.shared.lib.LocalNavController
+import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -40,13 +35,16 @@ fun NavBar(
     items: List<Screen>,
     startDestination: Screen,
     viewModel: NavBarViewModel = hiltViewModel(),
+    navController: NavHostController,
 ) {
+    val currentScreen by navController.getCurrentScreenAsState()
     NavigationBar(
         modifier = Modifier
     ) {
         items.forEach { screen ->
             NavBarItem(
                 screen,
+                isSelected = currentScreen == screen,
                 onNavigate = { navigateScreen: Screen ->
                     viewModel.navigator.tryNavigateTo(
                         navigateScreen,
@@ -61,10 +59,9 @@ fun NavBar(
 @Composable
 private fun RowScope.NavBarItem(
     screen: Screen,
+    isSelected: Boolean,
     onNavigate: (Screen) -> Unit,
 ) {
-    val navController = LocalNavController.current
-    val currentScreen by navController.currentBackStackEntryAsState()
 
     val label = if (screen is HasLabel) stringResource(screen.label) else ""
 
@@ -74,8 +71,6 @@ private fun RowScope.NavBarItem(
         }
     }
 
-    val selected by remember { derivedStateOf { screen.isEqualsToRoute(currentScreen) } }
-
     NavigationBarItem(
         icon = {
             Icon(
@@ -84,7 +79,7 @@ private fun RowScope.NavBarItem(
             )
         },
         label = { Text(label) },
-        selected = selected,
-        onClick = { if (!selected) onNavigate(screen) },
+        selected = isSelected,
+        onClick = { if (!isSelected) onNavigate(screen) },
     )
 }

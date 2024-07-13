@@ -17,17 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.app.config.bottomBarItems
 import com.lumen1024.groupeventer.entities.user.ui.Username
 import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
-import com.lumen1024.groupeventer.shared.config.Screen
-import com.lumen1024.groupeventer.shared.model.ScaffoldController
 import com.lumen1024.groupeventer.shared.ui.Avatar
-import com.lumen1024.groupeventer.shared.ui.NavBar
 
 @Composable
 fun ProfileScreen(
-    scaffoldController: ScaffoldController,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val user by viewModel.userService.user.collectAsState()
@@ -44,12 +39,6 @@ fun ProfileScreen(
     val handleEdit = { name: String ->
         viewModel.updateName(name)
     }
-
-    scaffoldController.setup(
-        bottomBar = {
-            NavBar(bottomBarItems, startDestination = Screen.Events)
-        }
-    )
 
     Column(
         modifier = Modifier

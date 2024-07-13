@@ -24,20 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
-import com.lumen1024.groupeventer.shared.model.ScaffoldController
 import com.lumen1024.groupeventer.shared.ui.EventStatusIndicator
 import com.lumen1024.groupeventer.shared.ui.EventStatusSelect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    scaffoldController: ScaffoldController,
     viewModel: CreateEventViewModel = hiltViewModel(),
 ) {
     var status by remember { mutableStateOf(GroupEventStatus.Prepare) }
@@ -50,8 +47,6 @@ fun CreateEventScreen(
         GroupEventStatus.Voting,
         GroupEventStatus.Ended,
     )
-
-
     
     Scaffold(modifier = Modifier
         .navigationBarsPadding()

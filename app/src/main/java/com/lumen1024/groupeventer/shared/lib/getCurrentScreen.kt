@@ -1,0 +1,32 @@
+package com.lumen1024.groupeventer.shared.lib
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.navigation.NavHostController
+import com.lumen1024.groupeventer.shared.config.Screen
+
+@Composable
+fun NavHostController.getCurrentScreenAsState(): State<Screen?> {
+    val screens = mapOf(
+        Screen.Auth.javaClass.canonicalName to Screen.Auth,
+        Screen.Tutorial.javaClass.canonicalName to Screen.Tutorial,
+
+        Screen.Groups.javaClass.canonicalName to Screen.Groups,
+        Screen.Events.javaClass.canonicalName to Screen.Events,
+        Screen.Profile.javaClass.canonicalName to Screen.Profile,
+
+        Screen.CreateEvent.javaClass.canonicalName to Screen.CreateEvent,
+    )
+    val state = this.currentBackStackEntryFlow
+        .collectAsState(null)
+    return remember {
+        derivedStateOf {
+            state.value?.destination?.route.let {
+                return@let screens[it]
+            }
+        }
+    }
+}
