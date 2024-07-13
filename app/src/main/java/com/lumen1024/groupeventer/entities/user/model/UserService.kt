@@ -1,9 +1,11 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.Group
+import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,34 +30,71 @@ class UserService @Inject constructor(
     val groups get() = MutableStateFlow(_groups.toImmutableList()).asStateFlow()
 
     suspend fun joinGroup(name: String, password: String): Result<Unit> {
+        val user = user.value ?: return Result.failure(Throwable("Not authorized"))
+
         val userData = userData.value
             ?: return Result.failure(Throwable("ded")) // todo
 
         val group = groupRepository.getGroup(name, password)
             .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
 
+        if (group.id in userData.groups) {
+            return Result.failure(Throwable("You already in this group"))
+        }
+
         userRepository.updateData(
-            userId = userData.id,
+            userId = user.id,
             data = mapOf(
-                "groups" to userData.groups.toMutableList().add(group.id)
+                "groups" to userData.groups + group.id
             )
         ).onFailure { return Result.failure(it) }
-
 
         groupRepository.updateGroup(
             groupId = group.id,
             data = mapOf(
-                "people" to group.people.toMutableList().add(userData.id)
+                "people" to group.people + user.id
             )
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
-    suspend fun createGroup(name: String, password: String, color: String): Result<Unit> {
+    suspend fun leaveGroup(name: String): Result<Unit> {
+        val user = user.value ?: return Result.failure(Throwable("Not authorized"))
+
+        val userData = userData.value
+            ?: return Result.failure(Throwable("ded")) // todo
+
+        val group = groupRepository.getGroup(name, null)
+            .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
+
+        if (group.id !in userData.groups) {
+            return Result.failure(Throwable("You are not in this group"))
+        }
+
+        userRepository.updateData(
+            userId = user.id,
+            data = mapOf(
+                "groups" to userData.groups - group.id
+            )
+        ).onFailure { return Result.failure(it) }
+
+        groupRepository.updateGroup(
+            groupId = group.id,
+            data = mapOf(
+                "people" to group.people - user.id
+            )
+        ).onFailure { return Result.failure(it) }
+
+        return Result.success(Unit)
+    }
+
+    suspend fun createGroup(name: String, password: String, color: GroupColor): Result<Unit> {
         if (groupRepository.getGroup(name = name, password = null).isSuccess) {
             return Result.failure(Throwable("Group with same name already exist"))
         } // todo: move to addGroup
+
+        val user = user.value ?: return Result.failure(Throwable("Not authorized"))
 
         val userData = userData.value
             ?: return Result.failure(Throwable("Not authorized")) // todo
@@ -63,15 +102,16 @@ class UserService @Inject constructor(
         val group = Group(
             name = name,
             password = password,
-            admin = userData.id,
+            admin = user.id,
+            color = color
         )
 
         groupRepository.addGroup(group)
 
         userRepository.updateData(
-            userId = userData.id,
+            userId = user.id,
             data = mapOf(
-                "groups" to userData.groups.toMutableList().add(group.id)
+                "groups" to userData.groups + group.id
             )
         ).onFailure { return Result.failure(it) }
 
@@ -83,7 +123,13 @@ class UserService @Inject constructor(
     private var unsubscribeFromGroupChanges: (() -> Unit)? = null
 
     init {
+        unsubscribeFromUserChanges?.let { it() }
         unsubscribeFromUserChanges = authService.listenChanges(this::updateUser)
+
+        unsubscribeFromUserDataChanges?.let {
+            it()
+            _userData.value = null
+        }
         unsubscribeFromUserDataChanges = listenUserDataChanges()
     }
 
@@ -94,6 +140,10 @@ class UserService @Inject constructor(
     private fun listenUserDataChanges(): (() -> Unit)? = user.value?.let {
         return userRepository.listenChanges(it.id) { data ->
             _userData.value = data
+            unsubscribeFromGroupChanges?.let {
+                it()
+                _groups.clear()
+            }
             unsubscribeFromGroupChanges = listenGroupChanges()
         }
     }
@@ -102,11 +152,12 @@ class UserService @Inject constructor(
      *
      * also return callback to remove this listener
      * */
-    private fun listenGroupChanges(): (() -> Unit)? = userData.value?.groups?.let {
-        return groupRepository.listenChanges(it) { changes ->
-            processGroupsChange(changes)
+    private fun listenGroupChanges(): (() -> Unit)? =
+        userData.value?.groups?.takeIf { it.isNotEmpty() }?.let {
+            return groupRepository.listenChanges(it) { changes ->
+                processGroupsChange(changes)
+            }
         }
-    }
 
     /** Change inner field [groups] for every [RepositoryObjectChange] in list*/
     private fun processGroupsChange(repositoryObjectChanges: List<RepositoryObjectChange<Group?>>) {
@@ -115,8 +166,9 @@ class UserService @Inject constructor(
             .forEach { change ->
                 when (change.type) {
                     RepositoryObjectChange.Type.ADDED,
-                    RepositoryObjectChange.Type.MODIFIED -> {
-                        val index = _groups.indexOfFirst { group -> group.id === change.data!!.id }
+                    RepositoryObjectChange.Type.MODIFIED,
+                    -> {
+                        val index = _groups.indexOfFirst { group -> group.id == change.data!!.id }
 
                         if (index == -1) {
                             _groups.add(change.data!!)

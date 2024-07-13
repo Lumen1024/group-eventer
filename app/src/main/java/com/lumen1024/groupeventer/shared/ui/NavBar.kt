@@ -9,7 +9,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,8 +66,15 @@ private fun RowScope.NavBarItem(
     val navController = LocalNavController.current
     val currentScreen by navController.currentBackStackEntryAsState()
 
-    val icon = if (screen is HasIcon) screen.icon else Icons.Default.Circle
     val label = if (screen is HasLabel) stringResource(screen.label) else ""
+
+    val icon by remember {
+        derivedStateOf {
+            if (screen is HasIcon) screen.icon else Icons.Default.Circle
+        }
+    }
+
+    val selected by remember { derivedStateOf { screen.isEqualsToRoute(currentScreen) } }
 
     NavigationBarItem(
         icon = {
@@ -75,7 +84,7 @@ private fun RowScope.NavBarItem(
             )
         },
         label = { Text(label) },
-        selected = screen.isEqualsToRoute(currentScreen),
-        onClick = { onNavigate(screen) },
+        selected = selected,
+        onClick = { if (!selected) onNavigate(screen) },
     )
 }

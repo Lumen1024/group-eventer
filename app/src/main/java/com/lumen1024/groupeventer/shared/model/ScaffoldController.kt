@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.shared.model
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

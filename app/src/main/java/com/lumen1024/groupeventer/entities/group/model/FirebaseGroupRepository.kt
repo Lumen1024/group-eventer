@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.entities.group.model
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
@@ -16,7 +17,7 @@ class FirebaseGroupRepository @Inject constructor(
     private val collection = firebase.firestore.collection("groups")
 
     override suspend fun addGroup(group: Group) {
-        collection.add(group).await()
+        collection.document(group.id).set(group).await()
     }
 
     @Deprecated("not work")
@@ -28,7 +29,7 @@ class FirebaseGroupRepository @Inject constructor(
                 .await()
                 .toObject(Group::class.java)
 
-            if (group === null) {
+            if (group == null) {
                 return Result.failure(
                     GroupRepositoryException(
                         RepositoryException.Code.UNKNOWN,
@@ -39,6 +40,7 @@ class FirebaseGroupRepository @Inject constructor(
 
             return Result.success(group)
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }
@@ -55,15 +57,18 @@ class FirebaseGroupRepository @Inject constructor(
     override suspend fun getGroup(name: String, password: String?): Result<Group> {
         val query = collection
             .whereEqualTo("name", name)
+            // TODO is a mistake isNullOrEmpty (should be a !isNullOrEmpty?)?
             .apply { if (password.isNullOrEmpty()) whereEqualTo("password", password) }
             .get()
             .await()
 
         if (query.isEmpty)
-            return Result.failure(GroupRepositoryException(
-                code = RepositoryException.Code.NOT_FOUND,
-                message = "" // todo
-            ))
+            return Result.failure(
+                GroupRepositoryException(
+                    code = RepositoryException.Code.NOT_FOUND,
+                    message = "" // todo
+                )
+            )
 
         val group = query.documents[0].toObject(Group::class.java)!! // up check
         return Result.success(group)
@@ -80,6 +85,7 @@ class FirebaseGroupRepository @Inject constructor(
                 .await()
             return Result.success(groups.toObjects(Group::class.java))
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }
@@ -105,6 +111,7 @@ class FirebaseGroupRepository @Inject constructor(
                     .await()
             )
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }
@@ -127,6 +134,7 @@ class FirebaseGroupRepository @Inject constructor(
                     .await()
             )
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }

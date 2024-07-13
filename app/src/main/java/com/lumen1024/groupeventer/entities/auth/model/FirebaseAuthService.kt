@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.entities.auth.model
 
 import android.net.Uri
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -43,6 +44,7 @@ class FirebaseAuthService @Inject constructor(
 
             return Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("service", e.message, e)
             return if (e is FirebaseAuthException)
                 Result.failure(e.toAuthException())
             else
@@ -55,6 +57,7 @@ class FirebaseAuthService @Inject constructor(
             Firebase.auth.signInWithEmailAndPassword(email, password).await()
             return Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("service", e.message, e)
             return if (e is FirebaseAuthException)
                 Result.failure(e.toAuthException())
             else
@@ -81,6 +84,7 @@ class FirebaseAuthService @Inject constructor(
 
             return Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("service", e.message, e)
             return if (e is FirebaseAuthException)
                 Result.failure(e.toAuthException())
             else
@@ -99,6 +103,8 @@ class FirebaseAuthService @Inject constructor(
 
         Firebase.auth.addAuthStateListener(listener)
         listeners.add(listener)
+
+        listener(Firebase.auth)
 
         return {
             Firebase.auth.removeAuthStateListener(listener)

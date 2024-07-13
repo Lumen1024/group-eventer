@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,28 +56,27 @@ fun GroupsScreen(
     var addDialogOpen by remember { mutableStateOf(false) }
     var sheetOpen by remember { mutableStateOf(false) }
 
-    scaffoldController.topBar {
-        TopAppBar(
-            title = {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(Screen.Groups.label),
-                    textAlign = TextAlign.Center
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "menu")
-                }
-            },
-            actions = {
-                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
-                Spacer(modifier = Modifier.width(16.dp))
-            }
-        )
-    }
-
     scaffoldController.setup(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(Screen.Groups.label),
+                        textAlign = TextAlign.Center
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "menu")
+                    }
+                },
+                actions = {
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "")
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+            )
+        },
         bottomBar = {
             NavBar(bottomBarItems, startDestination = Screen.Events)
         },
@@ -99,7 +99,9 @@ fun GroupsScreen(
             {
                 GroupItem(
                     onClick = {
-                        viewModel.toggleGroupHide(it.id)
+                        // TODO smth with hide and move leave on group page?
+//                        viewModel.toggleGroupHide(it.id)
+                        viewModel.leaveGroup(it.name)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

@@ -27,7 +27,7 @@ fun Avatar(modifier: Modifier = Modifier, url: Any?) {
     var isFirstLoad by remember { mutableStateOf(false) }
     var loadingError by remember { mutableStateOf<AsyncImagePainter.State.Error?>(null) }
 
-    val isValidImage by remember { derivedStateOf { url !== null && loadingError === null } }
+    val isValidImage by remember { derivedStateOf { url !== null && loadingError == null } }
 
     Box(
         modifier = Modifier

@@ -93,6 +93,9 @@ dependencies {
     // Material extension
     implementation(libs.androidx.compose.icons)
 
+//    // Profiling
+//    implementation("androidx.compose.runtime:runtime-tracing:1.0.0-beta01")
+
     // Base
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

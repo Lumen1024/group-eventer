@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.entities.user.model
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
@@ -22,7 +23,7 @@ class FirebaseUserRepository @Inject constructor(
                 .await()
                 .toObject(UserData::class.java)
 
-            if (userData === null) {
+            if (userData == null) {
                 // todo: remove? <-> @Answer: lumen1024 -> what is going on?
 
                 val newUserData = UserData(id = userId)
@@ -44,6 +45,7 @@ class FirebaseUserRepository @Inject constructor(
 
             return Result.success(userData)
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }
@@ -66,6 +68,7 @@ class FirebaseUserRepository @Inject constructor(
                     .await()
             )
         } catch (e: Exception) {
+            Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
                 return Result.failure(e.toRepositoryException())
             }
