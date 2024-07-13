@@ -7,6 +7,7 @@ import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
+import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,6 +117,15 @@ class UserService @Inject constructor(
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
+    }
+
+    suspend fun addEvent(event: GroupEvent, group: Group) {
+        groupRepository.updateGroup(
+            groupId = group.id,
+            data = mapOf(
+                "events" to group.events.toMutableList().add(event)
+            )
+        )
     }
 
     private var unsubscribeFromUserChanges: (() -> Unit)? = null
