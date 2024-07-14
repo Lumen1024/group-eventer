@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.app.scaffold_components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -62,7 +63,7 @@ fun Screen.getTopBarVariant(): TopBarVariant {
 @Composable
 fun AppTopBar(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
     val topBarVariant by remember {
@@ -71,28 +72,38 @@ fun AppTopBar(
         }
     }
 
-    when (val variant = topBarVariant) {
-        is TopBarVariant.Search -> {
+    // TODO performance?
+    AnimatedContent(targetState = topBarVariant, label = "Top bar animation") {
+        when (val variant = it) {
+            is TopBarVariant.Search -> {
 
+            }
+
+            is TopBarVariant.Default -> {
+                DefaultTopBar(variant = variant, modifier = modifier)
+            }
+
+            else -> {}
         }
-
-        is TopBarVariant.Default -> {
-            DefaultTopBar(variant = variant, modifier = modifier)
-        }
-
-        else -> {}
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultTopBar(
     variant: TopBarVariant.Default,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = variant.title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center) },
+        title = {
+            Text(
+                text = variant.title,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        },
         navigationIcon = variant.navIcon?.let {
             return@let {
                 IconButton(onClick = it.second) {
