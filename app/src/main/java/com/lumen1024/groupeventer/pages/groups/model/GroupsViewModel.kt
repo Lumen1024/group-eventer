@@ -24,7 +24,7 @@ class GroupsViewModel @Inject constructor(
             } else if (r.isFailure) {
                 context.showToast(r.exceptionOrNull()?.message ?: "Error leaving group")
             }
-            // todo: add error handle
+            val ded = 0
         }
     }
 }

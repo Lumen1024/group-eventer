@@ -58,7 +58,7 @@ class FirebaseGroupRepository @Inject constructor(
         val query = collection
             .whereEqualTo("name", name)
             // TODO is a mistake isNullOrEmpty (should be a !isNullOrEmpty?)?
-            .apply { if (password.isNullOrEmpty()) whereEqualTo("password", password) }
+            .let { return@let if (!password.isNullOrEmpty()) it.whereEqualTo("password", password) else it }
             .get()
             .await()
 

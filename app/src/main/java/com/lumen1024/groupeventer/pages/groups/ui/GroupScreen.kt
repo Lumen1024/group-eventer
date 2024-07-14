@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,7 +21,6 @@ import com.lumen1024.groupeventer.entities.group.ui.GroupItem
 import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
@@ -35,7 +33,7 @@ fun GroupsScreen(
     var selected by remember { mutableStateOf<Group?>(null) }
 
     var addDialogOpen by remember { mutableStateOf(false) }
-    var sheetOpen by remember { mutableStateOf(false) }
+    var isSheetOpen by remember { mutableStateOf(false) }
 
     Column {
         LazyColumn(
@@ -47,9 +45,8 @@ fun GroupsScreen(
             {
                 GroupItem(
                     onClick = {
-                        // TODO smth with hide and move leave on group page?
-//                        viewModel.toggleGroupHide(it.id)
-                        viewModel.leaveGroup(it.name)
+                        isSheetOpen = true
+                        selected = it
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -65,8 +62,15 @@ fun GroupsScreen(
                 onDismiss = { addDialogOpen = false }
             )
         }
-        if (sheetOpen) {
-            GroupDetailsBottomSheet()
+        if (isSheetOpen) {
+            selected?.let {
+                GroupDetailsBottomSheet(
+                    onDismiss = { isSheetOpen = false },
+                    group = it,
+                    onLeave = { viewModel.leaveGroup(it.name) }
+                )
+            }
+
         }
     }
 }
