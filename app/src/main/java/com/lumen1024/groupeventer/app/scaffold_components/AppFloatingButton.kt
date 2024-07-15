@@ -11,26 +11,53 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.pages.groups.ui.AddGroupDialog
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class FloatingButtonViewModel @Inject constructor(
+
+) : ViewModel() {
+
+}
 
 @Composable
 fun AppFloatingButton(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: FloatingButtonViewModel = hiltViewModel()
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
-    val showAddButton by remember { derivedStateOf { currentScreen == Screen.Groups } }
     var showAddGroupDialog by remember { mutableStateOf(false) }
 
-    if (showAddButton)
-        FloatingActionButton(onClick = {
-            showAddGroupDialog = true
-        }) {
-            Icon(Icons.Default.Add, "")
+    val showAddButton by remember {
+        derivedStateOf {
+            currentScreen in listOf( // todo: move to const?
+                Screen.Groups,
+                Screen.Events
+            )
         }
+    }
+    val action = {
+        if (currentScreen == Screen.Events)
+            navController.navigate(Screen.CreateEvent)
+        else if (currentScreen == Screen.Groups)
+            showAddGroupDialog = true
+    }
+
+    if (showAddButton)
+        FloatingActionButton(
+            onClick = action,
+        ) {
+                Icon(Icons.Default.Add, "")
+        }
+
     if (showAddGroupDialog)
         AddGroupDialog(onDismiss = { showAddGroupDialog = false })
 }

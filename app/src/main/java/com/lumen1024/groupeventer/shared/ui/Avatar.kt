@@ -1,14 +1,18 @@
 package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -31,8 +35,11 @@ fun Avatar(modifier: Modifier = Modifier, url: Any?) {
 
     Box(
         modifier = Modifier
+            .size(216.dp)
+            .border(BorderStroke(4.dp, MaterialTheme.colorScheme.primary), shape = CircleShape)
+            .padding(8.dp)
             .clip(CircleShape)
-            .size(200.dp)
+
             .then(modifier)
     ) {
         AnimatedVisibility(visible = isValidImage) {
