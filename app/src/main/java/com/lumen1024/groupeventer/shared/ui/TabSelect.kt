@@ -31,21 +31,22 @@ fun TabSelect(
     tabs: List<String>,
     startedSelected: Int = 0,
     onSelect: (index: Int) -> Unit = {},
-)
-{
+) {
     var selectedIndex by remember { mutableIntStateOf(startedSelected) }
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             //.background(Color.Yellow)
             //.padding(16.dp)
-            .border(width = 1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(16.dp))
-            .clipToBounds()
-
-        ,
+            .border(
+                width = 1.dp,
+                MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clipToBounds(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        tabs.forEachIndexed() { index, item ->
+        tabs.forEachIndexed { index, item ->
             val bgColor = if (selectedIndex == index) Color.Blue else Color.Red
             Box(
                 modifier = Modifier
@@ -70,9 +71,10 @@ private fun TabSelectPreview() {
     )
 
     GroupEventerTheme {
-        Box(modifier = Modifier
-            .size(250.dp)
-            .padding(20.dp),
+        Box(
+            modifier = Modifier
+                .size(250.dp)
+                .padding(20.dp),
             contentAlignment = Alignment.Center
 
 

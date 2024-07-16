@@ -1,8 +1,15 @@
 package com.lumen1024.groupeventer.app.scaffold_components
 
+import androidx.collection.intIntMapOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -14,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
@@ -26,15 +34,13 @@ import javax.inject.Inject
 @HiltViewModel
 class FloatingButtonViewModel @Inject constructor(
 
-) : ViewModel() {
-
-}
+) : ViewModel()
 
 @Composable
 fun AppFloatingButton(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: FloatingButtonViewModel = hiltViewModel()
+    viewModel: FloatingButtonViewModel = hiltViewModel(),
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
     var showAddGroupDialog by remember { mutableStateOf(false) }
@@ -59,6 +65,7 @@ fun AppFloatingButton(
         exit = fadeOut()
     ) {
         FloatingActionButton(
+            modifier = Modifier.padding(16.dp),
             onClick = action,
         ) {
             Icon(Icons.Default.Add, "")

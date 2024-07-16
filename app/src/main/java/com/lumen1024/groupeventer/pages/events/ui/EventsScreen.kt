@@ -31,7 +31,7 @@ fun EventsScreen(
 ) {
     val events = viewModel.events.collectAsState()
 
-    var isSheetOpen by remember { mutableStateOf(false) };
+    var isSheetOpen by remember { mutableStateOf(false) }
 
     Column {
         LazyColumn(

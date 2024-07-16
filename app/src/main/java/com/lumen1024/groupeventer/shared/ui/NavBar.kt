@@ -37,7 +37,7 @@ fun NavBar(
     navController: NavHostController,
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
-    NavigationBar() {
+    NavigationBar {
         items.forEach { screen ->
             NavBarItem(
                 screen,
