@@ -1,8 +1,8 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
+import com.google.firebase.firestore.FieldValue
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
@@ -80,13 +80,38 @@ class UserService @Inject constructor(
             )
         ).onFailure { return Result.failure(it) }
 
-        groupRepository.updateGroup(
-            groupId = group.id,
-            data = mapOf(
-                "people" to group.people - user.id
-            )
-        ).onFailure { return Result.failure(it) }
+        val isLast = group.people.isEmpty()
+        val isAdmin = group.admin == user.id
 
+        if (isLast) {
+            groupRepository.removeGroup(
+                groupId = group.id
+            ).onFailure { return Result.failure(it) }
+        } else if (isAdmin) {
+            // new admin
+            val newAdmin = group.people[0]
+            groupRepository.updateGroup(
+                groupId = group.id,
+                mapOf(
+                    Group::admin.name to newAdmin
+                )
+            ).onFailure { return Result.failure(it) }
+
+            // remove from common people
+            groupRepository.updateGroup(
+                groupId = group.id,
+                mapOf(
+                    Group::people.name to group.people - newAdmin
+                )
+            ).onFailure { return Result.failure(it) }
+        } else {
+            groupRepository.updateGroup(
+                groupId = group.id,
+                data = mapOf(
+                    "people" to group.people - user.id
+                )
+            ).onFailure { return Result.failure(it) }
+        }
         return Result.success(Unit)
     }
 
@@ -112,20 +137,71 @@ class UserService @Inject constructor(
         userRepository.updateData(
             userId = user.id,
             data = mapOf(
-                "groups" to userData.groups + group.id
+                "groups" to userData.groups + group.id // todo
             )
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
-    suspend fun addEvent(event: GroupEvent, group: Group) {
+    suspend fun updateGroup(map: Map<String, Any>): Result<Unit> {
+        TODO()
+    }
+
+    suspend fun createEvent(event: GroupEvent, group: Group): Result<Unit> {
+        if (!userInGroup(group)) return Result.failure(Throwable("ded")) // todo
+
+
         groupRepository.updateGroup(
             groupId = group.id,
             data = mapOf(
-                "events" to group.events.toMutableList().add(event)
+                "events" to (group.events + event)
+            )
+        ).onFailure { return Result.failure(it) }
+        return Result.success(Unit)
+    }
+
+    suspend fun updateEvent(event: GroupEvent): Result<Unit> {
+        val targetGroup = groups.value.let {
+            it.forEach { group ->
+                if (event in group.events)
+                    return@let group
+            }
+            return@let null
+        } ?: return Result.failure(Throwable("ded")) // todo
+
+        val id = user.value?.id ?: return Result.failure(Throwable("ded")) // todo
+
+        if (id != event.creator) return Result.failure(Throwable("ded")) // todo
+
+        groupRepository.updateGroup(
+            targetGroup.id, mapOf(
+                Group::events.name to FieldValue.arrayUnion(event) // todo maybe not work
+            )
+        ).onFailure { return Result.failure(it) }
+
+        return Result.success(Unit)
+    }
+
+    suspend fun deleteEvent(event: GroupEvent): Result<Unit> {
+        val targetGroup = groups.value.let {
+            it.forEach { group ->
+                if (event in group.events)
+                    return@let group
+            }
+            return@let null
+        } ?: return Result.failure(Throwable("ded")) // todo
+
+        val id = user.value?.id ?: return Result.failure(Throwable("ded")) // todo
+
+        if (id != event.creator) return Result.failure(Throwable("ded")) // todo
+
+        groupRepository.updateGroup(
+            targetGroup.id, mapOf(
+                Group::events.name to FieldValue.arrayRemove(event)
             )
         )
+        return Result.success(Unit)
     }
 
     private var unsubscribeFromUserChanges: (() -> Unit)? = null
@@ -145,6 +221,11 @@ class UserService @Inject constructor(
 
     private fun updateUser(user: User?) {
         _user.value = user
+    }
+
+    private suspend fun userInGroup(group: Group): Boolean {
+        return userData.value?.groups?.let { return@let (group.id in it) }
+            ?: false // todo
     }
 
     private fun listenUserDataChanges(): (() -> Unit)? = user.value?.let {
