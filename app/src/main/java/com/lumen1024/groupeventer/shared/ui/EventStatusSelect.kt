@@ -40,53 +40,53 @@ import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 @Composable
 fun EventStatusSelect(
     modifier: Modifier = Modifier,
+    availableStatuses: List<GroupEventStatus> = emptyList(),
     selected: GroupEventStatus = GroupEventStatus.Prepare,
-    onItemSelected: (GroupEventStatus) -> Unit
+    onItemSelected: (GroupEventStatus) -> Unit,
 ) {
     val cornersRadius = 16.dp
     val startShape = RoundedCornerShape(topStart = cornersRadius, bottomStart = cornersRadius)
     val midShape = RectangleShape
     val endShape = RoundedCornerShape(topEnd = cornersRadius, bottomEnd = cornersRadius)
-    Box(modifier = modifier)
-    {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(cornersRadius))
-                .height(intrinsicSize = IntrinsicSize.Min)
-                .width(360.dp)
-                .border(
-                    BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                    RoundedCornerShape(cornersRadius)
-                )
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(cornersRadius))
+            .height(intrinsicSize = IntrinsicSize.Min)
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                RoundedCornerShape(cornersRadius)
+            )
 
-        ) {
-            val items = GroupEventStatus.entries.toList()
+    ) {
+        val items = GroupEventStatus.entries.toList()
 
-            items.forEachIndexed { index, status ->
-                val shape = when (status) {
-                    GroupEventStatus.Prepare -> startShape
-                    GroupEventStatus.Voting -> midShape
-                    GroupEventStatus.Ended -> endShape
-                }
-                StatusSelectItem(
-                    status = status,
-                    shape = shape,
-                    onSelected = onItemSelected,
-                    selected = selected
-                )
-                if (index != 2) VerticalDivider(color = MaterialTheme.colorScheme.outline)
+        items.forEachIndexed { index, status ->
+            val shape = when (status) {
+                GroupEventStatus.Prepare -> startShape
+                GroupEventStatus.Voting -> midShape
+                GroupEventStatus.Ended -> endShape
             }
+            StatusSelectItem(
+                status = status,
+                shape = shape,
+                enabled = availableStatuses.let {
+                    if (it.isEmpty()) true else it.contains(status)
+                },
+                onSelected = onItemSelected,
+                selected = selected
+            )
+            if (index != 2) VerticalDivider(color = MaterialTheme.colorScheme.outline)
         }
     }
-
 }
 
 @Composable
 fun RowScope.StatusSelectItem(
     status: GroupEventStatus,
     shape: Shape,
+    enabled: Boolean = true,
+    selected: GroupEventStatus,
     onSelected: (GroupEventStatus) -> Unit,
-    selected: GroupEventStatus
 ) {
     val backgroundColor = colorResource(status.getColorResource())
     val weight: Float by animateFloatAsState(
@@ -102,9 +102,9 @@ fun RowScope.StatusSelectItem(
             .fillMaxHeight()
             .weight(weight),
         shape = shape,
+        enabled = enabled,
         onClick = { onSelected(status) },
         colors = ButtonDefaults.buttonColors(
-
             containerColor = color
         ),
     ) {

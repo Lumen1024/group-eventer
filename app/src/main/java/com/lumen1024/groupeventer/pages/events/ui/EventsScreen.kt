@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.pages.events.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,9 +31,13 @@ import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 fun EventsScreen(
     viewModel: EventsViewModel = hiltViewModel(),
 ) {
-    val events = viewModel.events.collectAsState()
+    val groups by viewModel.userService.groups.collectAsState()
+
+    val events by remember { derivedStateOf { groups.flatMap { it.events } } }
 
     var isSheetOpen by remember { mutableStateOf(false) }
+
+    Log.d("W", groups.toString())
 
     Column {
         LazyColumn(
@@ -40,7 +46,7 @@ fun EventsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(events.value, key = { event -> event.id })
+            items(events, key = { event -> event.id })
             {
                 GroupEventCard(
                     modifier = Modifier.clickable {

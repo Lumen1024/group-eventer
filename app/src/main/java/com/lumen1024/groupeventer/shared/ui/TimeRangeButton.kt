@@ -25,7 +25,7 @@ import java.time.ZoneId
 fun TimeRangeButton(
     date: Instant,
     onChanged: (date: Instant) -> Unit,
-    mirrored: Boolean = false
+    mirrored: Boolean = false,
 ) {
     var isDateDialogOpen by remember {
         mutableStateOf(false)
@@ -55,7 +55,7 @@ fun TimeRangeButton(
 
     Row(
         modifier = Modifier
-            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+            .border(1.dp, MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
     ) {
         if (mirrored) {
             timeButton()

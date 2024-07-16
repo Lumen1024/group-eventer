@@ -62,8 +62,7 @@ fun Username(
             ) {
                 Text(
                     text = username,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.Medium
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 if (showEdit) {
                     IconButton(onClick = { isEditing = !isEditing }) {

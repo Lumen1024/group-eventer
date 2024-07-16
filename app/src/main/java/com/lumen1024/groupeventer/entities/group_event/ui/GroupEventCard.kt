@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,8 +41,8 @@ fun GroupEventCard(
 ) {
     Card(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceContainer)
             .then(modifier),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         onClick = onClick,
     ) {
         // main container
@@ -51,7 +52,7 @@ fun GroupEventCard(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
 
-        ) {
+            ) {
             // header
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -61,25 +62,25 @@ fun GroupEventCard(
                 // group title
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(
-                        verticalAlignment = Alignment.Top,
+                        verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         val style = MaterialTheme.typography.bodySmall
                         Text(
                             text = "от", // todo: res
-                            fontStyle = style.fontStyle,
-                            fontSize = style.fontSize,
-                            fontWeight = style.fontWeight
+                            style = style
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
                             // todo: insert group data
-                            Box(modifier = Modifier
-                                .clip(RoundedCornerShape(5.dp))
-                                .size(14.dp)
-                                .background(Color.Green)) // here
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .size(14.dp)
+                                    .background(Color.Green)
+                            ) // here
                             Text(
                                 text = "Kotlin Group", // here
                                 fontStyle = style.fontStyle,
@@ -90,7 +91,8 @@ fun GroupEventCard(
                         }
                     }
                     val titleStyle = MaterialTheme.typography.titleLarge
-                    Text(text = event.name,
+                    Text(
+                        text = event.name,
                         fontStyle = titleStyle.fontStyle,
                         fontWeight = titleStyle.fontWeight,
                         fontSize = titleStyle.fontSize,
@@ -108,11 +110,13 @@ fun GroupEventCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(modifier = Modifier
-                    .border(
-                        BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                        shape = RoundedCornerShape(16.dp)
-                    ).padding(horizontal = 8.dp, vertical = 2.dp)
+                Row(
+                    modifier = Modifier
+                        .border(
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(text = "22 июня 18:00") // todo date
                 }
@@ -140,7 +144,11 @@ fun GroupEventCardPreview() {
 
     )
     GroupEventerTheme {
-        Box(modifier = Modifier.size(width = 400.dp, height = 900.dp).padding(16.dp))
+        Box(
+            modifier = Modifier
+                .size(width = 400.dp, height = 900.dp)
+                .padding(16.dp)
+        )
         {
             Column(
                 Modifier.fillMaxSize(),

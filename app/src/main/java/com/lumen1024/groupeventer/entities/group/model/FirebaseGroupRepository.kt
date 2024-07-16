@@ -27,7 +27,7 @@ class FirebaseGroupRepository @Inject constructor(
                 .document(groupId) // todo: use query by id field
                 .get()
                 .await()
-                .toObject(Group::class.java)
+                .toObject(GroupDto::class.java)?.toGroup()
 
             if (group == null) {
                 return Result.failure(
@@ -57,8 +57,12 @@ class FirebaseGroupRepository @Inject constructor(
     override suspend fun getGroup(name: String, password: String?): Result<Group> {
         val query = collection
             .whereEqualTo("name", name)
-            // TODO is a mistake isNullOrEmpty (should be a !isNullOrEmpty?)?
-            .let { return@let if (!password.isNullOrEmpty()) it.whereEqualTo("password", password) else it }
+            .let {
+                return@let if (!password.isNullOrEmpty()) it.whereEqualTo(
+                    "password",
+                    password
+                ) else it
+            }
             .get()
             .await()
 
@@ -70,7 +74,7 @@ class FirebaseGroupRepository @Inject constructor(
                 )
             )
 
-        val group = query.documents[0].toObject(Group::class.java)!! // up check
+        val group = query.documents[0].toObject(GroupDto::class.java)!!.toGroup() // up check
         return Result.success(group)
     }
 
@@ -83,7 +87,7 @@ class FirebaseGroupRepository @Inject constructor(
             val groups = groupsQuery
                 .get()
                 .await()
-            return Result.success(groups.toObjects(Group::class.java))
+            return Result.success(groups.toObjects(GroupDto::class.java).map { it.toGroup() })
         } catch (e: Exception) {
             Log.e("repository", e.message, e)
             if (e is FirebaseFirestoreException) {
@@ -161,7 +165,12 @@ class FirebaseGroupRepository @Inject constructor(
                 return@addSnapshotListener
             }
 
-            callback(snapshot!!.documentChanges.map { it.toRepositoryObjectChange() })
+            callback(snapshot!!.documentChanges.map { it ->
+                val change = it.toRepositoryObjectChange<GroupDto>()
+                val mappedChane =
+                    RepositoryObjectChange(change.type, change.data?.toGroup())
+                return@map mappedChane
+            })
         }
 
         return { registration.remove() }

@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.shared.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import com.lumen1024.groupeventer.shared.model.TimeRange
@@ -40,7 +42,7 @@ fun TimeRangePicker(value: TimeRange, onChange: (TimeRange) -> Unit) {
                 .weight(1f)
                 .height(3.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primaryContainer)
         )
         TimeRangeButton(
             mirrored = true,
@@ -50,7 +52,10 @@ fun TimeRangePicker(value: TimeRange, onChange: (TimeRange) -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, wallpaper = Wallpapers.NONE,
+    showSystemUi = false,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 fun TimeRangePickerPreview() {
     var timeRange by remember { mutableStateOf(TimeRange()) }

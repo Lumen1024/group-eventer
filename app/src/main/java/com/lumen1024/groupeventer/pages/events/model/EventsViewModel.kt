@@ -7,6 +7,7 @@ import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
+import com.lumen1024.groupeventer.entities.user.model.UserService
 import com.lumen1024.groupeventer.shared.config.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,14 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EventsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val groupRepository: FirebaseGroupRepository,
-    private val mainNavigator: Navigator,
+    val userService: UserService,
+    private val navigator: Navigator,
 ) : ViewModel() {
-
-    private val groups = emptyList<Group>()
-
-    private val _events = MutableStateFlow(emptyList<GroupEvent>())
-    val events = _events.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -33,8 +29,7 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-    fun addEvent()
-    {
-        mainNavigator.tryNavigateTo(Screen.CreateEvent)
+    fun addEvent() {
+        navigator.tryNavigateTo(Screen.CreateEvent)
     }
 }

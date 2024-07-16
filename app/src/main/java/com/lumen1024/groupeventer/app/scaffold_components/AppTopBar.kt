@@ -83,18 +83,27 @@ fun AppTopBar(
     }
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         // TODO performance?  // ??????????
-        AnimatedContent(targetState = topBarVariant, label = "Top bar animation") { variant -> // todo ???????????
+        AnimatedContent(
+            targetState = topBarVariant,
+            label = "Top bar animation"
+        ) { variant -> // todo ???????????
             when (variant) {
                 is TopBarVariant.Search -> {
                     var searchActive by remember { mutableStateOf(false) }
                     var query by remember { mutableStateOf("") }
                     SearchBar(
                         query = query,
-                        onQueryChange = {query = it},
+                        onQueryChange = { query = it },
                         onSearch = { variant.onSearch(it); searchActive = false },
                         active = searchActive,
-                        onActiveChange = {searchActive = it},
-                        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "")}
+                        onActiveChange = { searchActive = it },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = ""
+                            )
+                        },
+                        placeholder = { Text(variant.hint) }
                     ) {
                         // todo ?
                     }

@@ -167,7 +167,7 @@ fun AuthScreen(
                                 modifier = Modifier
                                     .padding(4.dp),
                                 textAlign = TextAlign.Center,
-                                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                style = MaterialTheme.typography.bodyLarge,
                                 text = stringResource(if (selected == 0) R.string.sign_in else R.string.sign_up)
                             )
                         }

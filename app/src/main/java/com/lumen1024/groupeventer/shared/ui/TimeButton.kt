@@ -31,7 +31,7 @@ fun TimeButton(
     ) {
         Text(
             text = timeStr,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

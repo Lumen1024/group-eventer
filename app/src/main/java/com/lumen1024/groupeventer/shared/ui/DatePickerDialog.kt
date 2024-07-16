@@ -37,7 +37,7 @@ fun DatePickerDialog(
                     onDismiss()
                 }
             ) {
-                Text(text = stringResource(android.R.string.cancel))
+                Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
@@ -46,7 +46,7 @@ fun DatePickerDialog(
                     onDismiss()
                 }
             ) {
-                Text(text = stringResource(android.R.string.ok))
+                Text(text = stringResource(android.R.string.cancel))
             }
         }
     ) {
