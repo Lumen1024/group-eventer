@@ -1,5 +1,8 @@
 package com.lumen1024.groupeventer.app.scaffold_components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -50,13 +53,17 @@ fun AppFloatingButton(
         else if (currentScreen == Screen.Groups)
             showAddGroupDialog = true
     }
-
-    if (showAddButton)
+    AnimatedVisibility(
+        visible = showAddButton,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         FloatingActionButton(
             onClick = action,
         ) {
-                Icon(Icons.Default.Add, "")
+            Icon(Icons.Default.Add, "")
         }
+    }
 
     if (showAddGroupDialog)
         AddGroupDialog(onDismiss = { showAddGroupDialog = false })

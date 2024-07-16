@@ -73,9 +73,7 @@ fun ProfileScreen(
                     .padding(horizontal = 8.dp),
                 label = "Some settings 1",
                 value = true
-            ) {
-
-            }
+            ) { }
         }
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
         Box(
