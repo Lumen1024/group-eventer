@@ -28,7 +28,6 @@ import coil.compose.SubcomposeAsyncImage
 
 @Composable
 fun Avatar(modifier: Modifier = Modifier, url: Any?) {
-    var isFirstLoad by remember { mutableStateOf(false) }
     var loadingError by remember { mutableStateOf<AsyncImagePainter.State.Error?>(null) }
 
     val isValidImage by remember { derivedStateOf { url !== null && loadingError == null } }
@@ -49,12 +48,9 @@ fun Avatar(modifier: Modifier = Modifier, url: Any?) {
                 contentDescription = "User avatar",
                 contentScale = ContentScale.Crop,
                 loading = {
-                    if (isFirstLoad) {
-                        CircularProgressIndicator()
-                    }
+                    CircularProgressIndicator()
                 },
-                onError = { loadingError = it },
-                onSuccess = { isFirstLoad = false }
+                onError = { loadingError = it }
             )
         }
         AnimatedVisibility(visible = !isValidImage) {
