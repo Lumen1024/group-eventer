@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseUserRepository @Inject constructor(
-    private val firebase: Firebase,
+    firebase: Firebase,
 ) : UserRepository {
     private val collection = firebase.firestore.collection("users")
 
@@ -26,7 +26,7 @@ class FirebaseUserRepository @Inject constructor(
             if (userData == null) {
                 // todo: remove? <-> @Answer: lumen1024 -> what is going on?
 
-                val newUserData = UserData(id = userId)
+                val newUserData = UserData()
 
                 collection
                     .document(userId)

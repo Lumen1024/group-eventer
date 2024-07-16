@@ -8,7 +8,6 @@ data class UserGroupProperties(
 )
 
 data class UserData(
-    val id: String = "",
     val groups: List<String> = emptyList(),
     val groupProperties: Map<String, UserGroupProperties> = emptyMap(),
 ) {
