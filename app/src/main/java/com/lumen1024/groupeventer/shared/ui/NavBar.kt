@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -38,9 +37,7 @@ fun NavBar(
     navController: NavHostController,
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
-    NavigationBar(
-        modifier = Modifier
-    ) {
+    NavigationBar() {
         items.forEach { screen ->
             NavBarItem(
                 screen,
