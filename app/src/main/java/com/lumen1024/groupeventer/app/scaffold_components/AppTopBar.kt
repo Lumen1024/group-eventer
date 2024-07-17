@@ -24,9 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 sealed class TopBarVariant {
     data object None : TopBarVariant()
@@ -42,11 +46,11 @@ sealed class TopBarVariant {
     ) : TopBarVariant()
 }
 
-fun Screen.getTopBarVariant(): TopBarVariant {
+fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant { // todo ref
     return when (this) {
         Screen.Groups -> TopBarVariant.Default(
             title = "Groups", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to {}, // todo
+            navIcon = Icons.AutoMirrored.Filled.List to {drawerController.tryOpenDrawer()}, // todo
             actions = mapOf(
                 Icons.Default.AccountCircle to {}, // todo
             )
@@ -54,7 +58,7 @@ fun Screen.getTopBarVariant(): TopBarVariant {
 
         Screen.Profile -> TopBarVariant.Default(
             title = "Profile", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to {}, // todo
+            navIcon = Icons.AutoMirrored.Filled.List to {drawerController.tryOpenDrawer()}, // todo
             actions = mapOf(
                 Icons.Default.Settings to {}, // todo
             )
@@ -69,16 +73,24 @@ fun Screen.getTopBarVariant(): TopBarVariant {
     }
 }
 
+@HiltViewModel
+class TopAppBarViewModel @Inject constructor(
+    val drawerController: DrawerController
+) : ViewModel() {
+
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: TopAppBarViewModel = hiltViewModel()
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
     val topBarVariant by remember {
         derivedStateOf {
-            currentScreen?.getTopBarVariant() ?: TopBarVariant.None
+            currentScreen?.getTopBarVariant(viewModel.drawerController) ?: TopBarVariant.None
         }
     }
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
