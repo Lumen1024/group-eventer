@@ -42,7 +42,7 @@ fun AppContent() {
     ModalNavigationDrawer(
         drawerContent = { AppDrawerContent() },
         drawerState = drawerState,
-
+        gesturesEnabled = true,
         ) {
         Scaffold(
             //modifier = Modifier.systemPadding(),

@@ -95,6 +95,7 @@ dependencies {
 
 //    // Profiling
 //    implementation("androidx.compose.runtime:runtime-tracing:1.0.0-beta01")
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 
     // Base
     implementation(libs.androidx.core.ktx)

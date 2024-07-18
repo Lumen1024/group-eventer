@@ -1,7 +1,6 @@
 package com.lumen1024.groupeventer.pages.profile.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,16 +9,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.lumen1024.groupeventer.entities.user.ui.Username
 import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.ui.Avatar
@@ -31,14 +37,12 @@ fun ProfileScreen(
 ) {
     val user by viewModel.userService.user.collectAsState()
 
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            uri?.let {
+    val galleryLauncher =
+        rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+            result.uriContent?.let {
                 viewModel.updateAvatar(it)
             }
         }
-    )
 
     val handleEdit = { name: String ->
         viewModel.updateName(name)
@@ -54,9 +58,34 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            val cropImageColors = object  {
+                val background = MaterialTheme.colorScheme.background
+                val topBar = MaterialTheme.colorScheme.surfaceContainer
+                val onTopBar = contentColorFor(backgroundColor = background)
+            }
             Avatar(
                 modifier = Modifier
-                    .clickable(role = Role.Button) { galleryLauncher.launch("image/*") },
+                    .clickable(role = Role.Button) {
+                        val options = CropImageContractOptions(
+                        null,
+                        CropImageOptions(
+                            imageSourceIncludeCamera = false,
+                            cropShape = CropImageView.CropShape.OVAL,
+                            fixAspectRatio = true,
+                            aspectRatioX = 1,
+                            aspectRatioY = 1,
+                            guidelines = CropImageView.Guidelines.OFF,
+                            borderLineThickness = 0f,
+
+                            activityBackgroundColor = cropImageColors.background.toArgb(),
+                            toolbarColor = cropImageColors.background.toArgb(),
+                            toolbarBackButtonColor = cropImageColors.onTopBar.toArgb(),
+                            activityMenuIconColor = cropImageColors.onTopBar.toArgb(),
+                            activityMenuTextColor = cropImageColors.onTopBar.toArgb(),
+                        )
+                    )
+                        galleryLauncher.launch(options)
+                    },
                 url = user?.avatarUrl
             )
             Username(
