@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +31,12 @@ fun GroupsScreen(
 
     val userGroups by viewModel.userService.userData.collectAsState()
 
-    var selected by remember { mutableStateOf<Group?>(null) }
+    var selectedGroupId by remember { mutableStateOf<String?>(null) }
+    var selectedGroup by remember { mutableStateOf<Group?>(null) }
+
+    LaunchedEffect(groups, selectedGroupId) {
+        selectedGroup = groups.find { group -> group.id == selectedGroupId }
+    }
 
     var addDialogOpen by remember { mutableStateOf(false) }
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -46,7 +52,7 @@ fun GroupsScreen(
                 GroupItem(
                     onClick = {
                         isSheetOpen = true
-                        selected = it
+                        selectedGroupId = it.id
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -63,14 +69,13 @@ fun GroupsScreen(
             )
         }
         if (isSheetOpen) {
-            selected?.let {
+            selectedGroup?.let { group ->
                 GroupDetailsBottomSheet(
                     onDismiss = { isSheetOpen = false },
-                    group = it,
-                    onLeave = { viewModel.leaveGroup(it.name) }
+                    group = group,
+                    onLeave = { viewModel.leaveGroup(group.name) }
                 )
             }
-
         }
     }
 }

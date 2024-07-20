@@ -18,14 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
+import com.lumen1024.groupeventer.entities.user.config.CropImageColors
+import com.lumen1024.groupeventer.entities.user.config.getCropperOptions
 import com.lumen1024.groupeventer.entities.user.ui.Username
 import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.ui.Avatar
@@ -47,6 +45,17 @@ fun ProfileScreen(
     val handleEdit = { name: String ->
         viewModel.updateName(name)
     }
+
+    val cropImageColors = object : CropImageColors {
+        override val background = MaterialTheme.colorScheme.background
+        override val topBar = MaterialTheme.colorScheme.surfaceContainer
+        override val onTopBar = contentColorFor(backgroundColor = background)
+    }
+
+    val openCropper = {
+        galleryLauncher.launch(getCropperOptions(cropImageColors))
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,34 +67,11 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val cropImageColors = object  {
-                val background = MaterialTheme.colorScheme.background
-                val topBar = MaterialTheme.colorScheme.surfaceContainer
-                val onTopBar = contentColorFor(backgroundColor = background)
-            }
-            Avatar(
-                modifier = Modifier
-                    .clickable(role = Role.Button) {
-                        val options = CropImageContractOptions(
-                        null,
-                        CropImageOptions(
-                            imageSourceIncludeCamera = false,
-                            cropShape = CropImageView.CropShape.OVAL,
-                            fixAspectRatio = true,
-                            aspectRatioX = 1,
-                            aspectRatioY = 1,
-                            guidelines = CropImageView.Guidelines.OFF,
-                            borderLineThickness = 0f,
 
-                            activityBackgroundColor = cropImageColors.background.toArgb(),
-                            toolbarColor = cropImageColors.background.toArgb(),
-                            toolbarBackButtonColor = cropImageColors.onTopBar.toArgb(),
-                            activityMenuIconColor = cropImageColors.onTopBar.toArgb(),
-                            activityMenuTextColor = cropImageColors.onTopBar.toArgb(),
-                        )
-                    )
-                        galleryLauncher.launch(options)
-                    },
+            Avatar(
+                showBorder = true,
+                modifier = Modifier
+                    .clickable(role = Role.Button, onClick = openCropper),
                 url = user?.avatarUrl
             )
             Username(

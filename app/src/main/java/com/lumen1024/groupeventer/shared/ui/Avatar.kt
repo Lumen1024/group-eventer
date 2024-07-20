@@ -22,24 +22,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 
 @Composable
-fun Avatar(modifier: Modifier = Modifier, url: Any?) {
+fun Avatar(
+    modifier: Modifier = Modifier,
+    url: Any?,
+    size: Dp = 216.dp,
+    showBorder: Boolean = false,
+) {
     var loadingError by remember { mutableStateOf<AsyncImagePainter.State.Error?>(null) }
 
     val isValidImage by remember { derivedStateOf { url !== null && loadingError == null } }
 
     Box(
         modifier = Modifier
-            .size(216.dp)
-            .border(BorderStroke(4.dp, MaterialTheme.colorScheme.primary), shape = CircleShape)
-            .padding(8.dp)
-            .clip(CircleShape)
-
+            .size(size)
+            .then(
+                if (showBorder) Modifier
+                    .border(
+                        BorderStroke(4.dp, MaterialTheme.colorScheme.primary),
+                        shape = CircleShape
+                    )
+                    .padding(8.dp)
+                else Modifier
+            )
             .then(modifier)
+            .clip(CircleShape)
     ) {
         AnimatedVisibility(visible = isValidImage) {
             SubcomposeAsyncImage(
