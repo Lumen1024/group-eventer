@@ -2,17 +2,14 @@ package com.lumen1024.groupeventer.entities.auth.model
 
 import android.net.Uri
 import android.util.Log
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
-import com.lumen1024.groupeventer.entities.user.model.UserService
-import com.lumen1024.groupeventer.entities.user.model.User
-import com.lumen1024.groupeventer.entities.user.model.toUser
-import kotlinx.coroutines.delay
+import com.lumen1024.groupeventer.entities.user_data.model.User
+import com.lumen1024.groupeventer.entities.user_data.model.toUser
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

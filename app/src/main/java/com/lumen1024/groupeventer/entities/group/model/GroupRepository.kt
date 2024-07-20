@@ -4,21 +4,25 @@ import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 
 interface GroupRepository {
 
-    suspend fun addGroup(group: Group)
+    suspend fun add(group: Group) : Result<Unit>
 
-    suspend fun getGroup(groupId: String): Result<Group>
-    suspend fun getGroups(groupIds: List<String> = emptyList()): Result<List<Group>>
 
-    suspend fun updateGroup(groupId: String, data: Map<String, Any>): Result<Void>
+    suspend fun get(name: String, password: String? = null) : Result<Group>
+    suspend fun get(id: String) : Result<Group>
 
-    suspend fun removeGroup(groupId: String): Result<Void>
+    suspend fun getList(properties: Map<String, Any> = emptyMap()): Result<List<Group>>
+    suspend fun getList(ids: List<String> = emptyList()): Result<List<Group>>
 
-    suspend fun getGroup(name: String, password: String?) : Result<Group>
 
-    fun listenChanges(
+    suspend fun update(groupId: String, data: Map<String, Any>): Result<Unit>
+
+    suspend fun remove(groupId: String): Result<Unit>
+
+
+    fun listenList(
         groupIds: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
-    ): () -> Unit
+    ): Result<Unit>
 
-    fun listenGroupChanges(groupId: String, callback: (Group) -> Unit)
+    fun listen(groupId: String, callback: (Group) -> Unit) : Result<Unit>
 }

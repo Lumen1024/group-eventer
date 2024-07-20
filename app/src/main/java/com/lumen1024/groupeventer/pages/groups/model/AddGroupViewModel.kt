@@ -1,11 +1,10 @@
 package com.lumen1024.groupeventer.pages.groups.model
 
 import android.content.Context
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
-import com.lumen1024.groupeventer.entities.user.model.UserService
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataService
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddGroupViewModel @Inject constructor(
-    private val userService: UserService,
+    private val userDataService: UserDataService,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
@@ -34,7 +33,7 @@ class AddGroupViewModel @Inject constructor(
 
     fun createGroup(name: String, password: String, color: GroupColor) {
         viewModelScope.launch {
-            val r = userService.createGroup(name, password, color) // todo: maybe color don't work
+            val r = userDataService.createGroup(name, password, color) // todo: maybe color don't work
             if (r.isSuccess) {
                 context.showToast("\"$name\" group added")
                 closeDialog()
@@ -45,7 +44,7 @@ class AddGroupViewModel @Inject constructor(
 
     fun joinGroup(name: String, password: String) {
         viewModelScope.launch {
-            val r = userService.joinGroup(name, password)
+            val r = userDataService.joinGroup(name, password)
             if (r.isSuccess) {
                 context.showToast("Joined group \"$name\"")
                 closeDialog()

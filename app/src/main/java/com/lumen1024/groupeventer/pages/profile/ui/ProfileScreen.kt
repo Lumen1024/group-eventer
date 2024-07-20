@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
 import com.lumen1024.groupeventer.entities.user.config.CropImageColors
 import com.lumen1024.groupeventer.entities.user.config.getCropperOptions
-import com.lumen1024.groupeventer.entities.user.ui.Username
+import com.lumen1024.groupeventer.entities.user_data.ui.Username
 import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.ui.Avatar
 import com.lumen1024.groupeventer.shared.ui.SettingsToggleItem
@@ -33,7 +33,7 @@ import com.lumen1024.groupeventer.shared.ui.SettingsToggleItem
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val user by viewModel.userService.user.collectAsState()
+    val user by viewModel.userDataService.user.collectAsState()
 
     val galleryLauncher =
         rememberLauncherForActivityResult(contract = CropImageContract()) { result ->

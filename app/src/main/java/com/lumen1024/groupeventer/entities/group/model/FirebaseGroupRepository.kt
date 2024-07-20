@@ -16,18 +16,17 @@ class FirebaseGroupRepository @Inject constructor(
 ) : GroupRepository {
     private val collection = firebase.firestore.collection("groups")
 
-    override suspend fun addGroup(group: Group) {
+    override suspend fun add(group: Group): Result<Unit> {
         collection.document(group.id).set(group).await()
+        return Result.success(Unit)
     }
 
-    @Deprecated("not work")
-    override suspend fun getGroup(groupId: String): Result<Group> {
+    override suspend fun get(id: String): Result<Group> {
         try {
             val group = collection
-                .document(groupId) // todo: use query by id field
+                .whereEqualTo(Group::id.name, id)
                 .get()
-                .await()
-                .toObject(GroupDto::class.java)?.toGroup()
+                .await().toObjects(GroupDto::class.java)[0].toGroup()
 
             if (group == null) {
                 return Result.failure(
@@ -54,7 +53,7 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override suspend fun getGroup(name: String, password: String?): Result<Group> {
+    override suspend fun get(name: String, password: String?): Result<Group> {
         val query = collection
             .whereEqualTo("name", name)
             .let {
@@ -78,10 +77,10 @@ class FirebaseGroupRepository @Inject constructor(
         return Result.success(group)
     }
 
-    override suspend fun getGroups(groupIds: List<String>): Result<List<Group>> {
+    override suspend fun getList(ids: List<String>): Result<List<Group>> {
         try {
             val groupsQuery =
-                if (groupIds.isNotEmpty()) collection.whereIn("id", groupIds)
+                if (ids.isNotEmpty()) collection.whereIn("id", ids)
                 else collection
 
             val groups = groupsQuery
@@ -103,10 +102,10 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateGroup(
+    override suspend fun update(
         groupId: String,
         data: Map<String, Any>,
-    ): Result<Void> {
+    ): Result<Unit> {
         return try {
             Result.success(
                 collection
@@ -152,10 +151,10 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override fun listenChanges(
+    override fun listenList(
         groupIds: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
-    ): () -> Unit {
+    ): Result<Unit> {
         if (groupIds.isEmpty()) {
             throw Exception("Ids list must not be empty")
         }
@@ -173,10 +172,10 @@ class FirebaseGroupRepository @Inject constructor(
             })
         }
 
-        return { registration.remove() }
+        return Result.success(Unit) // maybe callback
     }
 
-    override fun listenGroupChanges(groupId: String, callback: (Group) -> Unit) {
+    override fun listen(groupId: String, callback: (Group) -> Unit) {
         TODO("Not yet implemented")
     }
 }

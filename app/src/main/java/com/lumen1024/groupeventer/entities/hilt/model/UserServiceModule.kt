@@ -3,8 +3,8 @@ package com.lumen1024.groupeventer.entities.hilt.model
 import android.content.Context
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
-import com.lumen1024.groupeventer.entities.user.model.UserService
-import com.lumen1024.groupeventer.entities.user.model.UserRepository
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataService
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +22,8 @@ object UserServiceModule {
         @ApplicationContext context: Context,
         authService: AuthService,
         groupRepository: GroupRepository,
-        userRepository: UserRepository,
-    ): UserService {
-        return UserService(context, authService, groupRepository, userRepository)
+        userDataRepository: UserDataRepository,
+    ): UserDataService {
+        return UserDataService(context, authService, groupRepository, userDataRepository)
     }
 }

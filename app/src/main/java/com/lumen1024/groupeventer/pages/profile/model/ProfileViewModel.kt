@@ -11,9 +11,9 @@ import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
-import com.lumen1024.groupeventer.entities.user.model.UserData
-import com.lumen1024.groupeventer.entities.user.model.UserRepository
-import com.lumen1024.groupeventer.entities.user.model.UserService
+import com.lumen1024.groupeventer.entities.user_data.model.UserData
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataService
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,8 +30,8 @@ class ProfileViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val firebase: Firebase,
     private val authService: AuthService,
-    private val userRepository: UserRepository,
-    val userService: UserService,
+    private val userDataRepository: UserDataRepository,
+    val userDataService: UserDataService,
 ) : ViewModel() {
     private val avatarsRef = firebase.storage.reference.child("avatars")
 
@@ -41,7 +41,7 @@ class ProfileViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             if (firebase.auth.currentUser !== null) {
-                val result = userRepository.getData(firebase.auth.currentUser!!.uid)
+                val result = userDataRepository.get(firebase.auth.currentUser!!.uid)
 
                 if (result.isSuccess) {
                     _userData.value = result.getOrNull()

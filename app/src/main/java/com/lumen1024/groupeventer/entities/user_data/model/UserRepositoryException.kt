@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.model
+package com.lumen1024.groupeventer.entities.user_data.model
 
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.shared.model.RepositoryException

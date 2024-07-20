@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.model
+package com.lumen1024.groupeventer.entities.user_data.model
 
 import android.util.Log
 import com.google.firebase.Firebase
@@ -10,12 +10,12 @@ import com.lumen1024.groupeventer.shared.model.toRepositoryException
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirebaseUserRepository @Inject constructor(
+class FirebaseUserDataRepository @Inject constructor(
     firebase: Firebase,
-) : UserRepository {
+) : UserDataRepository {
     private val collection = firebase.firestore.collection("users")
 
-    override suspend fun getData(userId: String): Result<UserData> {
+    override suspend fun get(userId: String): Result<UserData> {
         try {
             val userData = collection
                 .document(userId)
@@ -59,7 +59,7 @@ class FirebaseUserRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateData(userId: String, data: Map<String, Any>): Result<Void> {
+    override suspend fun updateUserData(userId: String, data: Map<String, Any>): Result<Void> {
         return try {
             Result.success(
                 collection
@@ -82,7 +82,7 @@ class FirebaseUserRepository @Inject constructor(
         }
     }
 
-    override fun listenChanges(
+    override fun listen(
         userId: String,
         callback: (UserData?) -> Unit,
     ): () -> Unit {

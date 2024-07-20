@@ -31,7 +31,7 @@ import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 fun EventsScreen(
     viewModel: EventsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.userService.groups.collectAsState()
+    val groups by viewModel.userDataService.groups.collectAsState()
 
     val events by remember { derivedStateOf { groups.flatMap { it.events } } }
 

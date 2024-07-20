@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.ui
+package com.lumen1024.groupeventer.entities.user_data.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 

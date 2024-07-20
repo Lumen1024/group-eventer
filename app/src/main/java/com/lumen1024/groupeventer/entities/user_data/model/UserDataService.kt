@@ -1,26 +1,21 @@
-package com.lumen1024.groupeventer.entities.user.model
+package com.lumen1024.groupeventer.entities.user_data.model
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.firestore.FieldValue
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventDto
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
-class UserService @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val authService: AuthService,
+class UserDataService @Inject constructor(
     private val groupRepository: GroupRepository,
-    private val userRepository: UserRepository,
+    private val userDataRepository: UserDataRepository,
 ) {
     private val _user = MutableStateFlow<User?>(null)
     val user = _user.asStateFlow()
@@ -37,14 +32,14 @@ class UserService @Inject constructor(
         val userData = userData.value
             ?: return Result.failure(Throwable("ded")) // todo
 
-        val group = groupRepository.getGroup(name, password)
+        val group = groupRepository.get(name, password)
             .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
 
         if (group.id in userData.groups) {
             return Result.failure(Throwable("You already in this group"))
         }
 
-        userRepository.updateData(
+        userDataRepository.updateUserData(
             userId = user.id,
             data = mapOf(
                 "groups" to userData.groups + group.id
@@ -67,14 +62,14 @@ class UserService @Inject constructor(
         val userData = userData.value
             ?: return Result.failure(Throwable("ded")) // todo
 
-        val group = groupRepository.getGroup(name, null)
+        val group = groupRepository.get(name, null)
             .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
 
         if (group.id !in userData.groups) {
             return Result.failure(Throwable("You are not in this group"))
         }
 
-        userRepository.updateData(
+        userDataRepository.updateUserData(
             userId = user.id,
             data = mapOf(
                 "groups" to userData.groups - group.id
@@ -117,7 +112,7 @@ class UserService @Inject constructor(
     }
 
     suspend fun createGroup(name: String, password: String, color: GroupColor): Result<Unit> {
-        if (groupRepository.getGroup(name = name, password = null).isSuccess) {
+        if (groupRepository.get(name = name, password = null).isSuccess) {
             return Result.failure(Throwable("Group with same name already exist"))
         } // todo: move to addGroup
 
@@ -133,9 +128,9 @@ class UserService @Inject constructor(
             color = color
         )
 
-        groupRepository.addGroup(group)
+        groupRepository.add(group)
 
-        userRepository.updateData(
+        userDataRepository.updateUserData(
             userId = user.id,
             data = mapOf(
                 "groups" to userData.groups + group.id // todo
@@ -230,7 +225,7 @@ class UserService @Inject constructor(
     }
 
     private fun listenUserDataChanges(): (() -> Unit)? = user.value?.let {
-        return userRepository.listenChanges(it.id) { data ->
+        return userDataRepository.listen(it.id) { data ->
             _userData.value = data
             unsubscribeFromGroupChanges?.let {
                 it()
@@ -246,7 +241,7 @@ class UserService @Inject constructor(
      * */
     private fun listenGroupChanges(): (() -> Unit)? =
         userData.value?.groups?.takeIf { it.isNotEmpty() }?.let {
-            return groupRepository.listenChanges(it) { changes ->
+            return groupRepository.listenList(it) { changes ->
                 processGroupsChange(changes)
             }
         }

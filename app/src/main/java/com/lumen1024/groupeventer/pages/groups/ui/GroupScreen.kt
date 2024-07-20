@@ -26,10 +26,10 @@ import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
 fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.userService.groups.collectAsState()
-    val userData by viewModel.userService.userData.collectAsState()
+    val groups by viewModel.userDataService.groups.collectAsState()
+    val userData by viewModel.userDataService.userData.collectAsState()
 
-    val userGroups by viewModel.userService.userData.collectAsState()
+    val userGroups by viewModel.userDataService.userData.collectAsState()
 
     var selectedGroupId by remember { mutableStateOf<String?>(null) }
     var selectedGroup by remember { mutableStateOf<Group?>(null) }
