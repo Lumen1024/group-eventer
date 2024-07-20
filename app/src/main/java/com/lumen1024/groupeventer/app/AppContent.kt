@@ -9,7 +9,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,13 +19,11 @@ import com.lumen1024.groupeventer.app.scaffold_components.AppDrawerContent
 import com.lumen1024.groupeventer.app.scaffold_components.AppFloatingButton
 import com.lumen1024.groupeventer.app.scaffold_components.AppTopBar
 import com.lumen1024.groupeventer.app.scaffold_components.DrawerViewModel
-import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun AppContent() {
     val navController = rememberNavController()
-    val currentScreen by navController.getCurrentScreenAsState()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val drawerViewModel: DrawerViewModel = hiltViewModel()
@@ -42,10 +39,10 @@ fun AppContent() {
     ModalNavigationDrawer(
         drawerContent = { AppDrawerContent() },
         drawerState = drawerState,
-        gesturesEnabled = true,
-        ) {
+    ) {
         Scaffold(
-            //modifier = Modifier.systemPadding(),
+            // TODO what is this?
+            // modifier = Modifier.systemPadding(),
             topBar = { AppTopBar(navController = navController) },
             bottomBar = { AppBottomBar(navController = navController) },
             floatingActionButton = { AppFloatingButton(navController = navController) },

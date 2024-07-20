@@ -1,15 +1,14 @@
 package com.lumen1024.groupeventer.app.scaffold_components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import dagger.Module
 import dagger.Provides
@@ -39,20 +38,20 @@ class DrawerController {
 
 @HiltViewModel
 class DrawerViewModel @Inject constructor(
-    val drawerController: DrawerController
+    val drawerController: DrawerController,
 ) : ViewModel()
 
 @Composable
 fun AppDrawerContent() {
-    Column(modifier = Modifier
-        .background(MaterialTheme.colorScheme.surfaceContainer)
-        .statusBarsPadding()
-        //.padding(start = 8.dp)
-        .fillMaxWidth(0.9f)
-        .fillMaxHeight()
-    ) {
+    ModalDrawerSheet {
+        Text("Groups", modifier = Modifier.padding(16.dp))
+        HorizontalDivider()
         repeat(5) {
-            Text(text = "ded")
+            NavigationDrawerItem(
+                selected = false,
+                label = { Text("ded") },
+                onClick = {/*TODO*/ }
+            )
         }
     }
 }
