@@ -50,7 +50,7 @@ fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant {
     return when (this) {
         Screen.Groups -> TopBarVariant.Default(
             title = "Groups", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to {drawerController.tryOpenDrawer()}, // todo
+            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() }, // todo
             actions = mapOf(
                 Icons.Default.AccountCircle to {}, // todo
             )
@@ -58,7 +58,7 @@ fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant {
 
         Screen.Profile -> TopBarVariant.Default(
             title = "Profile", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to {drawerController.tryOpenDrawer()}, // todo
+            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() }, // todo
             actions = mapOf(
                 Icons.Default.Settings to {}, // todo
             )
@@ -75,17 +75,15 @@ fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant {
 
 @HiltViewModel
 class TopAppBarViewModel @Inject constructor(
-    val drawerController: DrawerController
-) : ViewModel() {
-
-}
+    val drawerController: DrawerController,
+) : ViewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: TopAppBarViewModel = hiltViewModel()
+    viewModel: TopAppBarViewModel = hiltViewModel(),
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
     val topBarVariant by remember {

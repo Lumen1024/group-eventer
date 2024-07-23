@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// TODO deprecated?
 @Module
 @InstallIn(SingletonComponent::class)
 object NavigationModule {

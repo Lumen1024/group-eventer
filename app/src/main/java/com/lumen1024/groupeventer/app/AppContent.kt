@@ -19,6 +19,7 @@ import com.lumen1024.groupeventer.app.scaffold_components.AppDrawerContent
 import com.lumen1024.groupeventer.app.scaffold_components.AppFloatingButton
 import com.lumen1024.groupeventer.app.scaffold_components.AppTopBar
 import com.lumen1024.groupeventer.app.scaffold_components.DrawerViewModel
+import com.lumen1024.groupeventer.shared.lib.systemPadding
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
@@ -41,8 +42,7 @@ fun AppContent() {
         drawerState = drawerState,
     ) {
         Scaffold(
-            // TODO what is this?
-            // modifier = Modifier.systemPadding(),
+            modifier = Modifier.systemPadding(),
             topBar = { AppTopBar(navController = navController) },
             bottomBar = { AppBottomBar(navController = navController) },
             floatingActionButton = { AppFloatingButton(navController = navController) },

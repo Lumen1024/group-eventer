@@ -4,8 +4,9 @@ import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.entities.user.model.FirebaseUserStateHolder
+import com.lumen1024.groupeventer.entities.user.model.UserActions
+import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
 import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
-import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +22,7 @@ object UserModule {
     fun provideUserStateHolder(
         groupRepository: GroupRepository,
         userDataRepository: UserDataRepository,
-        authService: AuthService
+        authService: AuthService,
     ): UserStateHolder {
         return FirebaseUserStateHolder(userDataRepository, groupRepository, authService)
     }
@@ -31,8 +32,8 @@ object UserModule {
     fun provideUserActions(
         groupRepository: GroupRepository,
         userDataRepository: UserDataRepository,
-        userStateHolder: UserStateHolder
-    ): FirebaseUserActions {
+        userStateHolder: UserStateHolder,
+    ): UserActions {
         return FirebaseUserActions(userDataRepository, groupRepository, userStateHolder)
     }
 }

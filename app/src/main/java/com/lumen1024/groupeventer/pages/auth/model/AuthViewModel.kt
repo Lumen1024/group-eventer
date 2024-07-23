@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
-import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
+import com.lumen1024.groupeventer.entities.auth.model.mapToResource
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,17 +46,26 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
 
-            val r = authService.login(email, password)
+            authService.login(email, password)
+                .onFailure {
+                    when (it) {
+                        is AuthException -> handleException(it)
+                        else -> context.showToast(
+                            context.getString(
+                                AuthException.Unknown("Error when logging in").mapToResource()
+                            )
+                        )
+                    }
+                }
+                .onSuccess {
+                    navigator.tryNavigateTo(
+                        route = Screen.Events,
+                        popUpToRoute = Screen.Events,
+                        inclusive = true,
+                    )
 
-            if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-            else navigator.tryNavigateTo(
-                route = Screen.Events,
-                popUpToRoute = Screen.Events,
-                inclusive = true,
-                )
-
-            _isLoading.value = false
-
+                    _isLoading.value = false
+                }
         }
     }
 
@@ -106,12 +115,12 @@ class AuthViewModel @Inject constructor(
             is AuthException.EmailAlreadyExist -> _emailError.value = EmailErrorState.AlreadyExist
             is AuthException.IncorrectCredentials -> context.showToast(
                 context.resources.getString(
-                    exception.mapAuthExceptionToMessage()
+                    exception.mapToResource()
                 )
             )
 
             is AuthException.ShortPassword -> _passwordError.value = PasswordErrorState.Short
-            is AuthException.Unknown -> context.showToast(context.resources.getString(exception.mapAuthExceptionToMessage()))
+            is AuthException.Unknown -> context.showToast(context.resources.getString(exception.mapToResource()))
             is AuthException.WrongFormatEmail -> _emailError.value = EmailErrorState.WrongFormat
         }
 

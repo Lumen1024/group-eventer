@@ -54,7 +54,7 @@ fun CreateEventScreen(
 
     val requestedRanges = remember { mutableStateListOf<TimeRange>() }
 
-    val groups by viewModel.firebaseUserActions.groups.collectAsState()
+    val groups by viewModel.userStateHolder.groups.collectAsState()
 
     val groupNames by remember { derivedStateOf { groups.map { it.name } } }
 

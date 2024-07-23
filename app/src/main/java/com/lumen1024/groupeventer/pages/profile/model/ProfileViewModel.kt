@@ -2,100 +2,95 @@ package com.lumen1024.groupeventer.pages.profile.model
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import com.google.firebase.storage.storage
 import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.auth.model.AuthException
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
-import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
-import com.lumen1024.groupeventer.entities.user_data.model.UserData
-import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
-import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
+import com.lumen1024.groupeventer.entities.auth.model.mapToResource
+import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
+import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val navigator: Navigator,
     @ApplicationContext private val context: Context,
-    private val firebase: Firebase,
+    private val navigator: Navigator,
     private val authService: AuthService,
     private val userDataRepository: UserDataRepository,
-    val firebaseUserActions: FirebaseUserActions,
+    val userStateHolder: UserStateHolder,
 ) : ViewModel() {
-    private val avatarsRef = firebase.storage.reference.child("avatars")
-
-    private val _userData = MutableStateFlow<UserData?>(null)
-    val groups = _userData.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            if (firebase.auth.currentUser !== null) {
-                val result = userDataRepository.get(firebase.auth.currentUser!!.uid)
-
-                if (result.isSuccess) {
-                    _userData.value = result.getOrNull()
-                }
-            }
-        }
-    }
-
     fun updateName(name: String) {
         viewModelScope.launch {
-//            _username.value = firebase.auth.currentUser?.displayName.toString()
-
-            val result = authService.updateUser(name = name)
-            val exception = result.exceptionOrNull()
-
-            if (result.isFailure && exception !== null) {
-                if (exception is AuthException) {
-                    context.showToast(context.resources.getString(exception.mapAuthExceptionToMessage()))
+            userDataRepository.update(
+                userStateHolder.userData.value?.id ?: return@launch,
+                mapOf(
+                    "name" to name
+                )
+            ).onFailure {
+                val messageResId = when (it) {
+                    is AuthException -> it.mapToResource()
+                    else -> AuthException.Unknown("Error when updating name").mapToResource()
                 }
-            }
 
-//            _username.value = firebase.auth.currentUser?.displayName.toString()
+                context.showToast(context.resources.getString(messageResId))
+            }
         }
     }
 
-    fun updateAvatar(avatarUrl: Uri) {
+    fun updateAvatar(imageUri: Uri) {
         viewModelScope.launch {
-            if (firebase.auth.currentUser !== null) {
-//                _avatarUrl.value = avatarUrl
+            try {
+                val userId = userStateHolder.userData.value?.id ?: return@launch
 
-                try {
-                    val uploadTask =
-                        avatarsRef.child(firebase.auth.currentUser!!.uid).putFile(avatarUrl).await()
+                val avatarUrl = userDataRepository.uploadAvatar(
+                    userId, imageUri
+                ).onFailure {
+                    val messageResId = when (it) {
+                        is AuthException -> it.mapToResource()
+                        else -> {
+                            val exception =
+                                AuthException.Unknown("Error when loading avatar image to server")
 
-                    val downloadUri = uploadTask.storage.downloadUrl.await()
+                            Log.e("ProfileViewModel", exception.message, exception)
 
-
-                    val result = authService.updateUser(avatarUrl = downloadUri)
-                    val exception = result.exceptionOrNull()
-
-                    if (result.isFailure && exception !== null) {
-                        if (exception is AuthException) {
-                            context.showToast(context.resources.getString(exception.mapAuthExceptionToMessage()))
+                            exception.mapToResource()
                         }
                     }
 
-//                    _avatarUrl.value = Uri.parse(firebase.auth.currentUser?.photoUrl.toString())
-                } catch (e: Exception) {
-                    context.showToast("Error when setting avatar")
+                    context.showToast(context.resources.getString(messageResId))
+                }.getOrNull() ?: return@launch
+
+                userDataRepository.update(
+                    userId, mapOf(
+                        "avatarUrl" to avatarUrl.toString()
+                    )
+                ).onFailure {
+                    val messageResId = when (it) {
+                        is AuthException -> it.mapToResource()
+                        else -> {
+                            val exception =
+                                AuthException.Unknown("Error when updating avatar")
+
+                            Log.e("ProfileViewModel", exception.message, exception)
+
+                            exception.mapToResource()
+                        }
+                    }
+
+                    context.showToast(context.resources.getString(messageResId))
                 }
+            } catch (e: Exception) {
+                context.showToast("Error when setting avatar")
             }
         }
     }
-
 
     fun logout() {
         viewModelScope.launch {
@@ -104,7 +99,7 @@ class ProfileViewModel @Inject constructor(
             if (!authService.checkAuthorized()) {
                 navigator.tryNavigateTo(
                     route = Screen.Auth,
-                    // todo
+                    // todo ?
                 )
             }
         }

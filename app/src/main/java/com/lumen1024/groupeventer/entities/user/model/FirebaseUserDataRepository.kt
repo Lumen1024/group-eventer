@@ -1,9 +1,12 @@
-package com.lumen1024.groupeventer.entities.user_data.model
+package com.lumen1024.groupeventer.entities.user.model
 
+import android.net.Uri
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 import com.lumen1024.groupeventer.entities.group.model.UserDataDto
 import com.lumen1024.groupeventer.entities.group.model.toUserData
+import com.lumen1024.groupeventer.entities.group.model.toUserDataDto
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -11,13 +14,12 @@ class FirebaseUserDataRepository @Inject constructor(
     firebase: Firebase,
 ) : UserDataRepository {
     private val collection = firebase.firestore.collection("users")
+    private val avatarsRef = firebase.storage.reference.child("avatars")
 
     override suspend fun add(userData: UserData): Result<Unit> {
         return try {
-            collection.document(userData.id).set(userData).await()
-
+            collection.document(userData.id).set(userData.toUserDataDto()).await()
             Result.success(Unit)
-
         } catch (e: Throwable) {
             Result.failure(e)
         }
@@ -26,12 +28,12 @@ class FirebaseUserDataRepository @Inject constructor(
     override suspend fun get(id: String): Result<UserData> {
         return try {
             val userData = collection.document(id)
-                .get().await()
-                .toObject(UserData::class.java)
+                .get()
+                .await()
+                .toObject(UserDataDto::class.java)?.toUserData()
                 ?: throw Throwable("No user with this id")
 
             Result.success(userData)
-
         } catch (e: Throwable) {
             Result.failure(e)
         }
@@ -39,9 +41,18 @@ class FirebaseUserDataRepository @Inject constructor(
 
     override suspend fun update(id: String, data: Map<String, Any>): Result<Unit> {
         return try {
-            collection.document(id).update(data)
+            collection.document(id).update(data).await()
             Result.success(Unit)
+        } catch (e: Throwable) {
+            Result.failure(e)
+        }
+    }
 
+    override suspend fun uploadAvatar(id: String, image: Uri): Result<Uri> {
+        return try {
+            val uploadTask = avatarsRef.child(id).putFile(image).await()
+            val avatarUri = uploadTask.storage.downloadUrl.await()
+            Result.success(avatarUri)
         } catch (e: Throwable) {
             Result.failure(e)
         }
@@ -50,17 +61,16 @@ class FirebaseUserDataRepository @Inject constructor(
     override fun listen(
         id: String,
         callback: (UserData?) -> Unit,
-    ): Result<Unit> {
+    ): Result<() -> Unit> {
         return try {
-            collection.document(id).addSnapshotListener { snapshot, e ->
+            val unsubscribeFunc = collection.document(id).addSnapshotListener { snapshot, e ->
                 if (e != null) return@addSnapshotListener
-
                 val data = snapshot?.toObject(UserDataDto::class.java)?.toUserData()
                 callback(data)
             }
-            Result.success(Unit)
 
-        } catch (e : Throwable) {
+            Result.success { unsubscribeFunc.remove() }
+        } catch (e: Throwable) {
             Result.failure(e)
         }
     }

@@ -11,8 +11,7 @@ sealed class AuthException(message: String?) : Throwable(message) {
     class Unknown(message: String?) : AuthException(message)
 }
 
-fun FirebaseAuthException.toAuthException() : AuthException
-{
+fun FirebaseAuthException.toAuthException(): AuthException {
     return when (this.errorCode) {
         "ERROR_INVALID_EMAIL" ->
             AuthException.WrongFormatEmail(this.message)
@@ -29,7 +28,7 @@ fun FirebaseAuthException.toAuthException() : AuthException
     }
 }
 
-fun AuthException.mapAuthExceptionToMessage(): Int {
+fun AuthException.mapToResource(): Int {
     return when (this) {
         is AuthException.WrongFormatEmail -> R.string.wrong_format_email
         is AuthException.IncorrectCredentials -> R.string.incorrect_credential

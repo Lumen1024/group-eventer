@@ -6,7 +6,6 @@ import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
-import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(
@@ -101,7 +100,7 @@ class FirebaseUserActions @Inject constructor(
     override suspend fun createGroup(
         name: String,
         password: String,
-        color: GroupColor
+        color: GroupColor,
     ): Result<Unit> {
         if (groupRepository.get(name = name, password = null).isSuccess) {
             return Result.failure(Throwable("Group with same name already exist"))

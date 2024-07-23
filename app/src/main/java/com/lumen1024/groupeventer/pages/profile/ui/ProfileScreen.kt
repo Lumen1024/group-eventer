@@ -22,10 +22,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
+import com.lumen1024.groupeventer.entities.user.ui.Username
+import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.config.CropImageColors
 import com.lumen1024.groupeventer.shared.config.getCropperOptions
-import com.lumen1024.groupeventer.entities.user_data.ui.Username
-import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.ui.Avatar
 import com.lumen1024.groupeventer.shared.ui.SettingsToggleItem
 
@@ -33,7 +33,7 @@ import com.lumen1024.groupeventer.shared.ui.SettingsToggleItem
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val user by viewModel.firebaseUserActions.user.collectAsState()
+    val userData by viewModel.userStateHolder.userData.collectAsState()
 
     val galleryLauncher =
         rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
@@ -72,10 +72,10 @@ fun ProfileScreen(
                 showBorder = true,
                 modifier = Modifier
                     .clickable(role = Role.Button, onClick = openCropper),
-                url = user?.avatarUrl
+                url = userData?.avatarUrl
             )
             Username(
-                username = user?.name ?: "",
+                username = userData?.name ?: "",
                 showEdit = true,
                 onEdited = handleEdit
             )

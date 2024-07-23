@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user_data.ui
+package com.lumen1024.groupeventer.entities.user.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column

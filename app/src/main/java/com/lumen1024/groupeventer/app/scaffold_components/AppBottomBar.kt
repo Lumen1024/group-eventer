@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.lumen1024.groupeventer.app.config.bottomBarItems
+import com.lumen1024.groupeventer.app.config.HOME_PAGE_BOTTOM_BAR_ITEMS
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import com.lumen1024.groupeventer.shared.ui.NavBar
@@ -22,14 +22,15 @@ fun AppBottomBar(
     navController: NavHostController,
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
-    val showBottomBar by remember { derivedStateOf { currentScreen in bottomBarItems } }
+    val showBottomBar by remember { derivedStateOf { currentScreen in HOME_PAGE_BOTTOM_BAR_ITEMS } }
     AnimatedVisibility(
         showBottomBar,
         enter = fadeIn() + slideInVertically(initialOffsetY = { 200 }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { 200 })
     ) {
         NavBar(
-            items = bottomBarItems,
+            modifier = modifier,
+            items = HOME_PAGE_BOTTOM_BAR_ITEMS,
             startDestination = Screen.Events,
             navController = navController,
         )

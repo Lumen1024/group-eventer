@@ -7,9 +7,6 @@ import androidx.compose.material.icons.filled.Groups
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.shared.model.TimeRange
-import com.lumen1024.groupeventer.shared.model.TimeRangeDto
-import com.lumen1024.groupeventer.shared.model.toTimeRange
-import com.lumen1024.groupeventer.shared.model.toTimeRangeDto
 
 data class GroupEvent(
     val id: String = "",

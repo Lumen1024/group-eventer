@@ -103,7 +103,6 @@ class FirebaseGroupRepository @Inject constructor(
         ids: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
     ): Result<() -> Unit> {
-
         if (ids.isEmpty()) {
             return Result.failure(Throwable("Ids must not be empty"))
         }
@@ -116,7 +115,6 @@ class FirebaseGroupRepository @Inject constructor(
             val changes = snapshot?.documentChanges?.map { firebaseChange ->
                 val changeDto = firebaseChange.toRepositoryObjectChange<GroupDto>()
                 RepositoryObjectChange(changeDto.type, changeDto.data?.toGroup())
-
             } ?: return@addSnapshotListener
 
             callback(changes)

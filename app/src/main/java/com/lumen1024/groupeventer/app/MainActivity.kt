@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
         // make top and bottom bar transparent
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
                 Color.TRANSPARENT, Color.TRANSPARENT
             )
         )
+
         setContent {
             GroupEventerTheme {
                 Surface(

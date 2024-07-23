@@ -161,7 +161,7 @@ fun AuthScreen(
                                     // be displayed out of bounds.
                                     SizeTransform(clip = false)
                                 )
-                            }
+                            }, label = "Sign in/Sign out button transition"
                         ) { selected ->
                             Text(
                                 modifier = Modifier

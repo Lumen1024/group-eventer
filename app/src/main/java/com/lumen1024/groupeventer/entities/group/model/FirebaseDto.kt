@@ -1,7 +1,6 @@
 package com.lumen1024.groupeventer.entities.group.model
 
-import android.net.Uri
-import com.google.firebase.firestore.DocumentId
+import androidx.core.net.toUri
 import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEventResponseDto
@@ -9,12 +8,12 @@ import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
 import com.lumen1024.groupeventer.entities.group_event.model.PeopleStatus
 import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventResponse
 import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventResponseDto
-import com.lumen1024.groupeventer.entities.user_data.model.UserData
+import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
 
 data class GroupDto(
-    @DocumentId val id: String = "",
+    val id: String = "",
     val name: String = "",
     val color: GroupColor = GroupColor.RED,
     val description: String = "",
@@ -113,15 +112,23 @@ fun TimeRange.toTimeRangeDto() = TimeRangeDto(
 // --------------------------------------------
 
 data class UserDataDto(
-    @DocumentId val id : String = "",
+    val id: String = "",
     val name: String = "",
-    val avatarUrl: Uri? = null,
+    val avatarUrl: String? = null,
     val groups: List<String> = emptyList(),
 )
+
+fun UserData.toUserDataDto() =
+    UserDataDto(
+        id = id,
+        name = name,
+        avatarUrl = avatarUrl?.toString(),
+        groups = groups
+    )
 
 fun UserDataDto.toUserData() = UserData(
     id = id,
     name = name,
-    avatarUrl = avatarUrl,
+    avatarUrl = avatarUrl?.toUri(),
     groups = groups,
 )

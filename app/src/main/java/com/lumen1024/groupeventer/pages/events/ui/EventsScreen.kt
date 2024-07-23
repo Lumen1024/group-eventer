@@ -1,13 +1,12 @@
 package com.lumen1024.groupeventer.pages.events.ui
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -25,18 +24,15 @@ import com.lumen1024.groupeventer.entities.group_event.ui.GroupEventCard
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun EventsScreen(
     viewModel: EventsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.firebaseUserActions.groups.collectAsState()
+    val groups by viewModel.userStateHolder.groups.collectAsState()
 
     val events by remember { derivedStateOf { groups.flatMap { it.events } } }
 
     var isSheetOpen by remember { mutableStateOf(false) }
-
-    Log.d("W", groups.toString())
 
     Column {
         LazyColumn(
