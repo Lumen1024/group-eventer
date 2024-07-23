@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,10 +25,10 @@ import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
 fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.userDataService.groups.collectAsState()
-    val userData by viewModel.userDataService.userData.collectAsState()
+    val groups by viewModel.firebaseUserActions.groups.collectAsState()
+    val userData by viewModel.firebaseUserActions.userData.collectAsState()
 
-    val userGroups by viewModel.userDataService.userData.collectAsState()
+    val userGroups by viewModel.firebaseUserActions.userData.collectAsState()
 
     var selectedGroupId by remember { mutableStateOf<String?>(null) }
     var selectedGroup by remember { mutableStateOf<Group?>(null) }

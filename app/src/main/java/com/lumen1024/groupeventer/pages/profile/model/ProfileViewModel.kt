@@ -13,7 +13,7 @@ import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapAuthExceptionToMessage
 import com.lumen1024.groupeventer.entities.user_data.model.UserData
 import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
-import com.lumen1024.groupeventer.entities.user_data.model.UserDataService
+import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,7 @@ class ProfileViewModel @Inject constructor(
     private val firebase: Firebase,
     private val authService: AuthService,
     private val userDataRepository: UserDataRepository,
-    val userDataService: UserDataService,
+    val firebaseUserActions: FirebaseUserActions,
 ) : ViewModel() {
     private val avatarsRef = firebase.storage.reference.child("avatars")
 

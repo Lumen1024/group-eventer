@@ -2,9 +2,6 @@ package com.lumen1024.groupeventer.entities.group.model
 
 import androidx.compose.ui.graphics.Color
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventDto
-import com.lumen1024.groupeventer.entities.group_event.model.toGroupEvent
-import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventDto
 import java.util.UUID
 
 enum class GroupColor(val color: Color) {
@@ -29,42 +26,3 @@ data class Group(
     val people: List<String> = emptyList(),
     val admin: String = "",
 )
-
-fun Group.toGroupDto(): GroupDto {
-    return GroupDto(
-        id = id,
-        name = name,
-        color = color,
-        description = description,
-        password = password,
-        events = events.map { it.toGroupEventDto() },
-        people = people,
-        admin = admin
-    )
-}
-
-data class GroupDto(
-    val id: String = UUID.randomUUID().toString(),
-
-    val name: String = "",
-    val color: GroupColor = GroupColor.RED,
-    val description: String = "",
-    val password: String = "",
-
-    val events: List<GroupEventDto> = emptyList(),
-    val people: List<String> = emptyList(),
-    val admin: String = "",
-)
-
-fun GroupDto.toGroup(): Group {
-    return Group(
-        id = id,
-        name = name,
-        color = color,
-        description = description,
-        password = password,
-        events = events.map { it.toGroupEvent() },
-        people = people,
-        admin = admin
-    )
-}

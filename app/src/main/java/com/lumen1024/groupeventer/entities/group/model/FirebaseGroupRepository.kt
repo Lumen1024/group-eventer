@@ -26,10 +26,9 @@ class FirebaseGroupRepository @Inject constructor(
     override suspend fun get(id: String): Result<Group> {
         try {
             val group = collection
-                .whereEqualTo(Group::id.name, id)
+                .document(id)
                 .get().await()
-                .documents.getOrNull(0)
-                ?.toObject(GroupDto::class.java)
+                .toObject(GroupDto::class.java)
                 ?.toGroup()
                 ?: return Result.failure(Throwable("No group with this id"))
 
@@ -103,7 +102,7 @@ class FirebaseGroupRepository @Inject constructor(
     override fun listenList(
         ids: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
-    ): Result<Unit> {
+    ): Result<() -> Unit> {
 
         if (ids.isEmpty()) {
             return Result.failure(Throwable("Ids must not be empty"))
@@ -111,7 +110,7 @@ class FirebaseGroupRepository @Inject constructor(
 
         val query = collection.whereIn("id", ids)
 
-        query.addSnapshotListener { snapshot, e ->
+        val registration = query.addSnapshotListener { snapshot, e ->
             if (e != null) return@addSnapshotListener
 
             val changes = snapshot?.documentChanges?.map { firebaseChange ->
@@ -123,6 +122,6 @@ class FirebaseGroupRepository @Inject constructor(
             callback(changes)
         }
 
-        return Result.success(Unit) // maybe callback
+        return Result.success { registration.remove() }
     }
 }

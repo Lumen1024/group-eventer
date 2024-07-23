@@ -2,17 +2,20 @@ package com.lumen1024.groupeventer.entities.hilt.model
 
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
+import com.lumen1024.groupeventer.entities.user_data.model.FirebaseUserDataRepository
+import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class GroupModule {
+abstract class RepositoryModule {
 
-    @Singleton
     @Binds
     abstract fun bindGroupRepository(groupRepositoryImp: FirebaseGroupRepository): GroupRepository
+
+    @Binds
+    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserDataRepository): UserDataRepository
 }

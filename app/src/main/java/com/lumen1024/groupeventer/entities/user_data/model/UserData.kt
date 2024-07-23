@@ -6,8 +6,6 @@ data class UserData(
     val id: String = "",
     val name: String = "",
     val avatarUrl: Uri? = null,
-    val id: String = "",
-    val avatarUrl: Uri? = null,
-    val name: String? = null,
     val groups: List<String> = emptyList()
 )
+

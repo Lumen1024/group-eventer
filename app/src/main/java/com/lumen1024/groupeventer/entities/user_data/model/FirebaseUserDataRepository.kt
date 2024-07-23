@@ -1,12 +1,9 @@
 package com.lumen1024.groupeventer.entities.user_data.model
 
-import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
-import com.lumen1024.groupeventer.shared.model.RepositoryException
-import com.lumen1024.groupeventer.shared.model.toRepositoryException
+import com.lumen1024.groupeventer.entities.group.model.UserDataDto
+import com.lumen1024.groupeventer.entities.group.model.toUserData
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -15,85 +12,56 @@ class FirebaseUserDataRepository @Inject constructor(
 ) : UserDataRepository {
     private val collection = firebase.firestore.collection("users")
 
-    override suspend fun get(userId: String): Result<UserData> {
-        try {
-            val userData = collection
-                .document(userId)
-                .get()
-                .await()
-                .toObject(UserData::class.java)
+    override suspend fun add(userData: UserData): Result<Unit> {
+        return try {
+            collection.document(userData.id).set(userData).await()
 
-            if (userData == null) {
-                // todo: remove? <-> @Answer: lumen1024 -> what is going on?
+            Result.success(Unit)
 
-                val newUserData = UserData()
-
-                collection
-                    .document(userId)
-                    .set(newUserData)
-                    .await()
-
-                return Result.success(newUserData)
-
-//                return Result.failure(
-//                    UserRepositoryException(
-//                        code = RepositoryException.Code.UNKNOWN,
-//                        "User data is null"
-//                    )
-//                )
-            }
-
-            return Result.success(userData)
-        } catch (e: Exception) {
-            Log.e("repository", e.message, e)
-            if (e is FirebaseFirestoreException) {
-                return Result.failure(e.toRepositoryException())
-            }
-
-            return Result.failure(
-                UserRepositoryException(
-                    RepositoryException.Code.UNKNOWN,
-                    e.message
-                )
-            )
+        } catch (e: Throwable) {
+            Result.failure(e)
         }
     }
 
-    override suspend fun updateUserData(userId: String, data: Map<String, Any>): Result<Void> {
+    override suspend fun get(id: String): Result<UserData> {
         return try {
-            Result.success(
-                collection
-                    .document(userId)
-                    .update(data)
-                    .await()
-            )
-        } catch (e: Exception) {
-            Log.e("repository", e.message, e)
-            if (e is FirebaseFirestoreException) {
-                return Result.failure(e.toRepositoryException())
-            }
+            val userData = collection.document(id)
+                .get().await()
+                .toObject(UserData::class.java)
+                ?: throw Throwable("No user with this id")
 
-            return Result.failure(
-                UserRepositoryException(
-                    RepositoryException.Code.UNKNOWN,
-                    e.message
-                )
-            )
+            Result.success(userData)
+
+        } catch (e: Throwable) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun update(id: String, data: Map<String, Any>): Result<Unit> {
+        return try {
+            collection.document(id).update(data)
+            Result.success(Unit)
+
+        } catch (e: Throwable) {
+            Result.failure(e)
         }
     }
 
     override fun listen(
-        userId: String,
+        id: String,
         callback: (UserData?) -> Unit,
-    ): () -> Unit {
-        val registration = collection.document(userId).addSnapshotListener { snapshot, e ->
-            if (e !== null) {
-                return@addSnapshotListener
+    ): Result<Unit> {
+        return try {
+            collection.document(id).addSnapshotListener { snapshot, e ->
+                if (e != null) return@addSnapshotListener
+
+                val data = snapshot?.toObject(UserDataDto::class.java)?.toUserData()
+                callback(data)
             }
+            Result.success(Unit)
 
-            callback(snapshot!!.toObject())
+        } catch (e : Throwable) {
+            Result.failure(e)
         }
-
-        return { registration.remove() }
     }
 }

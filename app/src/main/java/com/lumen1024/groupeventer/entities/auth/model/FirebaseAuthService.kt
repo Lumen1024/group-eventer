@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.entities.auth.model
 
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.tasks.await
@@ -12,9 +13,9 @@ class FirebaseAuthService @Inject constructor(
 
     private val auth = firebase.auth
 
-    override fun checkAuthorized(): Result<Boolean> {
-        return Result.success(auth.currentUser != null)
-    }
+    override val userId: String?
+        get() = auth.currentUser?.uid
+
 
     override suspend fun login(email: String, password: String): Result<Unit> {
         try {
@@ -45,5 +46,12 @@ class FirebaseAuthService @Inject constructor(
     override suspend fun logout(): Result<Unit> {
         auth.signOut()
         return Result.success(Unit)
+    }
+
+    override fun listen(callback: () -> Unit): Result<() -> Unit> {
+        val listener : (FirebaseAuth) -> Unit = { callback() }
+        auth.addAuthStateListener(listener)
+
+        return Result.success { auth.removeAuthStateListener(listener) }
     }
 }

@@ -6,7 +6,7 @@ import com.lumen1024.groupeventer.app.navigation.Navigator
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.user_data.model.UserDataService
+import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    val userDataService: UserDataService,
+    val firebaseUserActions: FirebaseUserActions,
     val navigator: Navigator,
 ) : ViewModel() {
     fun saveEvent(
@@ -33,7 +33,7 @@ class CreateEventViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            var res = userDataService.createEvent(event, group)
+            var res = firebaseUserActions.createEvent(event, group)
         }
 
 

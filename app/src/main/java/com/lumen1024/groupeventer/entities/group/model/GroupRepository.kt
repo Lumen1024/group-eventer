@@ -22,7 +22,7 @@ interface GroupRepository {
     fun listenList(
         ids: List<String>,
         callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
-    ): Result<Unit>
+    ): Result<() -> Unit>
 
     //fun listen(id: String, callback: (Group) -> Unit) : Result<Unit>
 }

@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.config
+package com.lumen1024.groupeventer.shared.config
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

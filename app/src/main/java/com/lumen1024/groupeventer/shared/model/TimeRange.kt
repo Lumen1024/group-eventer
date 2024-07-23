@@ -25,16 +25,4 @@ data class TimeRange(
         )
 }
 
-fun TimeRange.toTimeRangeDto(): TimeRangeDto {
-    return TimeRangeDto(this.start.toEpochMilli(), this.end.toEpochMilli())
-}
-
-data class TimeRangeDto(
-    var start: Long = Instant.now().toEpochMilli(),
-    var end: Long = Instant.now().plusSeconds(3600).toEpochMilli(),
-)
-
-fun TimeRangeDto.toTimeRange(): TimeRange {
-    return TimeRange(this.start, this.end)
-}
 

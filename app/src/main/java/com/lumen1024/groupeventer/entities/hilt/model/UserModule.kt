@@ -1,18 +1,38 @@
 package com.lumen1024.groupeventer.entities.hilt.model
 
-import com.lumen1024.groupeventer.entities.user_data.model.FirebaseUserDataRepository
+import com.lumen1024.groupeventer.entities.auth.model.AuthService
+import com.lumen1024.groupeventer.entities.group.model.GroupRepository
+import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
+import com.lumen1024.groupeventer.entities.user.model.FirebaseUserStateHolder
+import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
 import com.lumen1024.groupeventer.entities.user_data.model.UserDataRepository
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class UserModule {
+object UserModule {
 
+    @Provides
     @Singleton
-    @Binds
-    abstract fun bindUserRepository(userRepositoryImp: FirebaseUserDataRepository): UserDataRepository
+    fun provideUserStateHolder(
+        groupRepository: GroupRepository,
+        userDataRepository: UserDataRepository,
+        authService: AuthService
+    ): UserStateHolder {
+        return FirebaseUserStateHolder(userDataRepository, groupRepository, authService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserActions(
+        groupRepository: GroupRepository,
+        userDataRepository: UserDataRepository,
+        userStateHolder: UserStateHolder
+    ): FirebaseUserActions {
+        return FirebaseUserActions(userDataRepository, groupRepository, userStateHolder)
+    }
 }

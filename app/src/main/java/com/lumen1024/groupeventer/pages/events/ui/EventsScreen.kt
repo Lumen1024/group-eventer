@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -31,7 +30,7 @@ import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 fun EventsScreen(
     viewModel: EventsViewModel = hiltViewModel(),
 ) {
-    val groups by viewModel.userDataService.groups.collectAsState()
+    val groups by viewModel.firebaseUserActions.groups.collectAsState()
 
     val events by remember { derivedStateOf { groups.flatMap { it.events } } }
 
