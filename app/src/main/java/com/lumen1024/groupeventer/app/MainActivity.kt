@@ -13,14 +13,29 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.groupeventer.app.ui.AppContent
+import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var authService: AuthService
+    private var checkedAuth = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+
+        installSplashScreen().setKeepOnScreenCondition { !checkedAuth }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            authService.refreshToken()
+            checkedAuth = true
+        }
 
         // make top and bottom bar transparent
         enableEdgeToEdge(

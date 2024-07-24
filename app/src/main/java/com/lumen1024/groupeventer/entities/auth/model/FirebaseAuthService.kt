@@ -19,6 +19,15 @@ class FirebaseAuthService @Inject constructor(
     override val userId: String?
         get() = auth.currentUser?.uid
 
+    override suspend fun refreshToken(): Result<Unit> {
+        return try {
+            auth.currentUser?.reload()?.await()
+            Result.success(Unit)
+        } catch (e: Throwable) {
+            return Result.failure(e)
+        }
+    }
+
     override suspend fun login(email: String, password: String): Result<Unit> {
         try {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
