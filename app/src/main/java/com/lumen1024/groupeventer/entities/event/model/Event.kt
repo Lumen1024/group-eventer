@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group_event.model
+package com.lumen1024.groupeventer.entities.event.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
@@ -8,7 +8,7 @@ import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.shared.model.TimeRange
 
-data class GroupEvent(
+data class Event(
     val id: String = "",
     val creator: String = "",
 
@@ -19,7 +19,7 @@ data class GroupEvent(
     // List of time ranges on event creation
     val requestedRanges: List<TimeRange> = emptyList(),
     // List of users responses to requested ranges
-    val voting: Map<String, GroupEventResponse> = emptyMap(),
+    val voting: Map<String, EventResponse> = emptyMap(),
 
     val finalRange: TimeRange = TimeRange(),
 

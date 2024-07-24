@@ -1,19 +1,39 @@
-package com.lumen1024.groupeventer.app.navigation
+package com.lumen1024.groupeventer.app.config
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.pages.auth.ui.AuthScreen
 import com.lumen1024.groupeventer.pages.create_event.ui.CreateEventScreen
 import com.lumen1024.groupeventer.pages.events.ui.EventsScreen
 import com.lumen1024.groupeventer.pages.groups.ui.GroupsScreen
 import com.lumen1024.groupeventer.pages.profile.ui.ProfileScreen
 import com.lumen1024.groupeventer.shared.config.Screen
+import com.lumen1024.groupeventer.shared.lib.getRelativeSlideInTransition
+import com.lumen1024.groupeventer.shared.lib.getRelativeSlideOutTransition
+import com.lumen1024.groupeventer.shared.model.Navigator
 import com.lumen1024.groupeventer.shared.ui.NavigationEffects
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
+@HiltViewModel
+class MainNavGraphViewModel @Inject constructor(
+    private val navigator: Navigator,
+    private val authService: AuthService,
+) : ViewModel() {
+
+    val navigationChannel = navigator.navigationChannel
+
+    fun getStartDestination(): Screen = if (authService.checkAuthorized())
+        Screen.Events
+    else
+        Screen.Auth
+}
 
 @Composable
 fun MainNavGraph(

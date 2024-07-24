@@ -2,12 +2,12 @@ package com.lumen1024.groupeventer.entities.group.model
 
 import androidx.core.net.toUri
 import com.lumen1024.groupeventer.entities.comment.model.Comment
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventResponseDto
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.group_event.model.PeopleStatus
-import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventResponse
-import com.lumen1024.groupeventer.entities.group_event.model.toGroupEventResponseDto
+import com.lumen1024.groupeventer.entities.event.model.Event
+import com.lumen1024.groupeventer.entities.event.model.EventResponseDto
+import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
+import com.lumen1024.groupeventer.entities.event.model.PeopleStatus
+import com.lumen1024.groupeventer.entities.event.model.toGroupEventResponse
+import com.lumen1024.groupeventer.entities.event.model.toGroupEventResponseDto
 import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
@@ -19,7 +19,7 @@ data class GroupDto(
     val description: String = "",
     val password: String = "",
 
-    val events: List<GroupEventDto> = emptyList(),
+    val events: List<EventDto> = emptyList(),
     val people: List<String> = emptyList(),
     val admin: String = "",
 ) {
@@ -47,7 +47,7 @@ fun Group.toGroupDto() = GroupDto(
 )
 
 
-data class GroupEventDto(
+data class EventDto(
     val id: String = "",
     val creator: String = "",
 
@@ -58,14 +58,14 @@ data class GroupEventDto(
     // List of time ranges on event creation
     val requestedRanges: List<TimeRangeDto> = emptyList(),
     // List of users responses to requested ranges
-    val voting: Map<String, GroupEventResponseDto> = emptyMap(),
+    val voting: Map<String, EventResponseDto> = emptyMap(),
 
     val finalRange: TimeRangeDto = TimeRangeDto(),
 
     val comments: List<Comment> = emptyList(),
     val people: Map<String, PeopleStatus> = emptyMap(),
 ) {
-    fun toGroupEvent() = GroupEvent(
+    fun toGroupEvent() = Event(
         id = id,
         creator = creator,
         status = status,
@@ -80,7 +80,7 @@ data class GroupEventDto(
 
 }
 
-fun GroupEvent.toGroupEventDto() = GroupEventDto(
+fun Event.toGroupEventDto() = EventDto(
     id = id,
     creator = creator,
     status = status,

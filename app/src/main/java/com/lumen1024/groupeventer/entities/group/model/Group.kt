@@ -1,7 +1,7 @@
 package com.lumen1024.groupeventer.entities.group.model
 
 import androidx.compose.ui.graphics.Color
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
+import com.lumen1024.groupeventer.entities.event.model.Event
 import java.util.UUID
 
 enum class GroupColor(val color: Color) {
@@ -22,7 +22,7 @@ data class Group(
     val description: String = "",
     val password: String = "",
 
-    val events: List<GroupEvent> = emptyList(),
+    val events: List<Event> = emptyList(),
     val people: List<String> = emptyList(),
     val admin: String = "",
 )

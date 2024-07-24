@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app.navigation
+package com.lumen1024.groupeventer.shared.lib
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -10,7 +10,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import com.lumen1024.groupeventer.shared.config.Screen
-import com.lumen1024.groupeventer.shared.lib.getScreen
 
 typealias NavHostAnimationScope = AnimatedContentTransitionScope<NavBackStackEntry>
 

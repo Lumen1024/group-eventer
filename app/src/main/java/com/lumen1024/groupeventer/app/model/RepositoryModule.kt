@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.hilt.model
+package com.lumen1024.groupeventer.app.model
 
 import com.lumen1024.groupeventer.entities.group.model.FirebaseGroupRepository
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository

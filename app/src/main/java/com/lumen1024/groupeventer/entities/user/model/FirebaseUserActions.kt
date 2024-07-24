@@ -1,11 +1,11 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import com.google.firebase.firestore.FieldValue
+import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(
@@ -135,7 +135,7 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun createEvent(event: GroupEvent, group: Group): Result<Unit> {
+    override suspend fun createEvent(event: Event, group: Group): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group")) // todo
 
         groupRepository.update(
@@ -147,7 +147,7 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun updateEvent(event: GroupEvent): Result<Unit> {
+    override suspend fun updateEvent(event: Event): Result<Unit> {
         val targetGroup = userStateHolder.groups.value.let {
             it.forEach { group ->
                 if (event in group.events)
@@ -170,7 +170,7 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun deleteEvent(event: GroupEvent): Result<Unit> {
+    override suspend fun deleteEvent(event: Event): Result<Unit> {
         val targetGroup = userStateHolder.groups.value.let {
             it.forEach { group ->
                 if (event in group.events)

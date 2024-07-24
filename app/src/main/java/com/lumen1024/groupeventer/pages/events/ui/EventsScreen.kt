@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.entities.group_event.ui.GroupEventCard
+import com.lumen1024.groupeventer.entities.event.ui.EventCard
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +43,7 @@ fun EventsScreen(
         ) {
             items(events, key = { event -> event.id })
             {
-                GroupEventCard(
+                EventCard(
                     modifier = Modifier.clickable {
 
                     },

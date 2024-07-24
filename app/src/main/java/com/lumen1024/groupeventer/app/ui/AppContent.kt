@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app
+package com.lumen1024.groupeventer.app.ui
 
 import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,12 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.lumen1024.groupeventer.app.navigation.MainNavGraph
-import com.lumen1024.groupeventer.app.scaffold_components.AppBottomBar
-import com.lumen1024.groupeventer.app.scaffold_components.AppDrawerContent
-import com.lumen1024.groupeventer.app.scaffold_components.AppFloatingButton
-import com.lumen1024.groupeventer.app.scaffold_components.AppTopBar
-import com.lumen1024.groupeventer.app.scaffold_components.DrawerViewModel
+import com.lumen1024.groupeventer.app.config.MainNavGraph
 import com.lumen1024.groupeventer.shared.lib.systemPadding
 import kotlinx.coroutines.flow.receiveAsFlow
 

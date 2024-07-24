@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
+import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.TimeRange

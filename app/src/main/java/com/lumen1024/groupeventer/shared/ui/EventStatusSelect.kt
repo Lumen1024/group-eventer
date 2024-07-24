@@ -4,13 +4,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,9 +30,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.group_event.model.getColorResource
-import com.lumen1024.groupeventer.entities.group_event.model.getIcon
+import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
+import com.lumen1024.groupeventer.entities.event.model.getColorResource
+import com.lumen1024.groupeventer.entities.event.model.getIcon
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 
 @Composable

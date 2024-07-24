@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEventStatus
+import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 
 @Composable
 fun EventStatusIndicator(modifier: Modifier = Modifier, status: GroupEventStatus) {

@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app.navigation
+package com.lumen1024.groupeventer.shared.model
 
 import com.lumen1024.groupeventer.shared.config.Screen
 import kotlinx.coroutines.channels.BufferOverflow

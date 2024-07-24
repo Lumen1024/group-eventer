@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app.scaffold_components
+package com.lumen1024.groupeventer.app.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue

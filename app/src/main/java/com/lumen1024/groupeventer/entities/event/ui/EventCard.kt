@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group_event.ui
+package com.lumen1024.groupeventer.entities.event.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,13 +29,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.entities.group_event.model.GroupEvent
+import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 
 @Composable
-fun GroupEventCard(
+fun EventCard(
     modifier: Modifier = Modifier,
-    event: GroupEvent,
+    event: Event,
     onClick: () -> Unit = {},
     onOptionClicked: () -> Unit = {},
 ) {
@@ -140,7 +140,7 @@ fun GroupEventCard(
 @Preview(showBackground = true)
 @Composable
 fun GroupEventCardPreview() {
-    val data = GroupEvent(
+    val data = Event(
 
     )
     GroupEventerTheme {
@@ -156,7 +156,7 @@ fun GroupEventCardPreview() {
             ) {
                 repeat(5)
                 {
-                    GroupEventCard(event = data, modifier = Modifier.fillMaxWidth())
+                    EventCard(event = data, modifier = Modifier.fillMaxWidth())
                 }
 
             }

@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app
+package com.lumen1024.groupeventer.app.config
 
 import android.app.Application
 import com.google.firebase.Firebase
