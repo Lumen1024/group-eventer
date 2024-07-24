@@ -5,11 +5,23 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.shared.config.Screen
 
 @Composable
 fun NavHostController.getCurrentScreenAsState(): State<Screen?> {
+
+    val state = this.currentBackStackEntryFlow
+        .collectAsState(null)
+    return remember {
+        derivedStateOf {
+            state.value?.destination?.getScreen()
+        }
+    }
+}
+
+fun NavDestination.getScreen() : Screen? {
     val screens = mapOf(
         Screen.Auth.javaClass.canonicalName to Screen.Auth,
         Screen.Tutorial.javaClass.canonicalName to Screen.Tutorial,
@@ -20,13 +32,6 @@ fun NavHostController.getCurrentScreenAsState(): State<Screen?> {
 
         Screen.CreateEvent.javaClass.canonicalName to Screen.CreateEvent,
     )
-    val state = this.currentBackStackEntryFlow
-        .collectAsState(null)
-    return remember {
-        derivedStateOf {
-            state.value?.destination?.route.let {
-                return@let screens[it]
-            }
-        }
-    }
+    val route = this.route ?: return null
+    return screens[route]
 }
