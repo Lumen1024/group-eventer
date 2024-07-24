@@ -76,7 +76,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
 
-            val r = authService.register(email, name, password)
+            val r = authService.register(name, email, password)
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
             else navigator.tryNavigateTo(
                 route = Screen.Events,

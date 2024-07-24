@@ -33,10 +33,32 @@ fun MainNavGraph(
     ) {
         composable<Screen.Auth> { AuthScreen() }
 
-        composable<Screen.Groups> { GroupsScreen() }
-        composable<Screen.Events> { EventsScreen() }
-        composable<Screen.Profile> { ProfileScreen() }
+        composable<Screen.Groups>(
+            enterTransition = { getRelativeSlideInTransition(right = listOf(Screen.Events, Screen.Profile)) },
+            exitTransition = { getRelativeSlideOutTransition(right = listOf(Screen.Events, Screen.Profile)) },
+        ) { GroupsScreen() }
+
+        composable<Screen.Events>(
+            enterTransition = {
+                getRelativeSlideInTransition(
+                    left = listOf(Screen.Groups),
+                    right = listOf(Screen.Profile)
+                )
+            },
+            exitTransition = {
+                getRelativeSlideOutTransition(
+                    left = listOf(Screen.Groups),
+                    right = listOf(Screen.Profile)
+                )
+            },
+        ) { EventsScreen() }
+
+        composable<Screen.Profile>(
+            enterTransition = { getRelativeSlideInTransition(left = listOf(Screen.Events, Screen.Groups)) },
+            exitTransition = { getRelativeSlideOutTransition(left = listOf(Screen.Events, Screen.Groups)) },
+        ) { ProfileScreen() }
 
         composable<Screen.CreateEvent> { CreateEventScreen() }
     }
 }
+
