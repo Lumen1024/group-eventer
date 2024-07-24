@@ -10,6 +10,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,8 +36,9 @@ fun GroupsScreen(
         selectedGroup = groups.find { group -> group.id == selectedGroupId }
     }
 
+    val isSheetOpen by remember { derivedStateOf { selectedGroup !== null } }
+
     var addDialogOpen by remember { mutableStateOf(false) }
-    var isSheetOpen by remember { mutableStateOf(false) }
 
     Column {
         LazyColumn(
@@ -48,7 +50,6 @@ fun GroupsScreen(
             {
                 GroupItem(
                     onClick = {
-                        isSheetOpen = true
                         selectedGroupId = it.id
                     },
                     modifier = Modifier
@@ -68,7 +69,7 @@ fun GroupsScreen(
         if (isSheetOpen) {
             selectedGroup?.let { group ->
                 GroupDetailsBottomSheet(
-                    onDismiss = { isSheetOpen = false },
+                    onDismiss = { selectedGroupId = null },
                     group = group,
                     onLeave = { viewModel.leaveGroup(group.name) }
                 )

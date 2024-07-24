@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +16,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,18 +52,24 @@ class GroupDetailsViewModel @Inject constructor(
     val users = _users.asStateFlow()
 
     fun setGroup(group: Group) {
-
         viewModelScope.launch {
-            _users.value = emptyList()
-            group.people.forEach {
-                userDataRepository.get(it).onSuccess { user ->
-                    _users.value += user
+            launch {
+                _users.value = emptyList()
+                group.people.forEach {
+                    launch {
+                        userDataRepository.get(it).onSuccess { user ->
+                            _users.value += user
+                        }
+                    }
                 }
             }
 
-            _admin.value = null
-            userDataRepository.get(group.admin).onSuccess { user ->
-                _admin.value = user
+            launch {
+                userDataRepository.get(group.admin).onSuccess { user ->
+                    _admin.value = user
+                }.onFailure {
+                    _admin.value = null
+                }
             }
         }
     }
@@ -76,16 +86,22 @@ fun GroupDetailsBottomSheet(
     val admin by viewModel.admin.collectAsState()
     val users by viewModel.users.collectAsState()
 
-    LaunchedEffect(group) {
+    LaunchedEffect(group.id) {
         viewModel.setGroup(group)
     }
 
+    val sheetState = rememberModalBottomSheetState()
+
     ModalBottomSheet(
+        modifier = Modifier.fillMaxHeight(),
+        sheetState = sheetState,
         onDismissRequest = onDismiss,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         )
         {
             Row(
@@ -102,12 +118,6 @@ fun GroupDetailsBottomSheet(
                     GroupColorBadge(color = group.color.color)
                     Text(text = group.name)
                 }
-
-                Text(
-                    text = "${group.people.size + 1} people",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary
-                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -116,19 +126,37 @@ fun GroupDetailsBottomSheet(
 
             LazyColumn(
                 modifier = Modifier
+                    .heightIn(min = 245.dp)
+                    .let {
+                        if (sheetState.currentValue === SheetValue.Expanded) {
+                            it.weight(1f)
+                        } else {
+                            it
+                        }
+                    }
                     .fillMaxWidth()
-                    .height(250.dp)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                item(key = admin?.id ?: "admin") {
-                    UserListItem(userData = admin, textColor = MaterialTheme.colorScheme.primary)
+                item(key = "${admin?.id ?: "unknown"}-admin") {
+                    UserListItem(
+                        userData = admin,
+                        textColor = MaterialTheme.colorScheme.primary
+                    )
                 }
 
                 items(users, key = { it.id }) {
                     UserListItem(userData = it)
                 }
             }
+
+            Text(
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+                text = "${group.people.size + 1} people",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
 
             HorizontalDivider()
 
@@ -156,7 +184,7 @@ fun UserListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Avatar(url = userData?.avatarUrl, size = 48.dp)
+        Avatar(url = userData?.avatarUrl, size = 42.dp)
         Text(text = userData.let {
             if (it == null || it.name.isEmpty()) {
                 return@let "Unknown"
