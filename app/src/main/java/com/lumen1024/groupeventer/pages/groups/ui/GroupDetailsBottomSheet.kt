@@ -121,11 +121,11 @@ fun GroupDetailsBottomSheet(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                item {
+                item(key = admin?.id ?: "admin") {
                     UserListItem(userData = admin, textColor = MaterialTheme.colorScheme.primary)
                 }
 
-                items(users) {
+                items(users, key = { it.id }) {
                     UserListItem(userData = it)
                 }
             }
