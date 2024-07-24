@@ -128,7 +128,7 @@ fun GroupDetailsBottomSheet(
                 modifier = Modifier
                     .heightIn(min = 245.dp)
                     .let {
-                        if (sheetState.currentValue === SheetValue.Expanded) {
+                        if (sheetState.currentValue == SheetValue.Expanded) {
                             it.weight(1f)
                         } else {
                             it
