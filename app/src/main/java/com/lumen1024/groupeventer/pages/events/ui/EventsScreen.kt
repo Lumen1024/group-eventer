@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.pages.events.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -20,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.event.ui.EventCard
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
 
@@ -32,7 +30,9 @@ fun EventsScreen(
 
     val events by remember { derivedStateOf { groups.flatMap { it.events } } }
 
-    var isSheetOpen by remember { mutableStateOf(false) }
+    var selectedEvent: Event? by remember { mutableStateOf(null) }
+
+    val isSheetOpen by remember { derivedStateOf { selectedEvent != null } }
 
     Column {
         LazyColumn(
@@ -44,20 +44,21 @@ fun EventsScreen(
             items(events, key = { event -> event.id })
             {
                 EventCard(
-                    modifier = Modifier.clickable {
-
-                    },
-                    event = it
+                    event = it,
+                    onClick = { selectedEvent = it }
                 )
             }
         }
 
         if (isSheetOpen)
-            ModalBottomSheet(onDismissRequest = { isSheetOpen = false }) {
-                repeat(10) {
-                    Text(text = "10erergefwefrqgeqrg")
-                }
-            }
+            EventDetailsBottomSheet(
+                onDismiss = { selectedEvent = null },
+                event = selectedEvent!!
+            )
     }
 }
 
+sealed class EventSheetState<T> {
+    data object Closed : EventSheetState<Unit>()
+    data class Open<T>(val data: T) : EventSheetState<T>()
+}
