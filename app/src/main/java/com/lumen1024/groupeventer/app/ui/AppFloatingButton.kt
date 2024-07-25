@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.lumen1024.groupeventer.pages.groups.ui.AddGroupDialog
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
+import com.lumen1024.groupeventer.widgets.add_group.ui.AddGroupDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

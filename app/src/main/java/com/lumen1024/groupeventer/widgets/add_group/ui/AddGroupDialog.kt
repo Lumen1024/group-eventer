@@ -1,14 +1,10 @@
-package com.lumen1024.groupeventer.pages.groups.ui
+package com.lumen1024.groupeventer.widgets.add_group.ui
 
-import android.util.Log
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,10 +29,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.ui.GroupColorPicker
-import com.lumen1024.groupeventer.pages.groups.model.AddGroupViewModel
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
 import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
+import com.lumen1024.groupeventer.widgets.add_group.model.AddGroupViewModel
 
 @Composable
 fun AddGroupDialog(

@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.pages.events.ui
+package com.lumen1024.groupeventer.widgets.event_details.ui
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -13,15 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import com.lumen1024.groupeventer.entities.event.model.Event
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import com.lumen1024.groupeventer.widgets.event_details.model.EventDetailsBottomSheetViewModel
 
-@HiltViewModel
-class EventDetailsBottomSheetViewModel @Inject constructor(
-
-) : ViewModel()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

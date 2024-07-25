@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.pages.groups.model
+package com.lumen1024.groupeventer.widgets.add_group.model
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

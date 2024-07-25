@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.event.ui.EventCard
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
+import com.lumen1024.groupeventer.widgets.event_details.ui.EventDetailsBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

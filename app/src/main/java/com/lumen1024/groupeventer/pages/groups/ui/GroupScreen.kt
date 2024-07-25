@@ -21,6 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.ui.GroupItem
 import com.lumen1024.groupeventer.pages.groups.model.GroupsViewModel
+import com.lumen1024.groupeventer.widgets.add_group.ui.AddGroupDialog
+import com.lumen1024.groupeventer.widgets.group_details.ui.GroupDetailsBottomSheet
 
 
 @Composable
