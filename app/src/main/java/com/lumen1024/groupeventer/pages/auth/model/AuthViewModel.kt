@@ -8,7 +8,10 @@ import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapToResource
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
+import com.lumen1024.groupeventer.shared.model.EmailErrorState
+import com.lumen1024.groupeventer.shared.model.NameErrorState
 import com.lumen1024.groupeventer.shared.model.Navigator
+import com.lumen1024.groupeventer.shared.model.PasswordErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
