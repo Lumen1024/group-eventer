@@ -7,9 +7,10 @@ import androidx.compose.material.icons.filled.Groups
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.shared.model.TimeRange
+import java.util.UUID
 
 data class Event(
-    val id: String = "",
+    val id: String = UUID.randomUUID().toString(),
     val creator: String = "",
 
     val status: GroupEventStatus = GroupEventStatus.Prepare,

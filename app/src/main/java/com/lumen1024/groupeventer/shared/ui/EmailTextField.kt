@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.pages.auth.model.EmailErrorState
+import com.lumen1024.groupeventer.shared.model.EmailErrorState
 
 @Composable
 fun EmailTextField(
@@ -23,10 +23,13 @@ fun EmailTextField(
     value: String,
     onChange: (it: String) -> Unit,
     emailErrorState: EmailErrorState = EmailErrorState.Normal,
-    focusManager: FocusManager
+    focusManager: FocusManager,
 ) {
     OutlinedTextField(
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+        ),
         label = { Text(text = stringResource(R.string.email)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Email, "Email") },
         modifier = modifier,
@@ -36,8 +39,7 @@ fun EmailTextField(
         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
         isError = emailErrorState != EmailErrorState.Normal,
         supportingText = {
-            when(emailErrorState)
-            {
+            when (emailErrorState) {
                 EmailErrorState.Normal -> {}
                 EmailErrorState.Empty -> Text(stringResource(R.string.empty_field))
                 EmailErrorState.WrongFormat -> Text(stringResource(R.string.wrong_format_email))

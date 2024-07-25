@@ -14,7 +14,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.pages.auth.model.NameErrorState
+import com.lumen1024.groupeventer.shared.model.NameErrorState
 
 @Composable
 fun NameTextField(

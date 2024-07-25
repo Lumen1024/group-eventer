@@ -1,17 +1,22 @@
 package com.lumen1024.groupeventer.pages.create_event.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,17 +41,20 @@ import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.TimeRange
-import com.lumen1024.groupeventer.shared.ui.EventStatusSelect
 import com.lumen1024.groupeventer.shared.ui.Select
+import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
 import com.lumen1024.groupeventer.shared.ui.TimeRangePicker
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
     viewModel: CreateEventViewModel = hiltViewModel(),
 ) {
-    val isNewEvent by remember { derivedStateOf { true } }
+//    val isNewEvent by remember { derivedStateOf { true } }
 
-    val availableStatuses by remember { derivedStateOf { if (isNewEvent) listOf(GroupEventStatus.Prepare) else emptyList() } }
+//    val availableStatuses by remember { derivedStateOf { if (isNewEvent) listOf(GroupEventStatus.Prepare) else emptyList() } }
+
+    val statuses = GroupEventStatus.entries.map { it.name }
 
     var status by remember { mutableStateOf(GroupEventStatus.Prepare) }
     var name by remember { mutableStateOf("") }
@@ -109,7 +117,9 @@ fun CreateEventScreen(
                     Select(
                         selected = selectedGroupName,
                         options = groupNames,
-                        onSelect = { selectedGroupName = it }
+                        onSelect = { selectedGroupName = it },
+                        fill = true,
+                        shape = RoundedCornerShape(16.dp)
                     )
                 }
 
@@ -131,24 +141,65 @@ fun CreateEventScreen(
                     )
                 }
 
-                EventStatusSelect(
-                    modifier = Modifier.fillMaxWidth(),
-                    availableStatuses = availableStatuses,
-                    selected = status,
-                    onItemSelected = { status = it })
+                Spacer(modifier = Modifier.height(4.dp))
+
+                SimpleTabSwitch(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp)),
+                    tabHeight = 44.dp,
+                    tabs = statuses,
+                    unselectedColor = MaterialTheme.colorScheme.background,
+                    onChange = {
+                        status = GroupEventStatus.valueOf(statuses[it])
+                    }
+                )
 
 
-                IconButton(onClick = { requestedRanges += TimeRange() }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add new time range")
-                }
-                HorizontalDivider()
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(count = requestedRanges.size) {
-                        TimeRangePicker(
-                            value = requestedRanges[it],
-                            onChange = { value -> requestedRanges[it] = value })
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text("Time ranges")
+                        IconButton(onClick = { requestedRanges.add(TimeRange()) }) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add new time range"
+                            )
+                        }
+                    }
+
+                    HorizontalDivider()
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(count = requestedRanges.size) { index ->
+//                            val dismissState = rememberSwipeToDismissBoxState(
+//                                confirmValueChange = {
+//                                    when (it) {
+//                                        SwipeToDismissBoxValue.StartToEnd -> return@rememberSwipeToDismissBoxState false
+//
+//                                        SwipeToDismissBoxValue.EndToStart -> {
+//                                            requestedRanges.remove(requestedRanges[index])
+//                                        }
+//
+//                                        SwipeToDismissBoxValue.Settled -> return@rememberSwipeToDismissBoxState false
+//                                    }
+//                                    return@rememberSwipeToDismissBoxState true
+//                                },
+//                                // positional threshold of 25%
+//                                positionalThreshold = { it * .25f }
+//                            )
+//                            SwipeToDismissBox(state = dismissState, backgroundContent = {}) {
+                            TimeRangePicker(
+                                value = requestedRanges[index],
+                                onChange = { value -> requestedRanges[index] = value })
+//                            }
+                        }
                     }
                 }
             }

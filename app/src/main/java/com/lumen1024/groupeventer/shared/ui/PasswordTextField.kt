@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.pages.auth.model.PasswordErrorState
+import com.lumen1024.groupeventer.shared.model.PasswordErrorState
 
 
 @Composable
@@ -28,7 +28,7 @@ fun PasswordTextField(
     modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
-    passwordErrorState: PasswordErrorState = PasswordErrorState.Normal
+    passwordErrorState: PasswordErrorState = PasswordErrorState.Normal,
 ) {
     var hided by remember {
         mutableStateOf(true)
@@ -52,8 +52,7 @@ fun PasswordTextField(
         },
         isError = passwordErrorState != PasswordErrorState.Normal,
         supportingText = {
-            when(passwordErrorState)
-            {
+            when (passwordErrorState) {
                 PasswordErrorState.Normal -> {}
                 PasswordErrorState.Empty -> Text(stringResource(R.string.empty_field))
                 PasswordErrorState.Short -> Text(stringResource(R.string.short_password))
