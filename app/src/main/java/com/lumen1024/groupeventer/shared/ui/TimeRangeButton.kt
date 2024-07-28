@@ -2,6 +2,8 @@ package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +40,7 @@ fun TimeRangeButton(
     val timeButton = @Composable {
         TimeButton(
             modifier = Modifier
+                .fillMaxHeight()
                 .width(96.dp),
             shape = if (mirrored) RoundedLeftShape else RoundedRightShape,
             date = date,
@@ -47,6 +50,7 @@ fun TimeRangeButton(
 
     val dayMonthButton = @Composable {
         DayMonthButton(
+            modifier = Modifier.fillMaxHeight(),
             shape = if (mirrored) RoundedRightShape else RoundedLeftShape,
             date = date,
             onClick = { isDateDialogOpen = true },
@@ -55,6 +59,7 @@ fun TimeRangeButton(
 
     Row(
         modifier = Modifier
+            .height(48.dp)
             .border(1.dp, MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
     ) {
         if (mirrored) {
