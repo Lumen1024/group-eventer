@@ -14,6 +14,7 @@ enum class GroupColor(val color: Color) {
     YELLOW(Color(0xFFFFB300)),
 }
 
+
 data class Group(
     val id: String = UUID.randomUUID().toString(),
 
@@ -23,6 +24,10 @@ data class Group(
     val password: String = "",
 
     val events: List<Event> = emptyList(),
-    val people: List<String> = emptyList(),
+    val members: Map<String, MemberData> = emptyMap(),
     val admin: String = "",
+)
+
+data class MemberData(
+    val notificationIds: List<String> = emptyList(),
 )

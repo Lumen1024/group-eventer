@@ -19,11 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroupEventer.Starting"
         tools:targetApi="31">
+
         <activity
             android:name=".app.MainActivity"
-            android:fitsSystemWindows="true"
             android:enableOnBackInvokedCallback="true"
             android:exported="true"
+            android:fitsSystemWindows="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.GroupEventer.Starting"
             tools:ignore="RedundantLabel">
@@ -33,23 +34,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <service
-            android:name=".app.model.FirebaseNotificationsService"
-            android:foregroundServiceType="dataSync" /> <!-- укажите соответствующий тип в зависимости от задачи -->
-
-        <receiver
-            android:name=".app.model.BootBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
+            android:name=".app.model.FirebaseNotificationService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
 
     </application>
 

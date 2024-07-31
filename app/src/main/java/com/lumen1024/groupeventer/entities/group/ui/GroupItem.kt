@@ -23,7 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
+import com.lumen1024.groupeventer.entities.group.model.MemberData
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import java.util.UUID
 
 @Composable
 fun GroupItem(
@@ -53,7 +55,7 @@ fun GroupItem(
         }
 
         Text(
-            text = "${group.people.size+1} people",
+            text = "${group.members.size + 1} people",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary
         )
@@ -78,7 +80,10 @@ fun GroupCardPreview() {
                     group = Group(
                         name = "Dota 2",
                         color = GroupColor.RED,
-                        people = listOf("ded", "ded")
+                        members = mapOf(
+                            UUID.randomUUID().toString() to MemberData(),
+                            UUID.randomUUID().toString() to MemberData()
+                        )
                     ),
                     modifier = Modifier
                         .fillMaxWidth()

@@ -12,6 +12,8 @@ import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
 
+//-------------------------Group-------------------------
+
 data class GroupDto(
     val id: String = "",
     val name: String = "",
@@ -20,20 +22,20 @@ data class GroupDto(
     val password: String = "",
 
     val events: List<EventDto> = emptyList(),
-    val people: List<String> = emptyList(),
+    val members: Map<String, MemberDataDto> = emptyMap(),
     val admin: String = "",
-) {
-    fun toGroup() = Group(
-        id = id,
-        name = name,
-        color = color,
-        description = description,
-        password = password,
-        events = events.map { it.toGroupEvent() },
-        people = people,
-        admin = admin
-    )
-}
+)
+
+fun GroupDto.toGroup() = Group(
+    id = id,
+    name = name,
+    color = color,
+    description = description,
+    password = password,
+    events = events.map { it.toGroupEvent() },
+    members = members.map { it.key to it.value.toMemberData() }.toMap(),
+    admin = admin
+)
 
 fun Group.toGroupDto() = GroupDto(
     name = name,
@@ -41,11 +43,25 @@ fun Group.toGroupDto() = GroupDto(
     description = description,
     password = password,
     events = events.map { it.toGroupEventDto() },
-    people = people,
+    members = members.map { it.key to it.value.toMemberDataDto() }.toMap(),
     admin = admin
-
 )
 
+//-------------------------MemberData-------------------------
+
+data class MemberDataDto(
+    val notificationIds: List<String> = emptyList(),
+)
+
+fun MemberDataDto.toMemberData() = MemberData(
+    notificationIds = notificationIds
+)
+
+fun MemberData.toMemberDataDto() = MemberDataDto(
+    notificationIds = notificationIds
+)
+
+//-------------------------Event-------------------------
 
 data class EventDto(
     val id: String = "",
@@ -64,21 +80,20 @@ data class EventDto(
 
     val comments: List<Comment> = emptyList(),
     val people: Map<String, PeopleStatus> = emptyMap(),
-) {
-    fun toGroupEvent() = Event(
-        id = id,
-        creator = creator,
-        status = status,
-        name = name,
-        description = description,
-        requestedRanges = requestedRanges.map { it.toTimeRange() },
-        voting = voting.entries.associate { it.key to it.value.toGroupEventResponse() },
-        finalRange = finalRange.toTimeRange(),
-        comments = comments,
-        people = people
-    )
+)
 
-}
+fun EventDto.toGroupEvent() = Event(
+    id = id,
+    creator = creator,
+    status = status,
+    name = name,
+    description = description,
+    requestedRanges = requestedRanges.map { it.toTimeRange() },
+    voting = voting.entries.associate { it.key to it.value.toGroupEventResponse() },
+    finalRange = finalRange.toTimeRange(),
+    comments = comments,
+    people = people
+)
 
 fun Event.toGroupEventDto() = EventDto(
     id = id,
@@ -93,29 +108,34 @@ fun Event.toGroupEventDto() = EventDto(
     people = people
 )
 
-// --------------------------------------------
+// -------------------------TimeRange-------------------------
 
 data class TimeRangeDto(
     var start: Long = Instant.now().toEpochMilli(),
     var end: Long = Instant.now().plusSeconds(3600).toEpochMilli(),
-) {
-    fun toTimeRange(): TimeRange {
-        return TimeRange(this.start, this.end)
-    }
-}
+)
+
+fun TimeRangeDto.toTimeRange() = TimeRange(this.start, this.end)
 
 fun TimeRange.toTimeRangeDto() = TimeRangeDto(
     this.start.toEpochMilli(),
     this.end.toEpochMilli()
 )
 
-// --------------------------------------------
+// -------------------------UserData-------------------------
 
 data class UserDataDto(
     val id: String = "",
     val name: String = "",
     val avatarUrl: String? = null,
     val groups: List<String> = emptyList(),
+)
+
+fun UserDataDto.toUserData() = UserData(
+    id = id,
+    name = name,
+    avatarUrl = avatarUrl?.toUri(),
+    groups = groups,
 )
 
 fun UserData.toUserDataDto() =
@@ -125,10 +145,3 @@ fun UserData.toUserDataDto() =
         avatarUrl = avatarUrl?.toString(),
         groups = groups
     )
-
-fun UserDataDto.toUserData() = UserData(
-    id = id,
-    name = name,
-    avatarUrl = avatarUrl?.toUri(),
-    groups = groups,
-)

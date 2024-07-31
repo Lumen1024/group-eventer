@@ -5,6 +5,7 @@ import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 
 interface UserActions {
+    suspend fun updateTokenInGroups(token: String): Result<Unit>
     suspend fun joinGroup(name: String, password: String): Result<Unit>
     suspend fun createGroup(name: String, password: String, color: GroupColor): Result<Unit>
     suspend fun leaveGroup(id: String): Result<Unit>

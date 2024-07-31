@@ -25,9 +25,9 @@ class GroupDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             launch {
                 _users.value = emptyList()
-                group.people.forEach {
+                group.members.keys.forEach { key ->
                     launch {
-                        userDataRepository.get(it).onSuccess { user ->
+                        userDataRepository.get(key).onSuccess { user ->
                             _users.value += user
                         }
                     }

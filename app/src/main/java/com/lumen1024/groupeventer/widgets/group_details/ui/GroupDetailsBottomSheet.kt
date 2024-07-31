@@ -113,7 +113,7 @@ fun GroupDetailsBottomSheet(
             Text(
                 modifier = Modifier
                     .padding(bottom = 4.dp),
-                text = "${group.people.size + 1} people",
+                text = "${group.members.size + 1} people",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary
             )

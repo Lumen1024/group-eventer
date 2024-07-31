@@ -70,6 +70,7 @@ android {
 dependencies {
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.firebase.messaging.ktx)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 

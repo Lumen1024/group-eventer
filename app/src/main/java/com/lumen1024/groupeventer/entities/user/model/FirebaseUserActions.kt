@@ -5,6 +5,7 @@ import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
+import com.lumen1024.groupeventer.entities.group.model.MemberDataDto
 import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
 import javax.inject.Inject
 
@@ -13,6 +14,30 @@ class FirebaseUserActions @Inject constructor(
     private val groupRepository: GroupRepository,
     private val userStateHolder: UserStateHolder,
 ) : UserActions {
+
+    override suspend fun updateTokenInGroups(token: String): Result<Unit> {
+        val userData = userStateHolder.userData.value
+            ?: return Result.failure(Throwable("UserData is null"))
+
+        // TODO: need to handle error when updating token
+        userData.groups.forEach {
+            val group = groupRepository.get(it)
+                .fold(onSuccess = { res -> res }, onFailure = { err -> return Result.failure(err) })
+
+            group.members[userData.id]?.let { member ->
+                member.notificationIds + token
+            }
+
+            groupRepository.update(
+                id = group.id,
+                data = mapOf(
+                    Group::members.name to group.members
+                )
+            ).onFailure { return@onFailure }
+        }
+
+        return Result.success(Unit)
+    }
 
     override suspend fun joinGroup(name: String, password: String): Result<Unit> {
         val userData = userStateHolder.userData.value
@@ -35,7 +60,7 @@ class FirebaseUserActions @Inject constructor(
         groupRepository.update(
             id = group.id,
             data = mapOf(
-                "people" to group.people + userData.id
+                Group::members.name to group.members + (userData.id to MemberDataDto())
             )
         ).onFailure { return Result.failure(it) }
 
@@ -60,16 +85,15 @@ class FirebaseUserActions @Inject constructor(
             )
         ).onFailure { return Result.failure(it) }
 
-        val isLast = group.people.isEmpty()
+        val isLast = group.members.isEmpty()
         val isAdmin = group.admin == userData.id
 
         if (isLast) {
             groupRepository.remove(
                 id = group.id
             ).onFailure { return Result.failure(it) }
-
         } else if (isAdmin) {
-            val newAdmin = group.people[0]
+            val newAdmin = group.members.keys.first()
             groupRepository.update(
                 id = group.id,
                 mapOf(
@@ -81,7 +105,7 @@ class FirebaseUserActions @Inject constructor(
             groupRepository.update(
                 id = group.id,
                 mapOf(
-                    Group::people.name to group.people - newAdmin
+                    Group::members.name to group.members - newAdmin
                 )
             ).onFailure { return Result.failure(it) }
 
@@ -89,7 +113,7 @@ class FirebaseUserActions @Inject constructor(
             groupRepository.update(
                 id = group.id,
                 data = mapOf(
-                    "people" to group.people - userData.id
+                    "people" to group.members - userData.id
                 )
             ).onFailure { return Result.failure(it) }
 
@@ -128,6 +152,7 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
+    // TODO: unused, need to remove
     override suspend fun updateGroup(groupId: String, data: Map<String, Any>): Result<Unit> {
         groupRepository.update(groupId, data)
             .onFailure { e -> return Result.failure(e) }

@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.entities.event.model
 
 import com.lumen1024.groupeventer.entities.group.model.TimeRangeDto
+import com.lumen1024.groupeventer.entities.group.model.toTimeRange
 import com.lumen1024.groupeventer.entities.group.model.toTimeRangeDto
 import com.lumen1024.groupeventer.shared.model.TimeRange
 
