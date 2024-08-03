@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.app.model
+package com.lumen1024.groupeventer.entities.notification.model
 
 import android.content.Context
 import android.util.Log
