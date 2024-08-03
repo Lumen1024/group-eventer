@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNavGraphViewModel @Inject constructor(
-    private val navigator: Navigator,
+    navigator: Navigator,
     private val authService: AuthService,
 ) : ViewModel() {
 
