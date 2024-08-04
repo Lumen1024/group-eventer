@@ -46,27 +46,27 @@ sealed class TopBarVariant {
     ) : TopBarVariant()
 }
 
-fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant { // todo: ref
+fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant { // TODO: ref
     return when (this) {
         Screen.Groups -> TopBarVariant.Default(
-            title = "Groups", // todo res
+            title = "Groups", // TODO: res
             navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() },
             actions = mapOf(
-                Icons.Default.AccountCircle to {}, // todo: top bar account circle click handler
+                Icons.Default.AccountCircle to {}, // TODO: top bar account circle click handler
             )
         )
 
         Screen.Profile -> TopBarVariant.Default(
-            title = "Profile", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() }, // todo
+            title = "Profile", // TODO: res
+            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() },
             actions = mapOf(
-                Icons.Default.Settings to {}, // todo
+                Icons.Default.Settings to {}, // TODO: setting topBar handler
             )
         )
 
         Screen.Events -> TopBarVariant.Search(
-            hint = "Search events", // todo res
-            onSearch = {} // todo: onSearch handler
+            hint = "Search events", // TODO: res
+            onSearch = {} // TODO: onSearch handler
         )
 
         else -> TopBarVariant.None
@@ -92,11 +92,11 @@ fun AppTopBar(
         }
     }
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        // TODO performance?  // ??????????
+        // TODO: performance?  // ??????????
         AnimatedContent(
             targetState = topBarVariant,
             label = "Top bar animation"
-        ) { variant -> // todo ???????????
+        ) { variant -> // TODO: ???????????
             when (variant) {
                 is TopBarVariant.Search -> {
                     var searchActive by remember { mutableStateOf(false) }
@@ -115,7 +115,7 @@ fun AppTopBar(
                         },
                         placeholder = { Text(variant.hint) }
                     ) {
-                        // todo: content inside search?
+                        // TODO: content inside search?
                     }
                 }
 
@@ -147,14 +147,14 @@ fun DefaultTopBar(
         navigationIcon = variant.navIcon?.let {
             return@let {
                 IconButton(onClick = it.second) {
-                    Icon(imageVector = it.first, contentDescription = "") // todo ?
+                    Icon(imageVector = it.first, contentDescription = "") // TODO: ?
                 }
             }
         } ?: { },
         actions = {
             variant.actions.forEach { pair ->
                 IconButton(onClick = pair.value) {
-                    Icon(imageVector = pair.key, contentDescription = "") // todo ?
+                    Icon(imageVector = pair.key, contentDescription = "") // TODO: ?
                 }
             }
         }

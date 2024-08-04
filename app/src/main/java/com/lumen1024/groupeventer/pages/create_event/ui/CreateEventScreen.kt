@@ -131,13 +131,13 @@ fun CreateEventScreen(
                         modifier = Modifier.fillMaxWidth(),
                         value = name,
                         onValueChange = { name = it },
-                        label = { Text(text = "Название") } // todo res
+                        label = { Text(text = "Название") } // TODO: res
                     )
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = description,
                         onValueChange = { description = it },
-                        label = { Text(text = "Описание") } // todo res
+                        label = { Text(text = "Описание") } // TODO: res
                     )
                 }
 

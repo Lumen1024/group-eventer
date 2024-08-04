@@ -33,12 +33,16 @@ class AddGroupViewModel @Inject constructor(
 
     fun createGroup(name: String, password: String, color: GroupColor) {
         viewModelScope.launch {
-            val r = firebaseUserActions.createGroup(name, password, color) // todo: maybe color don't work
-            if (r.isSuccess) {
+            val result = firebaseUserActions.createGroup(
+                name,
+                password,
+                color
+            ) // todo: maybe color don't work
+            if (result.isSuccess) {
                 context.showToast("\"$name\" group added")
                 closeDialog()
             }
-            // todo: add error handle
+            // TODO: add error handle
         }
     }
 
@@ -51,7 +55,7 @@ class AddGroupViewModel @Inject constructor(
             } else if (r.isFailure) {
                 context.showToast(r.exceptionOrNull()?.message ?: "Error join group")
             }
-            // todo: add error handle
+            // TODO: add error handle
         }
     }
 }

@@ -39,7 +39,7 @@ fun AppFloatingButton(
 
     val showAddButton by remember {
         derivedStateOf {
-            currentScreen in listOf( // todo: move to const?
+            currentScreen in listOf( // TODO: move to const?
                 Screen.Groups,
                 Screen.Events
             )

@@ -99,7 +99,8 @@ class ProfileViewModel @Inject constructor(
             if (!authService.checkAuthorized()) {
                 navigator.tryNavigateTo(
                     route = Screen.Auth,
-                    // todo: ?
+                    // TODO: ?
+                    // FIXME:  
                 )
             }
         }

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 interface UserNotification {
 
-    // todo: maybe best option is not use many method
+    // TODO: maybe best option is not use many method
     //       and create enum for different event change?
 
     fun notifyEventCreated(eventId: String, groupId: String)
@@ -20,15 +20,15 @@ interface UserNotification {
 
 class TodoImp : UserNotification {
     override fun notifyEventCreated(eventId: String, groupId: String) {
-        // todo
+        // TODO: implement
     }
 
     override fun notifyEventTimePlaced(eventId: String, groupId: String) {
-        // todo
+        // TODO: implement
     }
 
     override fun notifyEventChanged(eventId: String, groupId: String) {
-        // todo
+        // TODO: implement
     }
 
 }

@@ -50,7 +50,7 @@ fun AppDrawerContent() {
             NavigationDrawerItem(
                 selected = false,
                 label = { Text("ded") },
-                onClick = {/* todo: drawer item click*/ }
+                onClick = {/*TODO: drawer item click*/ }
             )
         }
     }

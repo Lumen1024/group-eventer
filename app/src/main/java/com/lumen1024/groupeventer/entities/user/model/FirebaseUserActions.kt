@@ -161,7 +161,7 @@ class FirebaseUserActions @Inject constructor(
     }
 
     override suspend fun createEvent(event: Event, group: Group): Result<Unit> {
-        if (!userInGroup(group)) return Result.failure(Throwable("User not in group")) // todo
+        if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 
         groupRepository.update(
             id = group.id,

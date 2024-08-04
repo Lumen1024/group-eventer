@@ -74,7 +74,7 @@ fun EventCard(
                     ) {
                         val style = MaterialTheme.typography.bodySmall
                         Text(
-                            text = "от", // todo: res
+                            text = "от", // TODO: res
                             style = style
                         )
                         Row(
@@ -124,12 +124,12 @@ fun EventCard(
                         )
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
-                    Text(text = "22 июня 18:00") // todo: insert
+                    Text(text = "22 июня 18:00") // TODO: insert
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = event.duration.toString(DurationUnit.HOURS)) // todo
+                    Text(text = event.duration.toString(DurationUnit.HOURS)) // TODO: duration parse
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,

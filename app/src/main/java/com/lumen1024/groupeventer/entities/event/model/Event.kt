@@ -16,7 +16,7 @@ data class Event(
     val status: GroupEventStatus = GroupEventStatus.Prepare,
     val name: String = "Новое событие",
     val description: String = "",
-    val duration: Duration = Duration.ZERO, // todo: DTO
+    val duration: Duration = Duration.ZERO, // TODO: DTO
 
     // List of time ranges on event creation
     val requestedRanges: List<TimeRange> = emptyList(),

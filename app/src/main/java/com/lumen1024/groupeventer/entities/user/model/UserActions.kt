@@ -14,5 +14,5 @@ interface UserActions {
     suspend fun updateEvent(event: Event): Result<Unit>
     suspend fun deleteEvent(event: Event): Result<Unit>
 
-    suspend fun updateTokenInGroups(token: String): Result<Unit> // todo remove
+    suspend fun updateTokenInGroups(token: String): Result<Unit> // TODO: remove
 }
