@@ -55,7 +55,7 @@ fun EventsScreen(
         if (isSheetOpen)
             EventDetailsBottomSheet(
                 onDismiss = { selectedEvent = null },
-                event = selectedEvent?.first!!
+                pair = selectedEvent!!
             )
     }
 }

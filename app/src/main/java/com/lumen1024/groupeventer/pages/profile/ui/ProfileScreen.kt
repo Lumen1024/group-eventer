@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,7 +26,6 @@ import com.lumen1024.groupeventer.pages.profile.model.ProfileViewModel
 import com.lumen1024.groupeventer.shared.config.CropImageColors
 import com.lumen1024.groupeventer.shared.config.getCropperOptions
 import com.lumen1024.groupeventer.shared.ui.Avatar
-import com.lumen1024.groupeventer.shared.ui.SettingsToggleItem
 
 @Composable
 fun ProfileScreen(
@@ -80,17 +78,18 @@ fun ProfileScreen(
                 onEdited = handleEdit
             )
         }
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-        repeat(3) { // TODO: profile settings content
-            SettingsToggleItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                label = "Some settings 1",
-                value = true
-            ) { }
-        }
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+//        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+//        repeat(3) { // TODO: profile settings content
+//            SettingsToggleItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 8.dp),
+//                label = "Some settings 1",
+//                value = true
+//            ) { }
+//        }
+//        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+//      Box(modifier = Modifier.size(300.dp).background(MaterialTheme.colorScheme.outlineVariant))
         Box(
             Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
