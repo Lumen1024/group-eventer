@@ -17,7 +17,7 @@ fun GroupRepositoryException.toMessage(): Int {
         RepositoryException.Code.UNAUTHENTICATED -> R.string.unauthenticated
         RepositoryException.Code.UNAVAILABLE -> R.string.group_unavailable
         RepositoryException.Code.UNKNOWN -> R.string.group_unknown
-        RepositoryException.Code.NOT_FOUND -> R.string.group_unknown // todo
+        RepositoryException.Code.NOT_FOUND -> R.string.group_unknown // todo: ?
         else -> R.string.group_unknown
     }
 }

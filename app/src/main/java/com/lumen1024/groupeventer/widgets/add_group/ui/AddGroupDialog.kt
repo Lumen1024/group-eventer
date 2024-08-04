@@ -57,7 +57,7 @@ fun AddGroupDialog(
 
     val onConfirm by remember {
         derivedStateOf {
-            // TODO
+            // todo: refactor
             if (isCreate)
                 return@derivedStateOf { viewModel.createGroup(name, password, selectedColor) }
             else
@@ -120,7 +120,7 @@ fun AddGroupDialog(
     }
 }
 
-// TODO refactor picker dialog? New base dialog?
+// todo: refactor picker dialog? New base dialog?
 @Composable
 fun DialogButtons(
     modifier: Modifier = Modifier,

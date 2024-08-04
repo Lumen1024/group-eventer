@@ -59,7 +59,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp), //todo scroll?
+            .padding(16.dp), // todo scroll?
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -81,7 +81,7 @@ fun ProfileScreen(
             )
         }
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-        repeat(3) { // todo
+        repeat(3) { // todo profile settings content
             SettingsToggleItem(
                 modifier = Modifier
                     .fillMaxWidth()

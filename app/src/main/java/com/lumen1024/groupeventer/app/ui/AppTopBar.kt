@@ -46,13 +46,13 @@ sealed class TopBarVariant {
     ) : TopBarVariant()
 }
 
-fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant { // todo ref
+fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant { // todo: ref
     return when (this) {
         Screen.Groups -> TopBarVariant.Default(
             title = "Groups", // todo res
-            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() }, // todo
+            navIcon = Icons.AutoMirrored.Filled.List to { drawerController.tryOpenDrawer() },
             actions = mapOf(
-                Icons.Default.AccountCircle to {}, // todo
+                Icons.Default.AccountCircle to {}, // todo: top bar account circle click handler
             )
         )
 
@@ -66,7 +66,7 @@ fun Screen.getTopBarVariant(drawerController: DrawerController): TopBarVariant {
 
         Screen.Events -> TopBarVariant.Search(
             hint = "Search events", // todo res
-            onSearch = {} // todo
+            onSearch = {} // todo: onSearch handler
         )
 
         else -> TopBarVariant.None
@@ -115,7 +115,7 @@ fun AppTopBar(
                         },
                         placeholder = { Text(variant.hint) }
                     ) {
-                        // todo ?
+                        // todo: content inside search?
                     }
                 }
 

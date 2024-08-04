@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.widgets.event_details.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,10 +24,7 @@ fun EventDetailsBottomSheet(
     viewModel: EventDetailsBottomSheetViewModel = hiltViewModel()
 ) {
     val sheetState = rememberModalBottomSheetState(
-        confirmValueChange = {
-            Log.d("ded", it.name)
-            return@rememberModalBottomSheetState true
-        }
+        confirmValueChange = { return@rememberModalBottomSheetState true }
     )
     ModalBottomSheet(
         onDismissRequest = onDismiss,

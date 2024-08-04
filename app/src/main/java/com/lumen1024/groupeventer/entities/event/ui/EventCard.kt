@@ -23,22 +23,29 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.event.model.Event
+import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import kotlin.time.DurationUnit
 
 @Composable
 fun EventCard(
     modifier: Modifier = Modifier,
-    event: Event,
+    pair: Pair<Event, Group>,
     onClick: () -> Unit = {},
     onOptionClicked: () -> Unit = {},
 ) {
+    val event by remember { derivedStateOf { pair.first } }
+    val group by remember { derivedStateOf { pair.second } }
+
     Card(
         modifier = Modifier
             .then(modifier),
@@ -74,15 +81,14 @@ fun EventCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
-                            // todo: insert group data
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(5.dp))
                                     .size(14.dp)
-                                    .background(Color.Green)
-                            ) // here
+                                    .background(group.color.color)
+                            )
                             Text(
-                                text = "Kotlin Group", // here
+                                text = group.name,
                                 fontStyle = style.fontStyle,
                                 fontSize = style.fontSize,
                                 fontWeight = style.fontWeight
@@ -118,12 +124,12 @@ fun EventCard(
                         )
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
-                    Text(text = "22 июня 18:00") // todo date
+                    Text(text = "22 июня 18:00") // todo: insert
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = "3ч") // todo: insert duration
+                    Text(text = event.duration.toString(DurationUnit.HOURS)) // todo
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,
@@ -156,7 +162,10 @@ fun GroupEventCardPreview() {
             ) {
                 repeat(5)
                 {
-                    EventCard(event = data, modifier = Modifier.fillMaxWidth())
+                    EventCard(
+                        pair = data to Group(name = "ded"),
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
 
             }

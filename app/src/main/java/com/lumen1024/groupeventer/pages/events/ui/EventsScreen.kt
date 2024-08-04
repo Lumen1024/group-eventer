@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.event.ui.EventCard
+import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.pages.events.model.EventsViewModel
+import com.lumen1024.groupeventer.shared.lib.flatMapLinked
 import com.lumen1024.groupeventer.widgets.event_details.ui.EventDetailsBottomSheet
 
 
@@ -28,9 +30,9 @@ fun EventsScreen(
 ) {
     val groups by viewModel.userStateHolder.groups.collectAsState()
 
-    val events by remember { derivedStateOf { groups.flatMap { it.events } } }
+    val events by remember { derivedStateOf { groups.flatMapLinked { it.events } } }
 
-    var selectedEvent: Event? by remember { mutableStateOf(null) }
+    var selectedEvent: Pair<Event, Group>? by remember { mutableStateOf(null) }
 
     val isSheetOpen by remember { derivedStateOf { selectedEvent != null } }
 
@@ -41,10 +43,10 @@ fun EventsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(events, key = { event -> event.id })
+            items(events.toList(), key = { pair -> pair.first.id })
             {
                 EventCard(
-                    event = it,
+                    pair = it,
                     onClick = { selectedEvent = it }
                 )
             }
@@ -53,12 +55,8 @@ fun EventsScreen(
         if (isSheetOpen)
             EventDetailsBottomSheet(
                 onDismiss = { selectedEvent = null },
-                event = selectedEvent!!
+                event = selectedEvent?.first!!
             )
     }
 }
 
-sealed class EventSheetState<T> {
-    data object Closed : EventSheetState<Unit>()
-    data class Open<T>(val data: T) : EventSheetState<T>()
-}

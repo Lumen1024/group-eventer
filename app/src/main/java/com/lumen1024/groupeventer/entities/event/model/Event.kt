@@ -4,10 +4,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Groups
-import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.util.UUID
+import kotlin.time.Duration
 
 data class Event(
     val id: String = UUID.randomUUID().toString(),
@@ -16,6 +16,7 @@ data class Event(
     val status: GroupEventStatus = GroupEventStatus.Prepare,
     val name: String = "Новое событие",
     val description: String = "",
+    val duration: Duration = Duration.ZERO, // todo: DTO
 
     // List of time ranges on event creation
     val requestedRanges: List<TimeRange> = emptyList(),
@@ -32,12 +33,6 @@ enum class GroupEventStatus {
     Prepare,
     Voting,
     Ended,
-}
-
-fun GroupEventStatus.getColorResource() = when (this) {
-    GroupEventStatus.Prepare -> R.color.status_prepare
-    GroupEventStatus.Voting -> R.color.status_voting
-    GroupEventStatus.Ended -> R.color.status_ended
 }
 
 fun GroupEventStatus.getIcon() = when (this) {

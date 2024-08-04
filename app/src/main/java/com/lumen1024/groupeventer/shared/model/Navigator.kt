@@ -61,7 +61,7 @@ class Navigator {
         )
     }
 
-    // TODO implement restore state
+    // todo: implement restore state
 }
 
 sealed class NavigationIntent {
