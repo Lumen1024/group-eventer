@@ -30,7 +30,7 @@ fun EventsScreen(
 ) {
     val groups by viewModel.userStateHolder.groups.collectAsState()
 
-    val events by remember { derivedStateOf { groups.flatMapLinked { it.events } } }
+    val events by remember(groups) { derivedStateOf { groups.flatMapLinked { it.events } } }
 
     var selectedEvent: Pair<Event, Group>? by remember { mutableStateOf(null) }
 

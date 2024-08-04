@@ -43,8 +43,8 @@ fun EventCard(
     onClick: () -> Unit = {},
     onOptionClicked: () -> Unit = {},
 ) {
-    val event by remember { derivedStateOf { pair.first } }
-    val group by remember { derivedStateOf { pair.second } }
+    val event by remember(pair.first) { derivedStateOf { pair.first } }
+    val group by remember(pair.second) { derivedStateOf { pair.second } }
 
     Card(
         modifier = Modifier
