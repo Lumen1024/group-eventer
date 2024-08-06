@@ -50,8 +50,11 @@ class FirebaseUserStateHolder @Inject constructor(
     }
 
     private fun listenGroupChanges(): (() -> Unit)? {
-        userData.value?.groups?.takeIf { it.isNotEmpty() }?.let {
-            return groupRepository.listenList(it) { changes ->
+        _groups.clear()
+
+        userData.value?.groups?.takeIf { it.isNotEmpty() }?.let { groups ->
+
+            return groupRepository.listenList(groups) { changes ->
                 processGroupsChange(changes)
             }.getOrNull()
         } ?: return null

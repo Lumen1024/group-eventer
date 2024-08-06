@@ -9,6 +9,8 @@ interface UserActions {
     suspend fun createGroup(name: String, password: String, color: GroupColor): Result<Unit>
     suspend fun leaveGroup(id: String): Result<Unit>
     suspend fun updateGroup(groupId: String, data: Map<String, Any>): Result<Unit>
+    suspend fun transferAdministrator(groupId: String, user: UserData): Result<Unit>
+    suspend fun removeUserFromGroup(groupId: String, user: UserData): Result<Unit>
 
     suspend fun createEvent(event: Event, group: Group): Result<Unit>
     suspend fun updateEvent(event: Event): Result<Unit>

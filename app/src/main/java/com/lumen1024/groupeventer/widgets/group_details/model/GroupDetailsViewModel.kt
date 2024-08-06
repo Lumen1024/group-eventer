@@ -1,11 +1,16 @@
 package com.lumen1024.groupeventer.widgets.group_details.model
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.groupeventer.entities.group.model.Group
+import com.lumen1024.groupeventer.entities.user.model.UserActions
 import com.lumen1024.groupeventer.entities.user.model.UserData
 import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
+import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
+import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -13,7 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupDetailsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userDataRepository: UserDataRepository,
+    val userStateHolder: UserStateHolder,
+    val userActions: UserActions,
 ) : ViewModel() {
     private val _admin = MutableStateFlow<UserData?>(null)
     val admin = _admin.asStateFlow()
@@ -40,6 +48,29 @@ class GroupDetailsViewModel @Inject constructor(
                 }.onFailure {
                     _admin.value = null
                 }
+            }
+        }
+    }
+
+    fun removeUserFromGroup(groupId: String, user: UserData) {
+        viewModelScope.launch {
+            userActions.removeUserFromGroup(groupId, user)
+        }
+    }
+
+    fun transferAdministrator(groupId: String, user: UserData) {
+        viewModelScope.launch {
+            userActions.transferAdministrator(groupId, user)
+        }
+    }
+
+    fun leaveGroup(groupId: String) {
+        viewModelScope.launch {
+            val r = userActions.leaveGroup(groupId)
+            if (r.isSuccess) {
+                context.showToast("Leaved group \"$groupId\"")
+            } else if (r.isFailure) {
+                context.showToast(r.exceptionOrNull()?.message ?: "Error leaving group")
             }
         }
     }

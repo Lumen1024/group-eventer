@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.lumen1024.groupeventer.app.config.MainNavGraph
-import com.lumen1024.groupeventer.shared.lib.systemPadding
 import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
@@ -37,7 +36,9 @@ fun AppContent() {
         drawerState = drawerState,
     ) {
         Scaffold(
-            modifier = Modifier.systemPadding(),
+            // TODO: do we need system padding if it works without it?
+            //  Also it looks better when bottom bar expands down to the screen
+//            modifier = Modifier.systemPadding(),
             topBar = { AppTopBar(navController = navController) },
             bottomBar = { AppBottomBar(navController = navController) },
             floatingActionButton = { AppFloatingButton(navController = navController) },
