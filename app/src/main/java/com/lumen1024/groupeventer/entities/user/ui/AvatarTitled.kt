@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.shared.ui.Avatar
 
 @Composable
-fun AvatarWithUsername(
+fun AvatarTitled(
     modifier: Modifier = Modifier,
     avatarUrl: Uri?,
     username: String?,

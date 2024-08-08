@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.user.model.UserData
-import com.lumen1024.groupeventer.entities.user.ui.AvatarWithUsername
+import com.lumen1024.groupeventer.entities.user.ui.AvatarTitled
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -47,7 +47,7 @@ fun GroupUserListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        AvatarWithUsername(
+        AvatarTitled(
             avatarUrl = userData?.avatarUrl,
             username = userData?.name,
             textColor = textColor
@@ -61,7 +61,7 @@ fun GroupUserListItem(
                         contentDescription = "More options" // TODO: res
                     )
                 }
-                GroupUserListItemMoreDropDownButton(
+                GroupUserActionsDropdown(
                     expanded = moreOptionsMenuExpanded,
                     onDismissRequest = { moreOptionsMenuExpanded = false },
                     onRemoveFromGroup = onRemoveFromGroup,

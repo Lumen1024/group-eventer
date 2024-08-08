@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun GroupUserListItemMoreDropDownButton(
+fun GroupUserActionsDropdown(
     modifier: Modifier = Modifier,
     expanded: Boolean,
     onDismissRequest: () -> Unit,
