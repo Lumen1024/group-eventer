@@ -160,6 +160,84 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
+    override suspend fun transferAdministrator(groupId: String, user: UserData): Result<Unit> {
+        val userData = userStateHolder.userData.value
+            ?: return Result.failure(Throwable("UserData is null"))
+
+        if (userData.id == user.id) {
+            return Result.failure(Throwable("You can not transfer admin to yourself"))
+        }
+
+        val group = groupRepository.get(groupId)
+            .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
+
+        if (group.id !in user.groups) {
+            return Result.failure(Throwable("Cannot transfer admin to user not in group"))
+        }
+
+        if (userData.id != group.admin) {
+            return Result.failure(Throwable("Only admin can transfer admin"))
+        }
+
+        // TODO: need use firebase transactions to prevent set user as admin but not remove it
+        //  from members
+
+        groupRepository.update(
+            id = groupId,
+            data = mapOf(
+                Group::admin.name to user.id
+            )
+        ).onFailure { return Result.failure(it) }
+
+        groupRepository.update(
+            id = groupId,
+            data = mapOf(
+                Group::members.name to (group.members - user.id) + (userData.id to MemberDataDto())
+            )
+        ).onFailure { return Result.failure(it) }
+
+        return Result.success(Unit)
+    }
+
+    override suspend fun removeUserFromGroup(groupId: String, user: UserData): Result<Unit> {
+        val userData = userStateHolder.userData.value
+            ?: return Result.failure(Throwable("UserData is null"))
+
+        if (userData.id == user.id) {
+            return Result.failure(Throwable("You can not remove yourself from group"))
+        }
+
+        val group = groupRepository.get(groupId)
+            .fold(onSuccess = { it }, onFailure = { return Result.failure(it) })
+
+        if (group.id !in user.groups) {
+            return Result.failure(Throwable("Cannot remove user not in group from this group"))
+        }
+
+        if (userData.id != group.admin) {
+            return Result.failure(Throwable("Only admin can remove people from group"))
+        }
+
+        // TODO: need use firebase transactions to prevent remove user from group but not
+        //  remove group from user
+
+        userDataRepository.update(
+            id = user.id,
+            data = mapOf(
+                "groups" to user.groups - group.id
+            )
+        ).onFailure { return Result.failure(it) }
+
+        groupRepository.update(
+            id = groupId,
+            data = mapOf(
+                Group::members.name to group.members - user.id
+            )
+        ).onFailure { return Result.failure(it) }
+
+        return Result.success(Unit)
+    }
+
     override suspend fun createEvent(event: Event, group: Group): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 

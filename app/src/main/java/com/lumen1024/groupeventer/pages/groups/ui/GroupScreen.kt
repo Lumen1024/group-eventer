@@ -73,7 +73,6 @@ fun GroupsScreen(
                 GroupDetailsBottomSheet(
                     onDismiss = { selectedGroupId = null },
                     group = group,
-                    onLeave = { viewModel.leaveGroup(group.name) }
                 )
             }
         }

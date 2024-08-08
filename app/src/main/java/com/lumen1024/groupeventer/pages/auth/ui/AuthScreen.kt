@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.R
 import com.lumen1024.groupeventer.pages.auth.model.AuthViewModel
+import com.lumen1024.groupeventer.shared.lib.systemPadding
 import com.lumen1024.groupeventer.shared.ui.EmailTextField
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
@@ -65,7 +66,9 @@ fun AuthScreen(
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
 
-    Column {
+    Column(
+        modifier = Modifier.systemPadding()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
