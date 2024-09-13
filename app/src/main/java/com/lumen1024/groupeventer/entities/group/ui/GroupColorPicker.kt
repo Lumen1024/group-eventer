@@ -7,9 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.group.model.GroupColor
-import com.lumen1024.groupeventer.shared.lib.ColorRippleTheme
 import com.lumen1024.groupeventer.shared.ui.ColorCircle
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupColorPicker(
     modifier: Modifier = Modifier,
@@ -58,7 +60,7 @@ fun GroupColorPicker(
         ) {
             colors.forEach { color ->
                 CompositionLocalProvider(
-                    LocalRippleTheme provides ColorRippleTheme(color.color),
+                    LocalRippleConfiguration provides RippleConfiguration(color.color),
                 ) {
                     IconButton(
                         onClick = { onSelect(color) }
