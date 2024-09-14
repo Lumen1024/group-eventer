@@ -16,7 +16,7 @@ data class Event(
     val status: GroupEventStatus = GroupEventStatus.Prepare,
     val name: String = "Новое событие",
     val description: String = "",
-    val duration: Duration = Duration.ZERO, // TODO: DTO
+    val duration: Duration = Duration.ZERO,
 
     // List of time ranges on event creation
     val requestedRanges: List<TimeRange> = emptyList(),
@@ -32,13 +32,13 @@ data class Event(
 enum class GroupEventStatus {
     Prepare,
     Voting,
-    Ended,
+    Finish,
 }
 
 fun GroupEventStatus.getIcon() = when (this) {
     GroupEventStatus.Prepare -> Icons.Default.AccessTime
     GroupEventStatus.Voting -> Icons.Default.Groups
-    GroupEventStatus.Ended -> Icons.Default.CalendarToday
+    GroupEventStatus.Finish -> Icons.Default.CalendarToday
 }
 
 enum class PeopleStatus {
