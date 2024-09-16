@@ -9,14 +9,13 @@ import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
 import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.Navigator
-import com.lumen1024.groupeventer.shared.model.TimeRange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    val firebaseUserActions: FirebaseUserActions,
+    private val firebaseUserActions: FirebaseUserActions,
     val userStateHolder: UserStateHolder,
     val navigator: Navigator,
 ) : ViewModel() {
@@ -25,13 +24,11 @@ class CreateEventViewModel @Inject constructor(
         name: String,
         description: String,
         status: GroupEventStatus,
-        requestedRanges: List<TimeRange>,
     ) {
         val event = Event(
             name = name,
             description = description,
             status = status,
-            requestedRanges = requestedRanges
         )
 
         viewModelScope.launch {

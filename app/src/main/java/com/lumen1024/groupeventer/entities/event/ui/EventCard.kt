@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
-import kotlin.time.DurationUnit
 
 @Composable
 fun EventCard(
@@ -129,7 +128,7 @@ fun EventCard(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = event.duration.toString(DurationUnit.HOURS)) // TODO: duration parse
+                    Text(text = event.duration.toString()) // TODO: duration parse
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,

@@ -1,32 +1,21 @@
 package com.lumen1024.groupeventer.entities.event.model
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Groups
-import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.shared.model.TimeRange
+import java.time.Duration
 import java.util.UUID
-import kotlin.time.Duration
 
 data class Event(
     val id: String = UUID.randomUUID().toString(),
     val creator: String = "",
 
     val status: GroupEventStatus = GroupEventStatus.Prepare,
-    val name: String = "Новое событие",
+    val name: String = "",
     val description: String = "",
     val duration: Duration = Duration.ZERO,
 
-    // List of time ranges on event creation
-    val requestedRanges: List<TimeRange> = emptyList(),
-    // List of users responses to requested ranges
-    val voting: Map<String, EventResponse> = emptyMap(),
-
-    val finalRange: TimeRange = TimeRange(),
-
-    val comments: List<Comment> = emptyList(),
-    val people: Map<String, PeopleStatus> = emptyMap(),
+    val initialRange: TimeRange = TimeRange(), // range when event might be
+    val proposalRanges: Map<String, TimeRange> = emptyMap(), // ranges that people want
+    val startTime: TimeRange = TimeRange(), // time when event starts
 )
 
 enum class GroupEventStatus {
@@ -35,11 +24,6 @@ enum class GroupEventStatus {
     Finish,
 }
 
-fun GroupEventStatus.getIcon() = when (this) {
-    GroupEventStatus.Prepare -> Icons.Default.AccessTime
-    GroupEventStatus.Voting -> Icons.Default.Groups
-    GroupEventStatus.Finish -> Icons.Default.CalendarToday
-}
 
 enum class PeopleStatus {
     Ready,

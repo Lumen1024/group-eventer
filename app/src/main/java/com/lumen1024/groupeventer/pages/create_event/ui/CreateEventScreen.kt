@@ -94,7 +94,6 @@ fun CreateEventScreen(
                             name,
                             description,
                             status,
-                            requestedRanges
                         )
                     }) {
                     Text(text = "save")

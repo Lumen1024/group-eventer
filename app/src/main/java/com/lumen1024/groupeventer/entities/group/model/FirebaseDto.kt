@@ -1,14 +1,11 @@
 package com.lumen1024.groupeventer.entities.group.model
 
 import androidx.core.net.toUri
-import com.lumen1024.groupeventer.entities.comment.model.Comment
 import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.event.model.EventResponseDto
 import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.event.model.PeopleStatus
-import com.lumen1024.groupeventer.entities.event.model.toGroupEventResponse
-import com.lumen1024.groupeventer.entities.event.model.toGroupEventResponseDto
 import com.lumen1024.groupeventer.entities.user.model.UserData
+import com.lumen1024.groupeventer.shared.lib.durationToString
+import com.lumen1024.groupeventer.shared.lib.stringToDuration
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
 
@@ -68,44 +65,41 @@ data class EventDto(
     val creator: String = "",
 
     val status: GroupEventStatus = GroupEventStatus.Prepare,
-    val name: String = "Новое событие",
+    val name: String = "",
     val description: String = "",
+    val duration: String = "",
 
-    // List of time ranges on event creation
-    val requestedRanges: List<TimeRangeDto> = emptyList(),
-    // List of users responses to requested ranges
-    val voting: Map<String, EventResponseDto> = emptyMap(),
-
-    val finalRange: TimeRangeDto = TimeRangeDto(),
-
-    val comments: List<Comment> = emptyList(),
-    val people: Map<String, PeopleStatus> = emptyMap(),
+    val initialRange: TimeRangeDto = TimeRangeDto(), // range when event might be
+    val proposalRanges: Map<String, TimeRangeDto> = emptyMap(), // ranges that people want
+    val startTime: TimeRangeDto = TimeRangeDto(), // time when event starts
 )
 
 fun EventDto.toGroupEvent() = Event(
     id = id,
     creator = creator,
+
     status = status,
     name = name,
     description = description,
-    requestedRanges = requestedRanges.map { it.toTimeRange() },
-    voting = voting.entries.associate { it.key to it.value.toGroupEventResponse() },
-    finalRange = finalRange.toTimeRange(),
-    comments = comments,
-    people = people
+    duration = stringToDuration(duration),
+
+    initialRange = initialRange.toTimeRange(),
+    proposalRanges = proposalRanges.entries.associate { it.key to it.value.toTimeRange() },
+    startTime = startTime.toTimeRange()
 )
 
 fun Event.toGroupEventDto() = EventDto(
     id = id,
     creator = creator,
+
     status = status,
     name = name,
     description = description,
-    requestedRanges = requestedRanges.map { it.toTimeRangeDto() },
-    voting = voting.entries.associate { it.key to it.value.toGroupEventResponseDto() },
-    finalRange = finalRange.toTimeRangeDto(),
-    comments = comments,
-    people = people
+    duration = durationToString(duration),
+
+    initialRange = initialRange.toTimeRangeDto(),
+    proposalRanges = proposalRanges.entries.associate { it.key to it.value.toTimeRangeDto() },
+    startTime = startTime.toTimeRangeDto(),
 )
 
 // -------------------------TimeRange-------------------------
