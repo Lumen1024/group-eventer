@@ -25,6 +25,7 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeRangeButton(
+    modifier: Modifier = Modifier,
     date: Instant,
     onChanged: (date: Instant) -> Unit,
     mirrored: Boolean = false,
@@ -58,7 +59,7 @@ fun TimeRangeButton(
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .height(48.dp)
             .border(1.dp, MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
     ) {
