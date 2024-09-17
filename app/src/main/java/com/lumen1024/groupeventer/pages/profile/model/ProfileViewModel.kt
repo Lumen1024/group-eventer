@@ -97,11 +97,10 @@ class ProfileViewModel @Inject constructor(
             authService.logout()
 
             if (!authService.checkAuthorized()) {
-                navigator.tryNavigateTo(
-                    route = Screen.Auth,
-                    // TODO: ?
-                    // FIXME:  
-                )
+                navigator.navigate(Screen.Auth) {
+                    popUpTo(Screen.Auth) { inclusive = false }
+                    launchSingleTop = true
+                }
             }
         }
     }

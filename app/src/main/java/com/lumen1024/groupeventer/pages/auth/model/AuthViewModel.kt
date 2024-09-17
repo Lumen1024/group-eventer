@@ -61,11 +61,9 @@ class AuthViewModel @Inject constructor(
                     }
                 }
                 .onSuccess {
-                    navigator.tryNavigateTo(
-                        route = Screen.Events,
-                        popUpToRoute = Screen.Events,
-                        inclusive = true,
-                    )
+                    navigator.navigate(Screen.Events) {
+                        popUpTo(Screen.Auth) { inclusive = true }
+                    }
 
                     _isLoading.value = false
                 }
@@ -81,11 +79,9 @@ class AuthViewModel @Inject constructor(
 
             val r = authService.register(name, email, password)
             if (r.isFailure) handleException(r.exceptionOrNull() as AuthException)
-            else navigator.tryNavigateTo(
-                route = Screen.Events,
-                popUpToRoute = Screen.Events,
-                inclusive = true,
-            )
+            else navigator.navigate(Screen.Events) {
+                popUpTo(Screen.Auth) { inclusive = true }
+            }
 
             _isLoading.value = false
         }

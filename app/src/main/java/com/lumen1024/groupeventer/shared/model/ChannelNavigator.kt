@@ -1,17 +1,28 @@
 package com.lumen1024.groupeventer.shared.model
 
+import androidx.navigation.NavOptionsBuilder
 import com.lumen1024.groupeventer.shared.config.Screen
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 
-class Navigator {
+interface Navigator {
+    val navigationChannel: Channel<NavigationIntent>
+    fun navigate(screen: Screen, builder: NavOptionsBuilder.() -> Unit = { })
+    fun back(inclusive: Boolean = false)
+    fun deepBack(screen: Screen, inclusive: Boolean = false)
+}
 
-    val navigationChannel = Channel<NavigationIntent>(
+class ChannelNavigator : Navigator {
+
+    override val navigationChannel = Channel<NavigationIntent>(
         capacity = Int.MAX_VALUE,
         onBufferOverflow = BufferOverflow.DROP_LATEST,
     )
 
-    suspend fun navigateBack(route: Screen? = null, inclusive: Boolean = false) {
+    suspend fun navigateBack(
+        route: Screen? = null,
+        inclusive: Boolean = false
+    ) {
         navigationChannel.send(
             NavigationIntent.NavigateBack(
                 route = route,
@@ -20,7 +31,10 @@ class Navigator {
         )
     }
 
-    fun tryNavigateBack(route: Screen? = null, inclusive: Boolean = false) {
+    fun tryNavigateBack(
+        route: Screen? = null,
+        inclusive: Boolean = false
+    ) {
         navigationChannel.trySend(
             NavigationIntent.NavigateBack(
                 route = route,
@@ -31,50 +45,53 @@ class Navigator {
 
     suspend fun navigateTo(
         route: Screen,
-        popUpToRoute: Screen? = null,
-        inclusive: Boolean = false,
-        isSingleTop: Boolean = false,
+        builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.send(
             NavigationIntent.NavigateTo(
                 route = route,
-                popUpToRoute = popUpToRoute,
-                inclusive = inclusive,
-                isSingleTop = isSingleTop,
+                builder = builder,
             )
         )
     }
 
     fun tryNavigateTo(
         route: Screen,
-        popUpToRoute: Screen? = null,
-        inclusive: Boolean = false,
-        isSingleTop: Boolean = false,
+        builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.trySend(
             NavigationIntent.NavigateTo(
                 route = route,
-                popUpToRoute = popUpToRoute,
-                inclusive = inclusive,
-                isSingleTop = isSingleTop,
+                builder = builder
             )
         )
     }
 
-    // TODO: implement restore state
+    override fun navigate(screen: Screen, builder: NavOptionsBuilder.() -> Unit) {
+        tryNavigateTo(screen, builder)
+    }
+
+    override fun back(inclusive: Boolean) {
+        tryNavigateBack(inclusive = inclusive)
+    }
+
+    override fun deepBack(screen: Screen, inclusive: Boolean) {
+        tryNavigateBack(screen, inclusive)
+    }
 }
 
 sealed class NavigationIntent {
+
     data class NavigateBack(
         val route: Screen? = null,
-        val inclusive: Boolean = false,
+        val inclusive: Boolean,
     ) : NavigationIntent()
 
     data class NavigateTo(
         val route: Screen,
-        val popUpToRoute: Screen? = null,
-        val inclusive: Boolean = false,
-        val isSingleTop: Boolean = false,
+        val builder: NavOptionsBuilder.() -> Unit = {}
     ) : NavigationIntent()
 }
+
+
 

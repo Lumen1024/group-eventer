@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.app.model
 
+import com.lumen1024.groupeventer.shared.model.ChannelNavigator
 import com.lumen1024.groupeventer.shared.model.Navigator
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,5 @@ object NavigationModule {
 
     @Singleton
     @Provides
-    fun provideNavigator() = Navigator()
+    fun provideNavigator(): Navigator = ChannelNavigator()
 }

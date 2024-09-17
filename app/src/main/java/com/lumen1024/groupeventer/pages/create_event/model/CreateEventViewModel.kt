@@ -7,7 +7,6 @@ import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
-import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,6 +35,6 @@ class CreateEventViewModel @Inject constructor(
         }
 
 
-        navigator.tryNavigateTo(Screen.Events)
+        navigator.back()
     }
 }

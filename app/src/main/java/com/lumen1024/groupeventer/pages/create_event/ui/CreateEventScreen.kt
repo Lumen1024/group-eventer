@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
-import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import com.lumen1024.groupeventer.shared.ui.Select
 import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
@@ -76,7 +75,7 @@ fun CreateEventScreen(
                 modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { viewModel.navigator.tryNavigateTo(Screen.Events) }) {
+                IconButton(onClick = { viewModel.navigator.back() }) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "")
                 }
                 Text(

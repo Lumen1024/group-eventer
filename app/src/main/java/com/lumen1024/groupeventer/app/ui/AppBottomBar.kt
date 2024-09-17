@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.app.config.HOME_PAGE_BOTTOM_BAR_ITEMS
-import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import com.lumen1024.groupeventer.shared.ui.NavBar
 
@@ -31,7 +30,6 @@ fun AppBottomBar(
         NavBar(
             modifier = modifier,
             items = HOME_PAGE_BOTTOM_BAR_ITEMS,
-            startDestination = Screen.Events,
             navController = navController,
         )
     }

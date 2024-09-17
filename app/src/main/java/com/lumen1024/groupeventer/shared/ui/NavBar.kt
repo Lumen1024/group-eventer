@@ -34,7 +34,6 @@ class NavBarViewModel @Inject constructor(
 fun NavBar(
     modifier: Modifier = Modifier,
     items: List<Screen>,
-    startDestination: Screen,
     viewModel: NavBarViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
@@ -47,11 +46,12 @@ fun NavBar(
                 screen,
                 isSelected = currentScreen == screen,
                 onNavigate = { navigateScreen: Screen ->
-                    viewModel.navigator.tryNavigateTo(
+                    viewModel.navigator.navigate(
                         navigateScreen,
-                        popUpToRoute = startDestination,
-                        isSingleTop = true,
-                    )
+                    ) {
+                        popUpTo(navigateScreen) { inclusive = false }
+                        launchSingleTop = true
+                    }
                 })
         }
     }

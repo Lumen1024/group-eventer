@@ -28,12 +28,7 @@ fun NavigationEffects(
                     }
                 }
                 is NavigationIntent.NavigateTo -> {
-                    navHostController.navigate(intent.route) {
-                        launchSingleTop = intent.isSingleTop
-                        intent.popUpToRoute?.let { popUpToRoute ->
-                            popUpTo(popUpToRoute) { inclusive = intent.inclusive }
-                        }
-                    }
+                    navHostController.navigate(intent.route, intent.builder)
                 }
             }
         }
