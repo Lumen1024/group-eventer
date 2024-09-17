@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
@@ -45,7 +46,11 @@ fun EventsTopBar(
                 expanded = expanded,
                 onExpandedChange = { expanded = it },
                 placeholder = { Text("Search") },
-                leadingIcon = { Icon(Icons.Default.FilterList, contentDescription = null) },
+                leadingIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.FilterList, contentDescription = null)
+                    }
+                },
                 trailingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
             )
         },
