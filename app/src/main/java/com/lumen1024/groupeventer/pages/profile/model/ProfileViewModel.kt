@@ -10,7 +10,6 @@ import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.auth.model.mapToResource
 import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
 import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
-import com.lumen1024.groupeventer.shared.config.Screen
 import com.lumen1024.groupeventer.shared.lib.showToast
 import com.lumen1024.groupeventer.shared.model.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -88,19 +87,6 @@ class ProfileViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 context.showToast("Error when setting avatar")
-            }
-        }
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            authService.logout()
-
-            if (!authService.checkAuthorized()) {
-                navigator.navigate(Screen.Auth) {
-                    popUpTo(Screen.Auth) { inclusive = false }
-                    launchSingleTop = true
-                }
             }
         }
     }

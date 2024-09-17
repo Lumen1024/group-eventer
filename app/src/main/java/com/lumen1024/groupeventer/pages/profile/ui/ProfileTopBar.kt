@@ -12,12 +12,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileTopBar(
-    navHostController: NavHostController,
     modifier: Modifier = Modifier,
     onLogout: () -> Unit,
 ) {
@@ -35,7 +33,7 @@ fun ProfileTopBar(
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onLogout() }) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.Logout, contentDescription = "")
             }
         }
