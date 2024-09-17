@@ -1,12 +1,7 @@
-package com.lumen1024.groupeventer.app.model
+package com.lumen1024.groupeventer.entities.user.model
 
 import com.lumen1024.groupeventer.entities.auth.model.AuthService
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
-import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
-import com.lumen1024.groupeventer.entities.user.model.FirebaseUserStateHolder
-import com.lumen1024.groupeventer.entities.user.model.UserActions
-import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
-import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
