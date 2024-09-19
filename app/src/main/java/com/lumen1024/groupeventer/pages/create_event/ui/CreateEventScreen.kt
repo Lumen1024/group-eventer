@@ -38,8 +38,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
 import com.lumen1024.groupeventer.shared.model.TimeRange
-import com.lumen1024.groupeventer.shared.ui.Select
 import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
+import com.lumen1024.groupeventer.shared.ui.TextSelect
 import com.lumen1024.groupeventer.shared.ui.TimeRangeButton
 import com.lumen1024.groupeventer.shared.ui.TimeRangePicker
 import java.time.Instant
@@ -90,11 +90,10 @@ fun CreateEventScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             AnimatedVisibility(visible = groupNames.isNotEmpty()) {
-                Select(
+                TextSelect(
                     selected = selectedGroupName,
                     options = groupNames,
                     onSelect = { selectedGroupName = it },
-                    fill = true,
                     shape = RoundedCornerShape(16.dp)
                 )
             }

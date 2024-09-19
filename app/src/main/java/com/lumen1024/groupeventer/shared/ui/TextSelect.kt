@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -22,12 +23,11 @@ import androidx.compose.ui.graphics.Shape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Select(
-    modifier: Modifier = Modifier,
+fun TextSelect(
     selected: String,
     options: List<String>,
     onSelect: (String) -> Unit,
-    fill: Boolean = false,
+    modifier: Modifier = Modifier,
     shape: Shape = TextFieldDefaults.shape,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -35,23 +35,15 @@ fun Select(
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = expanded,
-        onExpandedChange = {
-            expanded = it
-        }
+        onExpandedChange = { expanded = it }
     ) {
         TextField(
             modifier = Modifier
-                .menuAnchor()
-                .let {
-                    if (fill) {
-                        it.fillMaxWidth(1f)
-                    } else {
-                        it
-                    }
-                },
-            shape = shape,
+                .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
+                .fillMaxWidth(),
             value = selected,
             onValueChange = {},
+            shape = shape,
             readOnly = true,
             singleLine = true,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
