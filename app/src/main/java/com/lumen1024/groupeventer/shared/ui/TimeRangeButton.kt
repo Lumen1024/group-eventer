@@ -77,7 +77,7 @@ fun TimeRangeButton(
             TimePickerDialog(
                 initialHour = date.atZone(ZoneId.systemDefault()).hour,
                 initialMinute = date.atZone(ZoneId.systemDefault()).minute,
-                onCancel = { isTimePickerDialogOpen = false },
+                onDismiss = { isTimePickerDialogOpen = false },
                 onConfirm = { onChanged(it.time.toInstant()) }
             )
         }

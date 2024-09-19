@@ -1,6 +1,5 @@
 package com.lumen1024.groupeventer.shared.ui
 
-import android.R
 import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,41 +43,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import java.time.Instant
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(
-    modifier: Modifier = Modifier,
-    onCancel: () -> Unit,
+    onDismiss: () -> Unit,
     onConfirm: (Calendar) -> Unit,
-    initialHour: Int? = null,
-    initialMinute: Int? = null,
+    modifier: Modifier = Modifier,
+    initialHour: Int = Instant.now().atZone(ZoneId.systemDefault()).hour,
+    initialMinute: Int = Instant.now().atZone(ZoneId.systemDefault()).minute,
 ) {
-
-    val time = Calendar.getInstance()
-    time.timeInMillis = System.currentTimeMillis()
-
     var mode: DisplayMode by remember { mutableStateOf(DisplayMode.Picker) }
     val timeState: TimePickerState = rememberTimePickerState(
-        initialHour = initialHour ?: time[Calendar.HOUR_OF_DAY],
-        initialMinute = initialMinute ?: time[Calendar.MINUTE],
+        initialHour = initialHour,
+        initialMinute = initialMinute,
     )
 
     fun onConfirmClicked() {
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.HOUR_OF_DAY, timeState.hour)
-        cal.set(Calendar.MINUTE, timeState.minute)
-        cal.isLenient = false
-
-        onConfirm(cal)
-        onCancel()
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, timeState.hour)
+            set(Calendar.MINUTE, timeState.minute)
+            isLenient = false
+        }
+        onConfirm(calendar)
+        onDismiss()
     }
 
-    // TimePicker does not provide a default TimePickerDialog, so we use our own PickerDialog:
+    // TimePicker does not provide a default TimePickerDialog, so we use our own implementation:
     // https://issuetracker.google.com/issues/288311426
     PickerDialog(
         modifier = modifier,
-        onDismissRequest = onCancel,
+        onDismissRequest = onDismiss,
         title = { Text("Select time") },
         buttons = {
             DisplayModeToggleButton(
@@ -86,11 +83,11 @@ fun TimePickerDialog(
                 onDisplayModeChange = { mode = it },
             )
             Spacer(Modifier.weight(1f))
-            TextButton(onClick = onCancel) {
-                Text(stringResource(id = R.string.cancel))
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(id = android.R.string.cancel))
             }
             TextButton(onClick = ::onConfirmClicked) {
-                Text(stringResource(id = R.string.ok))
+                Text(stringResource(id = android.R.string.ok))
             }
         },
     ) {
@@ -116,7 +113,7 @@ private fun DisplayModeToggleButton(
         ) {
             Icon(
                 imageVector = Icons.Default.Keyboard,
-                contentDescription = "",
+                contentDescription = "Keyboard",
             )
         }
 
@@ -126,7 +123,7 @@ private fun DisplayModeToggleButton(
         ) {
             Icon(
                 imageVector = Icons.Default.Schedule,
-                contentDescription = "",
+                contentDescription = "Schedule",
             )
         }
     }
@@ -136,9 +133,9 @@ private fun DisplayModeToggleButton(
 @Composable
 fun PickerDialog(
     onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
     title: @Composable () -> Unit,
     buttons: @Composable RowScope.() -> Unit,
-    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     BasicAlertDialog(
