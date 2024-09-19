@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -45,7 +46,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp), // TODO: scroll?
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -57,6 +58,7 @@ fun ProfileScreen(
             Avatar(
                 showBorder = true,
                 modifier = Modifier
+                    .size(232.dp)
                     .clickable(
                         role = Role.Button,
                         onClick = { galleryLauncher.launch(getCropperOptions(cropImageColors)) }),

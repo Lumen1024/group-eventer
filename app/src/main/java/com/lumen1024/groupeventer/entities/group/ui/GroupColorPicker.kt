@@ -3,6 +3,7 @@ package com.lumen1024.groupeventer.entities.group.ui
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -67,8 +68,8 @@ fun GroupColorPicker(
                     ) {
                         ColorCircle(
                             color = color.color,
+                            modifier = Modifier.size(circleSize),
                             selected = color == selectedColor,
-                            size = circleSize
                         )
                     }
                 }

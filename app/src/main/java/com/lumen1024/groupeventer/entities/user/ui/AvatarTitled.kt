@@ -3,6 +3,7 @@ package com.lumen1024.groupeventer.entities.user.ui
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -37,7 +38,7 @@ fun AvatarTitled(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Avatar(url = avatarUrl, size = 42.dp)
+        Avatar(url = avatarUrl, modifier = Modifier.size(42.dp))
         Text(text = displayUsername, color = textColor)
     }
 }

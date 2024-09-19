@@ -3,32 +3,37 @@ package com.lumen1024.groupeventer.shared.ui
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 
 @Composable
 fun ColorCircle(
-    modifier: Modifier = Modifier,
     color: Color,
+    modifier: Modifier = Modifier,
     selected: Boolean = false,
-    size: Dp = 24.dp,
 ) {
+    var sizePx by remember { mutableStateOf(IntSize.Zero) }
+    val sizeDp = with(LocalDensity.current) { sizePx.width.toDp() }
+
     val border by animateDpAsState(
-        if (selected) size else size / 5,
+        if (selected) sizeDp else sizeDp / 5,
         label = "Color circle border size"
     )
 
     Box(
         modifier = modifier
+            .onSizeChanged { sizePx = it }
             .border(width = border, color, shape = CircleShape)
-            .size(size)
             .clip(CircleShape)
     )
 }
