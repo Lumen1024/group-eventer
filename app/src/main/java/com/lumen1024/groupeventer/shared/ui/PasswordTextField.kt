@@ -25,23 +25,23 @@ import com.lumen1024.groupeventer.shared.model.PasswordErrorState
 
 @Composable
 fun PasswordTextField(
-    modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
+    modifier: Modifier = Modifier,
     passwordErrorState: PasswordErrorState = PasswordErrorState.Normal,
 ) {
-    var hided by remember {
-        mutableStateOf(true)
-    }
+    var hided by remember { mutableStateOf(true) }
+
     OutlinedTextField(
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        label = { Text(text = stringResource(R.string.password)) },
-        leadingIcon = { Icon(imageVector = Icons.Default.Lock, "Password") },
-        modifier = modifier,
         onValueChange = onChange,
-        singleLine = true,
         value = value,
+        modifier = modifier,
+        singleLine = true,
+        label = { Text(text = stringResource(R.string.password)) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         visualTransformation = if (hided) PasswordVisualTransformation() else VisualTransformation.None,
+        isError = passwordErrorState != PasswordErrorState.Normal,
+        leadingIcon = { Icon(imageVector = Icons.Default.Lock, "Password") },
         trailingIcon = {
             IconButton(onClick = { hided = !hided }) {
                 Icon(
@@ -50,7 +50,6 @@ fun PasswordTextField(
                 )
             }
         },
-        isError = passwordErrorState != PasswordErrorState.Normal,
         supportingText = {
             when (passwordErrorState) {
                 PasswordErrorState.Normal -> {}
