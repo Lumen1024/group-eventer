@@ -15,6 +15,7 @@ fun NavigationEffects(
     navHostController: NavHostController
 ) {
     val activity = (LocalContext.current as? Activity)
+
     LaunchedEffect(activity, navHostController, navigationChannel) {
         navigationChannel.receiveAsFlow().collect { intent ->
             if (activity?.isFinishing == true) return@collect

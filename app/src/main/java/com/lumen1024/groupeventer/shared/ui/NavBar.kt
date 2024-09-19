@@ -32,19 +32,18 @@ class NavBarViewModel @Inject constructor(
 
 @Composable
 fun NavBar(
-    modifier: Modifier = Modifier,
     items: List<Screen>,
-    viewModel: NavBarViewModel = hiltViewModel(),
     navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: NavBarViewModel = hiltViewModel(),
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
-    NavigationBar(
-        modifier = modifier
-    ) {
+
+    NavigationBar(modifier = modifier) {
         items.forEach { screen ->
             NavBarItem(
-                screen,
-                isSelected = currentScreen == screen,
+                screen = screen,
+                isSelected = (currentScreen == screen),
                 onNavigate = { navigateScreen: Screen ->
                     viewModel.navigator.navigate(
                         navigateScreen,
@@ -52,7 +51,8 @@ fun NavBar(
                         popUpTo(navigateScreen) { inclusive = false }
                         launchSingleTop = true
                     }
-                })
+                }
+            )
         }
     }
 }
@@ -68,7 +68,10 @@ private fun RowScope.NavBarItem(
 
     val icon by remember {
         derivedStateOf {
-            if (screen is HasIcon) screen.icon else Icons.Default.Circle
+            if (screen is HasIcon)
+                screen.icon
+            else
+                Icons.Default.Circle
         }
     }
 
@@ -81,6 +84,6 @@ private fun RowScope.NavBarItem(
         },
         label = { Text(label) },
         selected = isSelected,
-        onClick = { if (!isSelected) onNavigate(screen) },
+        onClick = { onNavigate(screen) },
     )
 }
