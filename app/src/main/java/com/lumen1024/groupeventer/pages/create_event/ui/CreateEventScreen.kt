@@ -147,7 +147,11 @@ fun CreateEventScreen(
 
             when (status) {
                 GroupEventStatus.Prepare -> {
-                    TimeRangePicker(value = TimeRange(), onChange = {})
+                    TimeRangePicker(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = TimeRange(),
+                        onChange = {}
+                    )
                 }
 
                 GroupEventStatus.Voting,
