@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.shared.ui
 
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -9,8 +10,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.lumen1024.groupeventer.R
@@ -18,28 +17,28 @@ import com.lumen1024.groupeventer.shared.model.NameErrorState
 
 @Composable
 fun NameTextField(
-    modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
-    placeholder: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
     nameErrorState: NameErrorState = NameErrorState.Normal,
-    focusManager: FocusManager? = null,
+    keyboardAction: Pair<ImeAction, KeyboardActionScope.() -> Unit> = ImeAction.Default to { },
+    placeholder: @Composable (() -> Unit)? = null,
 ) {
     OutlinedTextField(
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        value = value,
+        onValueChange = onChange,
+        modifier = modifier,
         label = { Text(text = stringResource(R.string.name)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Person, "Email") },
-        modifier = modifier,
-        onValueChange = onChange,
-        value = value,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
-        placeholder = placeholder,
-        keyboardActions = KeyboardActions(onNext = { focusManager?.moveFocus(FocusDirection.Down) }),
+        keyboardActions = KeyboardActions(onNext = keyboardAction.second),
         isError = nameErrorState != NameErrorState.Normal,
+        placeholder = placeholder,
         supportingText = {
             when (nameErrorState) {
-                NameErrorState.Normal -> {}
                 NameErrorState.Empty -> Text(stringResource(R.string.empty_field))
+                NameErrorState.Normal -> {}
             }
         }
     )

@@ -22,12 +22,12 @@ fun EmailTextField(
     onChange: (it: String) -> Unit,
     modifier: Modifier = Modifier,
     emailErrorState: EmailErrorState = EmailErrorState.Normal,
-    action: Pair<ImeAction, KeyboardActionScope.() -> Unit> = ImeAction.Default to { },
+    keyboardAction: Pair<ImeAction, KeyboardActionScope.() -> Unit> = ImeAction.Default to { },
 ) {
     OutlinedTextField(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next
+            imeAction = keyboardAction.first
         ),
         label = { Text(text = stringResource(R.string.email)) },
         leadingIcon = { Icon(imageVector = Icons.Default.Email, "Email") },
@@ -35,14 +35,14 @@ fun EmailTextField(
         onValueChange = onChange,
         singleLine = true,
         value = value,
-        keyboardActions = KeyboardActions(onNext = action.second),
+        keyboardActions = KeyboardActions(onNext = keyboardAction.second),
         isError = emailErrorState != EmailErrorState.Normal,
         supportingText = {
             when (emailErrorState) {
-                EmailErrorState.Normal -> {}
                 EmailErrorState.Empty -> Text(stringResource(R.string.empty_field))
                 EmailErrorState.WrongFormat -> Text(stringResource(R.string.wrong_format_email))
                 EmailErrorState.AlreadyExist -> Text(stringResource(R.string.email_already_exist))
+                EmailErrorState.Normal -> {}
             }
         }
     )

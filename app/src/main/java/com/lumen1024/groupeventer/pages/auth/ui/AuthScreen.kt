@@ -113,7 +113,7 @@ fun AuthScreen(
                             name = it
                         },
                         nameErrorState = nameError,
-                        focusManager = focusManager
+                        keyboardAction = ImeAction.Next to { focusManager.moveFocus(FocusDirection.Down) }
                     )
                 }
 
@@ -122,7 +122,7 @@ fun AuthScreen(
                     value = email,
                     onChange = { email = it },
                     emailErrorState = emailError,
-                    action = ImeAction.Next to { focusManager.moveFocus(FocusDirection.Down) }
+                    keyboardAction = ImeAction.Next to { focusManager.moveFocus(FocusDirection.Down) }
                 )
                 PasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
