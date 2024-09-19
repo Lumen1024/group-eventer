@@ -1,6 +1,7 @@
 package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -25,18 +26,13 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeRangeButton(
-    modifier: Modifier = Modifier,
     date: Instant,
     onChanged: (date: Instant) -> Unit,
+    modifier: Modifier = Modifier,
     mirrored: Boolean = false,
 ) {
-    var isDateDialogOpen by remember {
-        mutableStateOf(false)
-    }
-
-    var isTimePickerDialogOpen by remember {
-        mutableStateOf(false)
-    }
+    var isDateDialogOpen by remember { mutableStateOf(false) }
+    var isTimePickerDialogOpen by remember { mutableStateOf(false) }
 
     val timeButton = @Composable {
         TimeButton(
@@ -49,7 +45,7 @@ fun TimeRangeButton(
         )
     }
 
-    val dayMonthButton = @Composable {
+    val dayButton = @Composable {
         DayMonthButton(
             modifier = Modifier
                 .fillMaxHeight()
@@ -62,14 +58,18 @@ fun TimeRangeButton(
 
     Row(
         modifier = modifier
-            .height(48.dp)
-            .border(1.dp, MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
+            .height(intrinsicSize = IntrinsicSize.Min)
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.primaryContainer,
+                RoundedCornerShape(8.dp)
+            )
     ) {
         if (mirrored) {
             timeButton()
-            dayMonthButton()
+            dayButton()
         } else {
-            dayMonthButton()
+            dayButton()
             timeButton()
         }
 

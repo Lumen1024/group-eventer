@@ -26,9 +26,13 @@ import com.lumen1024.groupeventer.shared.model.TimeRange
 
 
 @Composable
-fun TimeRangePicker(value: TimeRange, onChange: (TimeRange) -> Unit) {
+fun TimeRangePicker(
+    value: TimeRange,
+    onChange: (TimeRange) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -52,7 +56,9 @@ fun TimeRangePicker(value: TimeRange, onChange: (TimeRange) -> Unit) {
     }
 }
 
-@Preview(showBackground = true, wallpaper = Wallpapers.NONE,
+@Preview(
+    showBackground = true,
+    wallpaper = Wallpapers.NONE,
     showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
 )
