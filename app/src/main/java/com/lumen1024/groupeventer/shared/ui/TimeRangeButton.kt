@@ -51,7 +51,9 @@ fun TimeRangeButton(
 
     val dayMonthButton = @Composable {
         DayMonthButton(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(64.dp),
             shape = if (mirrored) RoundedRightShape else RoundedLeftShape,
             date = date,
             onClick = { isDateDialogOpen = true },
