@@ -1,5 +1,6 @@
 package com.lumen1024.groupeventer.shared.ui
 
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -9,8 +10,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,11 +18,11 @@ import com.lumen1024.groupeventer.shared.model.EmailErrorState
 
 @Composable
 fun EmailTextField(
-    modifier: Modifier = Modifier,
     value: String,
     onChange: (it: String) -> Unit,
+    modifier: Modifier = Modifier,
     emailErrorState: EmailErrorState = EmailErrorState.Normal,
-    focusManager: FocusManager,
+    action: Pair<ImeAction, KeyboardActionScope.() -> Unit> = ImeAction.Default to { },
 ) {
     OutlinedTextField(
         keyboardOptions = KeyboardOptions(
@@ -36,7 +35,7 @@ fun EmailTextField(
         onValueChange = onChange,
         singleLine = true,
         value = value,
-        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+        keyboardActions = KeyboardActions(onNext = action.second),
         isError = emailErrorState != EmailErrorState.Normal,
         supportingText = {
             when (emailErrorState) {
@@ -45,7 +44,6 @@ fun EmailTextField(
                 EmailErrorState.WrongFormat -> Text(stringResource(R.string.wrong_format_email))
                 EmailErrorState.AlreadyExist -> Text(stringResource(R.string.email_already_exist))
             }
-
         }
     )
 }
