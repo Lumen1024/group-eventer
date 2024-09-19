@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -29,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.event.model.Event
@@ -42,14 +46,16 @@ fun EventCard(
     onClick: () -> Unit = {},
     onOptionClicked: () -> Unit = {},
 ) {
+    // TODO: is remember necessary?
     val event by remember(pair.first) { derivedStateOf { pair.first } }
     val group by remember(pair.second) { derivedStateOf { pair.second } }
 
-    Card(
+    IndicationCard(
         modifier = Modifier
             .then(modifier),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        //colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
         onClick = onClick,
+        color = Color.Red,
     ) {
         // main container
         Column(
@@ -128,7 +134,7 @@ fun EventCard(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = event.duration.toString()) // TODO: duration parse
+                    Text(text = "${event.duration.toHours()}h") // TODO: duration parse
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,
@@ -139,6 +145,28 @@ fun EventCard(
             }
         }
 
+    }
+}
+
+@Composable
+fun IndicationCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    color: Color,
+    content: @Composable () -> Unit,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        onClick = onClick,
+    ) {
+        Row {
+            content()
+            Spacer(modifier = Modifier
+                .background(color)
+                .width(4.dp)
+                .fillMaxHeight(1f))
+        }
     }
 }
 
@@ -166,11 +194,7 @@ fun GroupEventCardPreview() {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-
             }
         }
-
-
     }
-
 }

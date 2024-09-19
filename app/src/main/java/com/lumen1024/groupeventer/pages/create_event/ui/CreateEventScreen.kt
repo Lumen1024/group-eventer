@@ -74,6 +74,7 @@ fun CreateEventScreen(
                         group,
                         name,
                         description,
+                        duration,
                         status,
                     )
                 },
