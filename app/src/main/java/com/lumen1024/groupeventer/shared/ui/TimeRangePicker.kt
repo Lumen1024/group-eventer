@@ -4,7 +4,9 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,11 +33,14 @@ fun TimeRangePicker(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         TimeRangeButton(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(2f),
             date = value.start,
             onChanged = { onChange(value.copy(start = it)) }
         )
@@ -47,6 +52,9 @@ fun TimeRangePicker(
                 .background(MaterialTheme.colorScheme.primaryContainer)
         )
         TimeRangeButton(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(2f),
             mirrored = true,
             date = value.end,
             onChanged = { onChange(value.copy(end = it)) }

@@ -3,9 +3,9 @@ package com.lumen1024.groupeventer.shared.ui
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -34,25 +34,24 @@ fun TimeRangeButton(
     var isDateDialogOpen by remember { mutableStateOf(false) }
     var isTimePickerDialogOpen by remember { mutableStateOf(false) }
 
-    val timeButton = @Composable {
-        TimeButton(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(96.dp),
-            shape = if (mirrored) RoundedLeftShape else RoundedRightShape,
-            date = date,
-            onClick = { isTimePickerDialogOpen = true }
-        )
-    }
-
-    val dayButton = @Composable {
+    val dayButton: @Composable RowScope.() -> Unit = {
         DayMonthButton(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(64.dp),
+                .fillMaxHeight(),
             shape = if (mirrored) RoundedRightShape else RoundedLeftShape,
             date = date,
             onClick = { isDateDialogOpen = true },
+        )
+    }
+
+    val timeButton: @Composable RowScope.() -> Unit = {
+        TimeButton(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f),
+            shape = if (mirrored) RoundedLeftShape else RoundedRightShape,
+            date = date,
+            onClick = { isTimePickerDialogOpen = true }
         )
     }
 

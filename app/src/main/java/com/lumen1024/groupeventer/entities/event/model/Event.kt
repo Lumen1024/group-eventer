@@ -8,7 +8,7 @@ data class Event(
     val id: String = UUID.randomUUID().toString(),
     val creator: String = "",
 
-    val status: GroupEventStatus = GroupEventStatus.Prepare,
+    val status: GroupEventStatus = GroupEventStatus.Voting,
     val name: String = "",
     val description: String = "",
     val duration: Duration = Duration.ZERO,
@@ -19,8 +19,8 @@ data class Event(
 )
 
 enum class GroupEventStatus {
-    Prepare,
     Voting,
+    Scheduled,
     Finish,
 }
 

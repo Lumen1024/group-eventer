@@ -64,7 +64,7 @@ data class EventDto(
     val id: String = "",
     val creator: String = "",
 
-    val status: GroupEventStatus = GroupEventStatus.Prepare,
+    val status: GroupEventStatus = GroupEventStatus.Voting,
     val name: String = "",
     val description: String = "",
     val duration: String = "",

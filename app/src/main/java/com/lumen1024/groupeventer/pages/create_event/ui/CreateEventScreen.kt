@@ -50,7 +50,7 @@ fun CreateEventScreen(
 ) {
     val statuses = GroupEventStatus.entries.map { it.name }
 
-    var status by remember { mutableStateOf(GroupEventStatus.Prepare) }
+    var status by remember { mutableStateOf(GroupEventStatus.Voting) }
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var duration by remember { mutableFloatStateOf(1f) }
@@ -109,12 +109,15 @@ fun CreateEventScreen(
                     label = { Text(text = "Название") } // TODO: res
                 )
                 OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(144.dp),
                     value = description,
                     onValueChange = { description = it },
                     label = { Text(text = "Описание") } // TODO: res
                 )
             }
+            Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -146,18 +149,22 @@ fun CreateEventScreen(
             )
 
             when (status) {
-                GroupEventStatus.Prepare -> {
+                GroupEventStatus.Voting -> {
                     TimeRangePicker(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp),
                         value = TimeRange(),
                         onChange = {}
                     )
                 }
 
-                GroupEventStatus.Voting,
+                GroupEventStatus.Scheduled,
                 GroupEventStatus.Finish -> {
                     TimeRangeButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp),
                         date = Instant.now(),
                         onChanged = {}
                     )

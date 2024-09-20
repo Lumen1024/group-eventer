@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Shape
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextSelect(
-    selected: String,
     options: List<String>,
+    selected: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = TextFieldDefaults.shape,
