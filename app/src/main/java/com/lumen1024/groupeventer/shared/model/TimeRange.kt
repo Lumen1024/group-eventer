@@ -10,8 +10,6 @@ data class TimeRange(
 ) {
     constructor() : this(Instant.now(), Instant.now().plusSeconds(3600))
 
-    constructor(start: String, end: String) : this(Instant.parse(start), Instant.parse(end))
-
     constructor(start: Long, end: Long) : this(
         Instant.ofEpochMilli(start),
         Instant.ofEpochMilli(end)

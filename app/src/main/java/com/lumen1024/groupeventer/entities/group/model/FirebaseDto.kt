@@ -71,7 +71,7 @@ data class EventDto(
 
     val initialRange: TimeRangeDto = TimeRangeDto(), // range when event might be
     val proposalRanges: Map<String, TimeRangeDto> = emptyMap(), // ranges that people want
-    val startTime: TimeRangeDto = TimeRangeDto(), // time when event starts
+    val startTime: Long = Instant.now().toEpochMilli(), // time when event starts
 )
 
 fun EventDto.toGroupEvent() = Event(
@@ -85,7 +85,7 @@ fun EventDto.toGroupEvent() = Event(
 
     initialRange = initialRange.toTimeRange(),
     proposalRanges = proposalRanges.entries.associate { it.key to it.value.toTimeRange() },
-    startTime = startTime.toTimeRange()
+    startTime = Instant.ofEpochMilli(startTime)
 )
 
 fun Event.toGroupEventDto() = EventDto(
@@ -99,7 +99,7 @@ fun Event.toGroupEventDto() = EventDto(
 
     initialRange = initialRange.toTimeRangeDto(),
     proposalRanges = proposalRanges.entries.associate { it.key to it.value.toTimeRangeDto() },
-    startTime = startTime.toTimeRangeDto(),
+    startTime = startTime.toEpochMilli(),
 )
 
 // -------------------------TimeRange-------------------------

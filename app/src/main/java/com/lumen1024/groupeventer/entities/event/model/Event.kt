@@ -2,6 +2,7 @@ package com.lumen1024.groupeventer.entities.event.model
 
 import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Duration
+import java.time.Instant
 import java.util.UUID
 
 data class Event(
@@ -15,7 +16,7 @@ data class Event(
 
     val initialRange: TimeRange = TimeRange(), // range when event might be
     val proposalRanges: Map<String, TimeRange> = emptyMap(), // ranges that people want
-    val startTime: TimeRange = TimeRange(), // time when event starts
+    val startTime: Instant = Instant.now(), // time when event starts
 )
 
 enum class GroupEventStatus {
@@ -23,12 +24,3 @@ enum class GroupEventStatus {
     Scheduled,
     Finish,
 }
-
-
-enum class PeopleStatus {
-    Ready,
-    Refused,
-    Unknown,
-    Maybe,
-}
-

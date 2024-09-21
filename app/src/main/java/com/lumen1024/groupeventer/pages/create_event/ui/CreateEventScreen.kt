@@ -14,15 +14,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AvTimer
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -35,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.pages.create_event.model.CreateEventViewModel
 import com.lumen1024.groupeventer.shared.model.TimeRange
@@ -42,27 +40,33 @@ import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
 import com.lumen1024.groupeventer.shared.ui.TextSelect
 import com.lumen1024.groupeventer.shared.ui.TimeRangeButton
 import com.lumen1024.groupeventer.shared.ui.TimeRangePicker
+import java.time.Duration
 import java.time.Instant
 
 @Composable
 fun CreateEventScreen(
     viewModel: CreateEventViewModel = hiltViewModel(),
 ) {
-    val statuses = GroupEventStatus.entries.map { it.name }
+    val groups by viewModel.userStateHolder.groups.collectAsState()
+    val groupNames by remember { derivedStateOf { groups.map { it.name } } }
 
     var status by remember { mutableStateOf(GroupEventStatus.Voting) }
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var duration by remember { mutableFloatStateOf(1f) }
 
-    val groups by viewModel.userStateHolder.groups.collectAsState()
-    val groupNames by remember { derivedStateOf { groups.map { it.name } } }
+    val statuses = GroupEventStatus.entries.map { it.name }
+
+    var initialRange: TimeRange by remember { mutableStateOf(TimeRange()) }
+    var startTime: Instant by remember { mutableStateOf(Instant.now()) }
+
 
     var selectedGroupName by remember(groupNames) { mutableStateOf(groupNames.getOrElse(0) { "" }) }
 
-    Scaffold(modifier = Modifier
-        .navigationBarsPadding()
-        .statusBarsPadding(),
+    Scaffold(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .statusBarsPadding(),
         topBar = {
             CreateEventTopBar(
                 title = name,
@@ -70,13 +74,32 @@ fun CreateEventScreen(
                 onSafeClicked = {
                     val group = groups.find { group -> group.name == selectedGroupName }
                         ?: return@CreateEventTopBar
-                    viewModel.saveEvent(
-                        group,
-                        name,
-                        description,
-                        duration,
-                        status,
-                    )
+
+                    when (status) {
+                        GroupEventStatus.Voting -> viewModel.saveEvent(
+                            event = Event(
+                                status = status,
+                                name = name,
+                                description = description,
+                                duration = Duration.ofHours(duration.toLong()),
+                                initialRange = initialRange
+                            ),
+                            group = group,
+                        )
+
+                        GroupEventStatus.Scheduled,
+                        GroupEventStatus.Finish -> viewModel.saveEvent(
+                            event = Event(
+                                status = status,
+                                name = name,
+                                description = description,
+                                duration = Duration.ofHours(duration.toLong()),
+                                startTime = startTime,
+                            ),
+                            group = group
+                        )
+                    }
+
                 },
             )
         }
@@ -89,6 +112,7 @@ fun CreateEventScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            // Group Select
             AnimatedVisibility(visible = groupNames.isNotEmpty()) {
                 TextSelect(
                     selected = selectedGroupName,
@@ -98,6 +122,7 @@ fun CreateEventScreen(
                 )
             }
 
+            // Name and Description
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -117,7 +142,10 @@ fun CreateEventScreen(
                     label = { Text(text = "Описание") } // TODO: res
                 )
             }
+
             Spacer(Modifier.height(16.dp))
+
+            // Duration
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -134,8 +162,10 @@ fun CreateEventScreen(
                 valueRange = 1f..6f,
                 steps = 4,
             )
+
             Spacer(modifier = Modifier.height(4.dp))
 
+            // Status Tabs
             SimpleTabSwitch(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,55 +178,28 @@ fun CreateEventScreen(
                 }
             )
 
+            // Time
             when (status) {
-                GroupEventStatus.Voting -> {
-                    TimeRangePicker(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp),
-                        value = TimeRange(),
-                        onChange = {}
-                    )
-                }
+                GroupEventStatus.Voting -> TimeRangePicker(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    value = initialRange,
+                    onChange = { initialRange = it }
+                )
 
                 GroupEventStatus.Scheduled,
-                GroupEventStatus.Finish -> {
-                    TimeRangeButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp),
-                        date = Instant.now(),
-                        onChanged = {}
-                    )
-                }
+                GroupEventStatus.Finish -> TimeRangeButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    date = startTime,
+                    onChanged = { startTime = it }
+                )
+
             }
         }
     }
 
 }
 
-@Composable
-fun CreateEventTopBar(
-    title: String,
-    onBackClick: () -> Unit,
-    onSafeClicked: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(imageVector = Icons.Default.Close, contentDescription = "")
-        }
-        Text(
-            text = title.ifEmpty { "New Event" },
-            style = MaterialTheme.typography.titleLarge
-        )
-        TextButton(modifier = Modifier.padding(horizontal = 8.dp),
-            onClick = { onSafeClicked() }
-        ) {
-            Text(text = "save")
-        }
-    }
-}
