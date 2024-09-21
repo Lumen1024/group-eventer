@@ -1,7 +1,6 @@
 package com.lumen1024.groupeventer.pages.profile.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
@@ -58,10 +56,8 @@ fun ProfileScreen(
             Avatar(
                 showBorder = true,
                 modifier = Modifier
-                    .size(232.dp)
-                    .clickable(
-                        role = Role.Button,
-                        onClick = { galleryLauncher.launch(getCropperOptions(cropImageColors)) }),
+                    .size(232.dp),
+                onClick = { galleryLauncher.launch(getCropperOptions(cropImageColors)) },
                 url = userData?.avatarUrl
             )
             Username(

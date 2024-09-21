@@ -2,6 +2,7 @@ package com.lumen1024.groupeventer.shared.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 
@@ -23,6 +25,7 @@ import coil.compose.SubcomposeAsyncImage
 fun Avatar(
     modifier: Modifier,
     url: Any?,
+    onClick: (() -> Unit)? = null,
     showBorder: Boolean = false,
 ) {
 
@@ -38,6 +41,15 @@ fun Avatar(
                 else Modifier
             )
             .clip(CircleShape)
+            .then(
+                if (onClick != null) Modifier
+                    .clickable(
+                        role = Role.Button,
+                        onClick = onClick
+                    )
+                else Modifier
+            )
+
     ) {
         if (url != null) {
             SubcomposeAsyncImage(
