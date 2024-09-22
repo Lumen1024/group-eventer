@@ -7,14 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -32,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.event.model.Event
@@ -41,21 +37,18 @@ import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 
 @Composable
 fun EventCard(
-    modifier: Modifier = Modifier,
     pair: Pair<Event, Group>,
+    onOptionClicked: () -> Unit,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    onOptionClicked: () -> Unit = {},
 ) {
     // TODO: is remember necessary?
     val event by remember(pair.first) { derivedStateOf { pair.first } }
     val group by remember(pair.second) { derivedStateOf { pair.second } }
 
-    IndicationCard(
-        modifier = Modifier
-            .then(modifier),
-        //colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        onClick = onClick,
-        color = Color.Red,
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
         // main container
         Column(
@@ -63,7 +56,6 @@ fun EventCard(
                 .padding(16.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-
             ) {
             // header
             Row(
@@ -73,34 +65,7 @@ fun EventCard(
             ) {
                 // group title
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        val style = MaterialTheme.typography.bodySmall
-                        Text(
-                            text = "от", // TODO: res
-                            style = style
-                        )
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(2.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .size(14.dp)
-                                    .background(group.color.color)
-                            )
-                            Text(
-                                text = group.name,
-                                fontStyle = style.fontStyle,
-                                fontSize = style.fontSize,
-                                fontWeight = style.fontWeight
-                            )
-
-                        }
-                    }
+                    FromGroupText(group)
                     val titleStyle = MaterialTheme.typography.titleLarge
                     Text(
                         text = event.name,
@@ -149,23 +114,33 @@ fun EventCard(
 }
 
 @Composable
-fun IndicationCard(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    color: Color,
-    content: @Composable () -> Unit,
-) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        onClick = onClick,
+private fun FromGroupText(group: Group) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row {
-            content()
-            Spacer(modifier = Modifier
-                .background(color)
-                .width(4.dp)
-                .fillMaxHeight(1f))
+        val style = MaterialTheme.typography.bodySmall
+        Text(
+            text = "от", // TODO: res
+            style = style
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(5.dp))
+                    .size(14.dp)
+                    .background(group.color.color)
+            )
+            Text(
+                text = group.name,
+                fontStyle = style.fontStyle,
+                fontSize = style.fontSize,
+                fontWeight = style.fontWeight
+            )
+
         }
     }
 }
@@ -174,7 +149,7 @@ fun IndicationCard(
 @Composable
 fun GroupEventCardPreview() {
     val data = Event(
-
+        name = "Fix bugs"
     )
     GroupEventerTheme {
         Box(
@@ -191,7 +166,8 @@ fun GroupEventCardPreview() {
                 {
                     EventCard(
                         pair = data to Group(name = "ded"),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        onOptionClicked = {}
                     )
                 }
             }
