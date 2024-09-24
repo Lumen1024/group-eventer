@@ -47,7 +47,8 @@ fun EventsScreen(
             {
                 EventCard(
                     pair = it,
-                    onClick = { selectedEvent = it }
+                    onClick = { selectedEvent = it },
+                    onOptionClicked = {}
                 )
             }
         }
