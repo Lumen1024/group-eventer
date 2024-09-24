@@ -25,6 +25,6 @@ fun EventDetailsBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState
     ) {
-        EventCard(pair = pair)
+        EventCard(pair = pair, onOptionClicked = {})
     }
 }
