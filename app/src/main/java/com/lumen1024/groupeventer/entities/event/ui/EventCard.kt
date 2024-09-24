@@ -48,6 +48,7 @@ fun EventCard(
 
     Card(
         modifier = modifier,
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
         // main container
