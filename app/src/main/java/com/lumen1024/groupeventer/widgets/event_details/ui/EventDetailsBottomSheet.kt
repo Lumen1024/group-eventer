@@ -17,7 +17,7 @@ import com.lumen1024.groupeventer.widgets.event_details.model.EventDetailsBottom
 fun EventDetailsBottomSheet(
     onDismiss: () -> Unit,
     pair: Pair<Event, Group>,
-    viewModel: EventDetailsBottomSheetViewModel = hiltViewModel()
+    viewModel: EventDetailsBottomSheetViewModel = hiltViewModel(),
 ) {
     val sheetState = rememberModalBottomSheetState(
         confirmValueChange = { return@rememberModalBottomSheetState true }
@@ -28,7 +28,7 @@ fun EventDetailsBottomSheet(
     ) {
         EventCard(pair = pair, onOptionClicked = {})
         VotedPeopleRanges()
-        TimeRangeSlider()
+//        TimeRangeSlider()
     }
 }
 
@@ -37,7 +37,3 @@ fun VotedPeopleRanges(modifier: Modifier = Modifier) {
 
 }
 
-@Composable
-fun TimeRangeSlider(modifier: Modifier = Modifier) {
-
-}
