@@ -28,12 +28,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lumen1024.groupeventer.entities.event.model.Event
+import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.groupeventer.shared.model.TimeRange
+import java.time.Instant
 
 @Composable
 fun EventCard(
@@ -57,7 +68,7 @@ fun EventCard(
                 .padding(16.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
+        ) {
             // header
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -87,20 +98,15 @@ fun EventCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier
-                        .border(
-                            BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
-                ) {
-                    Text(text = "22 июня 18:00") // TODO: insert
-                }
+                if (event.status == GroupEventStatus.Voting)
+                    EventCardTimeRange(timeRange = event.initialRange)
+                else
+                    EventCardTime(time = event.startTime)
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = "${event.duration.toHours()}h") // TODO: duration parse
+                    Text(text = "${event.duration.toHours()}h")
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Schedule,
@@ -113,6 +119,71 @@ fun EventCard(
 
     }
 }
+
+@Composable
+fun EventCardTimeRange(
+    modifier: Modifier = Modifier,
+    timeRange: TimeRange, // TODO: click to vote?
+) {
+    Text(
+        modifier = modifier
+            .dashedBorder(
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.primary,
+                intervals = arrayOf(20.dp, 4.dp),
+                cornerRadius = 100.dp
+            )
+            .padding(horizontal = 12.dp, vertical = 2.dp),
+        text = "20 fff 20:00 - 21:00"
+    )
+}
+
+@Composable
+fun EventCardTime(
+    modifier: Modifier = Modifier,
+    time: Instant
+) {
+    Text(
+        modifier = modifier
+            .border(
+                BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(horizontal = 12.dp, vertical = 2.dp),
+        text = time.toString()
+    )
+}
+
+fun Modifier.dashedBorder(
+    strokeWidth: Dp,
+    color: Color,
+    cornerRadius: Dp = 0.dp,
+    intervals: Array<Dp> = arrayOf(10.dp, 10.dp)
+) = composed(
+    factory = {
+        val density = LocalDensity.current
+        val strokeWidthPx = density.run { strokeWidth.toPx() }
+        val cornerRadiusPx = density.run { cornerRadius.toPx() }
+        val intervalsPx = intervals.map { density.run { it.toPx() } }.toFloatArray()
+
+        this.then(
+            Modifier.drawWithCache {
+                onDrawBehind {
+                    val stroke = Stroke(
+                        width = strokeWidthPx,
+                        pathEffect = PathEffect.dashPathEffect(intervalsPx, 0f)
+                    )
+
+                    drawRoundRect(
+                        color = color,
+                        style = stroke,
+                        cornerRadius = CornerRadius(cornerRadiusPx)
+                    )
+                }
+            }
+        )
+    }
+)
 
 @Composable
 private fun FromGroupText(group: Group) {
