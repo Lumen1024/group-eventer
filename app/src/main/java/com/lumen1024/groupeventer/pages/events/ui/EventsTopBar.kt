@@ -40,6 +40,7 @@ fun EventsTopBar(
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
+                enabled = false, // TODO
                 query = query,
                 onQueryChange = { query = it },
                 onSearch = { expanded = false },
