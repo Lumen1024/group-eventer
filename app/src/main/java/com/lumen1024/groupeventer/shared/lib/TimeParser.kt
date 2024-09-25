@@ -2,21 +2,50 @@ package com.lumen1024.groupeventer.shared.lib
 
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 fun stringToInstantWithPattern(string: String, pattern: String = "yyyy-MM-dd HH:mm:ss"): Instant {
-    val formatter = DateTimeFormatter.ofPattern(pattern)
-        .withZone(ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
     return Instant.from(formatter.parse(string))
 }
 
-fun instantToStringWithPattern(instant: Instant, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
-    val formatter = DateTimeFormatter.ofPattern(pattern)
-        .withZone(ZoneId.systemDefault()).withLocale(Locale.getDefault())
-    return formatter.format(instant)
+fun Instant.toStringWithPattern(pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
+        .withLocale(Locale.getDefault())
+    return formatter.format(this)
 }
+
+infix fun Instant.isSameDayAs(second: Instant): Boolean {
+    val zoneId: ZoneId = ZoneId.systemDefault()
+    val dateTime1 = this.atZone(zoneId).toLocalDate()
+    val dateTime2 = second.atZone(zoneId).toLocalDate()
+
+    return dateTime1 == dateTime2
+}
+
+fun Instant.daysFromToday(zoneId: ZoneId = ZoneId.systemDefault()): Long {
+    val today = LocalDate.now(zoneId)
+    val date = this.atZone(zoneId).toLocalDate()
+    return ChronoUnit.DAYS.between(today, date)
+}
+
+fun Instant.getRelativeDayName() = when (this.daysFromToday().toInt()) {
+    -2 -> "Позавчера"
+    -1 -> "Вчера"
+    0 -> "Сегодня"
+    1 -> "Завтра"
+    2 -> "Послезавтра"
+    else -> {
+        this.toStringWithPattern("dd MMM")
+    }
+}
+
+fun Instant.toStringRelative() = this.getRelativeDayName() + this.toStringWithPattern(" HH:mm")
+
 
 fun durationToString(duration: Duration): String {
     val hours = duration.toHours()
