@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.event.ui.EventCard
@@ -26,5 +27,17 @@ fun EventDetailsBottomSheet(
         sheetState = sheetState
     ) {
         EventCard(pair = pair, onOptionClicked = {})
+        VotedPeopleRanges()
+        TimeRangeSlider()
     }
+}
+
+@Composable
+fun VotedPeopleRanges(modifier: Modifier = Modifier) {
+
+}
+
+@Composable
+fun TimeRangeSlider(modifier: Modifier = Modifier) {
+
 }
