@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "Group Eventer"
 include(":app")
 include(":domain")
+include(":presentation")
+include(":data")
