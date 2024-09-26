@@ -21,6 +21,7 @@ materialIcons = "1.7.2"
 nav_version = "2.8.1"
 kotlinxSerializationJson = "1.6.3"
 firebaseMessagingKtx = "24.0.1"
+jetbrainsKotlinJvm = "2.0.0"
 
 [libraries]
 android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
@@ -67,5 +68,6 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 
