@@ -10,4 +10,5 @@ plugins {
 
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.jetbrains.kotlin.serialization) apply false
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }
