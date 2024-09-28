@@ -31,17 +31,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.group.model.Group
+import com.lumen1024.domain.Event
+import com.lumen1024.domain.Group
+import com.lumen1024.domain.GroupEventStatus
+import com.lumen1024.domain.TimeRange
 import com.lumen1024.groupeventer.shared.lib.toStringRelative
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
-import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
 
 @Composable
 fun EventCard(
-    pair: Pair<Event, Group>,
+    pair: Pair<com.lumen1024.domain.Event, com.lumen1024.domain.Group>,
     onOptionClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
@@ -91,7 +91,7 @@ fun EventCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (event.status == GroupEventStatus.Voting)
+                if (event.status == com.lumen1024.domain.GroupEventStatus.Voting)
                     EventCardTimeRange(timeRange = event.initialRange)
                 else
                     EventCardTime(time = event.startTime)
@@ -116,7 +116,7 @@ fun EventCard(
 @Composable
 fun EventCardTimeRange(
     modifier: Modifier = Modifier,
-    timeRange: TimeRange, // TODO: click to vote?
+    timeRange: com.lumen1024.domain.TimeRange, // TODO: click to vote?
 ) {
     Text(
         modifier = modifier
@@ -148,7 +148,7 @@ fun EventCardTime(
 
 
 @Composable
-private fun FromGroupText(group: Group) {
+private fun FromGroupText(group: com.lumen1024.domain.Group) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -182,7 +182,7 @@ private fun FromGroupText(group: Group) {
 @Preview(showBackground = true)
 @Composable
 fun GroupEventCardPreview() {
-    val data = Event(
+    val data = com.lumen1024.domain.Event(
         name = "Fix bugs"
     )
     GroupEventerTheme {
@@ -199,7 +199,7 @@ fun GroupEventCardPreview() {
                 repeat(5)
                 {
                     EventCard(
-                        pair = data to Group(name = "ded"),
+                        pair = data to com.lumen1024.domain.Group(name = "ded"),
                         modifier = Modifier.fillMaxWidth(),
                         onOptionClicked = {}
                     )

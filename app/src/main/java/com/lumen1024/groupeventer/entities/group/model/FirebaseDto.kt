@@ -1,12 +1,12 @@
 package com.lumen1024.groupeventer.entities.group.model
 
 import androidx.core.net.toUri
-import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.user.model.UserData
+import com.lumen1024.domain.Event
+import com.lumen1024.domain.GroupEventStatus
+import com.lumen1024.domain.TimeRange
+import com.lumen1024.domain.UserData
 import com.lumen1024.groupeventer.shared.lib.durationToString
 import com.lumen1024.groupeventer.shared.lib.stringToDuration
-import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Instant
 
 //-------------------------Group-------------------------
@@ -14,7 +14,7 @@ import java.time.Instant
 data class GroupDto(
     val id: String = "",
     val name: String = "",
-    val color: GroupColor = GroupColor.RED,
+    val color: com.lumen1024.domain.GroupColor = com.lumen1024.domain.GroupColor.RED,
     val description: String = "",
     val password: String = "",
 
@@ -23,7 +23,7 @@ data class GroupDto(
     val admin: String = "",
 )
 
-fun GroupDto.toGroup() = Group(
+fun GroupDto.toGroup() = com.lumen1024.domain.Group(
     id = id,
     name = name,
     color = color,
@@ -34,7 +34,7 @@ fun GroupDto.toGroup() = Group(
     admin = admin
 )
 
-fun Group.toGroupDto() = GroupDto(
+fun com.lumen1024.domain.Group.toGroupDto() = GroupDto(
     name = name,
     color = color,
     description = description,
@@ -50,11 +50,11 @@ data class MemberDataDto(
     val notificationIds: List<String> = emptyList(),
 )
 
-fun MemberDataDto.toMemberData() = MemberData(
+fun MemberDataDto.toMemberData() = com.lumen1024.domain.MemberData(
     notificationIds = notificationIds
 )
 
-fun MemberData.toMemberDataDto() = MemberDataDto(
+fun com.lumen1024.domain.MemberData.toMemberDataDto() = MemberDataDto(
     notificationIds = notificationIds
 )
 
@@ -64,7 +64,7 @@ data class EventDto(
     val id: String = "",
     val creator: String = "",
 
-    val status: GroupEventStatus = GroupEventStatus.Voting,
+    val status: com.lumen1024.domain.GroupEventStatus = com.lumen1024.domain.GroupEventStatus.Voting,
     val name: String = "",
     val description: String = "",
     val duration: String = "",
@@ -74,7 +74,7 @@ data class EventDto(
     val startTime: Long = Instant.now().toEpochMilli(), // time when event starts
 )
 
-fun EventDto.toGroupEvent() = Event(
+fun EventDto.toGroupEvent() = com.lumen1024.domain.Event(
     id = id,
     creator = creator,
 
@@ -88,7 +88,7 @@ fun EventDto.toGroupEvent() = Event(
     startTime = Instant.ofEpochMilli(startTime)
 )
 
-fun Event.toGroupEventDto() = EventDto(
+fun com.lumen1024.domain.Event.toGroupEventDto() = EventDto(
     id = id,
     creator = creator,
 
@@ -109,9 +109,9 @@ data class TimeRangeDto(
     var end: Long = Instant.now().plusSeconds(3600).toEpochMilli(),
 )
 
-fun TimeRangeDto.toTimeRange() = TimeRange(this.start, this.end)
+fun TimeRangeDto.toTimeRange() = com.lumen1024.domain.TimeRange(this.start, this.end)
 
-fun TimeRange.toTimeRangeDto() = TimeRangeDto(
+fun com.lumen1024.domain.TimeRange.toTimeRangeDto() = TimeRangeDto(
     this.start.toEpochMilli(),
     this.end.toEpochMilli()
 )
@@ -125,14 +125,14 @@ data class UserDataDto(
     val groups: List<String> = emptyList(),
 )
 
-fun UserDataDto.toUserData() = UserData(
+fun UserDataDto.toUserData() = com.lumen1024.domain.UserData(
     id = id,
     name = name,
     avatarUrl = avatarUrl?.toUri(),
     groups = groups,
 )
 
-fun UserData.toUserDataDto() =
+fun com.lumen1024.domain.UserData.toUserDataDto() =
     UserDataDto(
         id = id,
         name = name,

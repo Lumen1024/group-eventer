@@ -15,5 +15,5 @@ abstract class RepositoryModule {
     abstract fun bindGroupRepository(groupRepositoryImp: FirebaseGroupRepository): GroupRepository
 
     @Binds
-    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserDataRepository): UserDataRepository
+    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserDataRepository): com.lumen1024.domain.UserDataRepository
 }

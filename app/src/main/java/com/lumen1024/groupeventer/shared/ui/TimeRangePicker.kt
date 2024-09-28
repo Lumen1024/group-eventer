@@ -22,14 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import com.lumen1024.domain.TimeRange
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
-import com.lumen1024.groupeventer.shared.model.TimeRange
 
 
 @Composable
 fun TimeRangePicker(
-    value: TimeRange,
-    onChange: (TimeRange) -> Unit,
+    value: com.lumen1024.domain.TimeRange,
+    onChange: (com.lumen1024.domain.TimeRange) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -70,7 +70,7 @@ fun TimeRangePicker(
 )
 @Composable
 fun TimeRangePickerPreview() {
-    var timeRange by remember { mutableStateOf(TimeRange()) }
+    var timeRange by remember { mutableStateOf(com.lumen1024.domain.TimeRange()) }
 
     GroupEventerTheme {
         Box(Modifier.padding(16.dp)) {
