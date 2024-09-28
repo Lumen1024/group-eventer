@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.ui
+package com.lumen1024.presentation
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement

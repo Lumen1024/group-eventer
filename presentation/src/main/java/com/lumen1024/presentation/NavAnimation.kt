@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.presentation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
 import com.lumen1024.presentation.Screen
+import com.lumen1024.presentation.getScreen
 
 typealias NavHostAnimationScope = AnimatedContentTransitionScope<NavBackStackEntry>
 
@@ -30,7 +31,10 @@ fun NavHostAnimationScope.getRelativeSlideOutTransition(
                 else -> default
             }
         },
-        animationSpec = tween(durationMillis = animationDuration, easing = FastOutSlowInEasing)
+        animationSpec = tween(
+            durationMillis = com.lumen1024.presentation.animationDuration,
+            easing = FastOutSlowInEasing
+        )
     ) + fadeOut()
 }
 
@@ -49,6 +53,9 @@ fun NavHostAnimationScope.getRelativeSlideInTransition(
                 else -> default
             }
         },
-        animationSpec = tween(durationMillis = animationDuration, easing = FastOutSlowInEasing)
+        animationSpec = tween(
+            durationMillis = com.lumen1024.presentation.animationDuration,
+            easing = FastOutSlowInEasing
+        )
     ) + fadeIn()
 }

@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.presentation
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
