@@ -9,15 +9,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
-import com.lumen1024.groupeventer.shared.config.Screen
+import com.lumen1024.presentation.Screen
 
 typealias NavHostAnimationScope = AnimatedContentTransitionScope<NavBackStackEntry>
 
 private const val animationDuration = 500
 
 fun NavHostAnimationScope.getRelativeSlideOutTransition(
-    left: List<Screen> = emptyList(),
-    right: List<Screen> = emptyList(),
+    left: List<com.lumen1024.presentation.Screen> = emptyList(),
+    right: List<com.lumen1024.presentation.Screen> = emptyList(),
     default: SlideDirection = SlideDirection.Down
 ): @JvmSuppressWildcards ExitTransition {
 
@@ -35,8 +35,8 @@ fun NavHostAnimationScope.getRelativeSlideOutTransition(
 }
 
 fun NavHostAnimationScope.getRelativeSlideInTransition(
-    left: List<Screen> = emptyList(),
-    right: List<Screen> = emptyList(),
+    left: List<com.lumen1024.presentation.Screen> = emptyList(),
+    right: List<com.lumen1024.presentation.Screen> = emptyList(),
     default: SlideDirection = SlideDirection.Down
 ): @JvmSuppressWildcards EnterTransition {
 

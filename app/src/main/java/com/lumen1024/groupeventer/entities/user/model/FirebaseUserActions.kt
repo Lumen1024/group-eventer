@@ -1,19 +1,19 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import com.google.firebase.firestore.FieldValue
-import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.group.model.Group
-import com.lumen1024.groupeventer.entities.group.model.GroupColor
+import com.lumen1024.domain.Event
+import com.lumen1024.domain.Group
+import com.lumen1024.domain.GroupColor
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.group.model.MemberDataDto
 import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(
-    private val userDataRepository: UserDataRepository,
+    private val userDataRepository: com.lumen1024.domain.UserDataRepository,
     private val groupRepository: GroupRepository,
-    private val userStateHolder: UserStateHolder,
-) : UserActions {
+    private val userStateHolder: com.lumen1024.domain.UserStateHolder,
+) : com.lumen1024.domain.UserActions {
 
     override suspend fun updateTokenInGroups(token: String): Result<Unit> {
         val userData = userStateHolder.userData.value
@@ -31,7 +31,7 @@ class FirebaseUserActions @Inject constructor(
             groupRepository.update(
                 id = group.id,
                 data = mapOf(
-                    Group::members.name to group.members
+                    com.lumen1024.domain.Group::members.name to group.members
                 )
             ).onFailure { return@onFailure }
         }
@@ -60,7 +60,7 @@ class FirebaseUserActions @Inject constructor(
         groupRepository.update(
             id = group.id,
             data = mapOf(
-                Group::members.name to group.members + (userData.id to MemberDataDto())
+                com.lumen1024.domain.Group::members.name to group.members + (userData.id to MemberDataDto())
             )
         ).onFailure { return Result.failure(it) }
 
@@ -97,7 +97,7 @@ class FirebaseUserActions @Inject constructor(
             groupRepository.update(
                 id = group.id,
                 mapOf(
-                    Group::admin.name to newAdmin
+                    com.lumen1024.domain.Group::admin.name to newAdmin
                 )
             ).onFailure { return Result.failure(it) }
 
@@ -105,7 +105,7 @@ class FirebaseUserActions @Inject constructor(
             groupRepository.update(
                 id = group.id,
                 mapOf(
-                    Group::members.name to group.members - newAdmin
+                    com.lumen1024.domain.Group::members.name to group.members - newAdmin
                 )
             ).onFailure { return Result.failure(it) }
 
@@ -124,7 +124,7 @@ class FirebaseUserActions @Inject constructor(
     override suspend fun createGroup(
         name: String,
         password: String,
-        color: GroupColor,
+        color: com.lumen1024.domain.GroupColor,
     ): Result<Unit> {
         if (groupRepository.get(name = name, password = null).isSuccess) {
             return Result.failure(Throwable("Group with same name already exist"))
@@ -133,7 +133,7 @@ class FirebaseUserActions @Inject constructor(
         val userData = userStateHolder.userData.value
             ?: return Result.failure(Throwable("UserData is null"))
 
-        val group = Group(
+        val group = com.lumen1024.domain.Group(
             name = name,
             password = password,
             admin = userData.id,
@@ -160,7 +160,10 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun transferAdministrator(groupId: String, user: UserData): Result<Unit> {
+    override suspend fun transferAdministrator(
+        groupId: String,
+        user: com.lumen1024.domain.UserData
+    ): Result<Unit> {
         val userData = userStateHolder.userData.value
             ?: return Result.failure(Throwable("UserData is null"))
 
@@ -185,21 +188,24 @@ class FirebaseUserActions @Inject constructor(
         groupRepository.update(
             id = groupId,
             data = mapOf(
-                Group::admin.name to user.id
+                com.lumen1024.domain.Group::admin.name to user.id
             )
         ).onFailure { return Result.failure(it) }
 
         groupRepository.update(
             id = groupId,
             data = mapOf(
-                Group::members.name to (group.members - user.id) + (userData.id to MemberDataDto())
+                com.lumen1024.domain.Group::members.name to (group.members - user.id) + (userData.id to MemberDataDto())
             )
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
-    override suspend fun removeUserFromGroup(groupId: String, user: UserData): Result<Unit> {
+    override suspend fun removeUserFromGroup(
+        groupId: String,
+        user: com.lumen1024.domain.UserData
+    ): Result<Unit> {
         val userData = userStateHolder.userData.value
             ?: return Result.failure(Throwable("UserData is null"))
 
@@ -231,14 +237,17 @@ class FirebaseUserActions @Inject constructor(
         groupRepository.update(
             id = groupId,
             data = mapOf(
-                Group::members.name to group.members - user.id
+                com.lumen1024.domain.Group::members.name to group.members - user.id
             )
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
-    override suspend fun createEvent(event: Event, group: Group): Result<Unit> {
+    override suspend fun createEvent(
+        event: com.lumen1024.domain.Event,
+        group: com.lumen1024.domain.Group
+    ): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 
         groupRepository.update(
@@ -250,7 +259,7 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun updateEvent(event: Event): Result<Unit> {
+    override suspend fun updateEvent(event: com.lumen1024.domain.Event): Result<Unit> {
         val targetGroup = userStateHolder.groups.value.let {
             it.forEach { group ->
                 if (event in group.events)
@@ -266,14 +275,14 @@ class FirebaseUserActions @Inject constructor(
 
         groupRepository.update(
             targetGroup.id, mapOf(
-                Group::events.name to FieldValue.arrayUnion(event) // maybe not work
+                com.lumen1024.domain.Group::events.name to FieldValue.arrayUnion(event) // maybe not work
             )
         ).onFailure { return Result.failure(it) }
 
         return Result.success(Unit)
     }
 
-    override suspend fun deleteEvent(event: Event): Result<Unit> {
+    override suspend fun deleteEvent(event: com.lumen1024.domain.Event): Result<Unit> {
         val targetGroup = userStateHolder.groups.value.let {
             it.forEach { group ->
                 if (event in group.events)
@@ -289,13 +298,13 @@ class FirebaseUserActions @Inject constructor(
 
         groupRepository.update(
             targetGroup.id, mapOf(
-                Group::events.name to FieldValue.arrayRemove(event)
+                com.lumen1024.domain.Group::events.name to FieldValue.arrayRemove(event)
             )
         ).onFailure { e -> return Result.failure(e) }
         return Result.success(Unit)
     }
 
-    private fun userInGroup(group: Group): Boolean {
+    private fun userInGroup(group: com.lumen1024.domain.Group): Boolean {
         return userStateHolder.userData.value?.groups
             ?.let { return@let (group.id in it) }
             ?: false

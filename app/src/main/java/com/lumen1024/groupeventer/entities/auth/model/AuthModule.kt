@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class AuthModule {
 
     @Binds
-    abstract fun bindAuthService(service: FirebaseAuthService): AuthService
+    abstract fun bindAuthService(service: FirebaseAuthService): com.lumen1024.domain.AuthService
 }

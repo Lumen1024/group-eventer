@@ -1,8 +1,8 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import androidx.compose.runtime.mutableStateListOf
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
-import com.lumen1024.groupeventer.entities.group.model.Group
+import com.lumen1024.domain.AuthService
+import com.lumen1024.domain.Group
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,15 +11,15 @@ import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 class FirebaseUserStateHolder @Inject constructor(
-    private val userDataRepository: UserDataRepository,
+    private val userDataRepository: com.lumen1024.domain.UserDataRepository,
     private val groupRepository: GroupRepository,
-    private val authService: AuthService,
-) : UserStateHolder {
+    private val authService: com.lumen1024.domain.AuthService,
+) : com.lumen1024.domain.UserStateHolder {
 
-    private val _userData = MutableStateFlow<UserData?>(null)
+    private val _userData = MutableStateFlow<com.lumen1024.domain.UserData?>(null)
     override val userData = _userData.asStateFlow()
 
-    private val _groups = mutableStateListOf<Group>()
+    private val _groups = mutableStateListOf<com.lumen1024.domain.Group>()
     override val groups get() = MutableStateFlow(_groups.toImmutableList()).asStateFlow()
 
     private var unsubscribeAuth: (() -> Unit)? = null
@@ -64,7 +64,7 @@ class FirebaseUserStateHolder @Inject constructor(
         } ?: return null
     }
 
-    private fun processGroupsChange(repositoryObjectChanges: List<RepositoryObjectChange<Group?>>) {
+    private fun processGroupsChange(repositoryObjectChanges: List<RepositoryObjectChange<com.lumen1024.domain.Group?>>) {
         repositoryObjectChanges
             .filter { it.data != null }
             .forEach { change ->

@@ -31,10 +31,10 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.lumen1024.domain.TimeRange
 import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
 import com.lumen1024.groupeventer.shared.lib.throttleLatest
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
-import com.lumen1024.groupeventer.shared.model.TimeRange
 import java.time.Duration
 import kotlin.math.roundToInt
 
@@ -44,9 +44,9 @@ private val clipShape = RoundedCornerShape(4.dp)
 @Composable
 fun TimeRangeSlider(
     modifier: Modifier = Modifier,
-    timeRange: TimeRange,
+    timeRange: com.lumen1024.domain.TimeRange,
     duration: Duration,
-    onChange: (timeRange: TimeRange) -> Unit,
+    onChange: (timeRange: com.lumen1024.domain.TimeRange) -> Unit,
     step: Duration = Duration.ofMinutes(15),
 ) {
     val ratio by remember {
@@ -126,7 +126,12 @@ fun TimeRangeSlider(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState(onIndicatorDrag),
                     onDragStopped = {
-                        onChange(TimeRange(startTime, startTime.plusMillis(duration.toMillis())))
+                        onChange(
+                            com.lumen1024.domain.TimeRange(
+                                startTime,
+                                startTime.plusMillis(duration.toMillis())
+                            )
+                        )
                     }
                 ),
             ratio = ratio,
@@ -159,10 +164,10 @@ private fun TimeRangeSliderIndicator(
 @Preview
 @Composable
 private fun TimeRangeSliderPreview() {
-    val timeRange by remember { mutableStateOf(TimeRange()) }
+    val timeRange by remember { mutableStateOf(com.lumen1024.domain.TimeRange()) }
     val duration by remember { mutableStateOf(Duration.ofHours(1).plusMinutes(30)) }
 
-    var newTimeRange by remember { mutableStateOf(TimeRange()) }
+    var newTimeRange by remember { mutableStateOf(com.lumen1024.domain.TimeRange()) }
 
     GroupEventerTheme {
         Row(

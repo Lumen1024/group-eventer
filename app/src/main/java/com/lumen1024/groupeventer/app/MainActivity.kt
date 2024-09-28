@@ -12,9 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.lumen1024.groupeventer.app.ui.AppContent
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
+import com.lumen1024.domain.AuthService
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.presentation.ui.AppContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var authService: AuthService
+    lateinit var authService: com.lumen1024.domain.AuthService
     private var checkedAuth = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    AppContent()
+                    com.lumen1024.presentation.ui.AppContent()
                 }
             }
         }

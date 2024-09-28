@@ -1,15 +1,18 @@
 package com.lumen1024.groupeventer.shared.model
 
 import androidx.navigation.NavOptionsBuilder
-import com.lumen1024.groupeventer.shared.config.Screen
+import com.lumen1024.presentation.Screen
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 
 interface Navigator {
     val navigationChannel: Channel<NavigationIntent>
-    fun navigate(screen: Screen, builder: NavOptionsBuilder.() -> Unit = { })
+    fun navigate(
+        screen: com.lumen1024.presentation.Screen,
+        builder: NavOptionsBuilder.() -> Unit = { }
+    )
     fun back(inclusive: Boolean = false)
-    fun deepBack(screen: Screen, inclusive: Boolean = false)
+    fun deepBack(screen: com.lumen1024.presentation.Screen, inclusive: Boolean = false)
 }
 
 class ChannelNavigator : Navigator {
@@ -20,7 +23,7 @@ class ChannelNavigator : Navigator {
     )
 
     suspend fun navigateBack(
-        route: Screen? = null,
+        route: com.lumen1024.presentation.Screen? = null,
         inclusive: Boolean = false
     ) {
         navigationChannel.send(
@@ -32,7 +35,7 @@ class ChannelNavigator : Navigator {
     }
 
     fun tryNavigateBack(
-        route: Screen? = null,
+        route: com.lumen1024.presentation.Screen? = null,
         inclusive: Boolean = false
     ) {
         navigationChannel.trySend(
@@ -44,7 +47,7 @@ class ChannelNavigator : Navigator {
     }
 
     suspend fun navigateTo(
-        route: Screen,
+        route: com.lumen1024.presentation.Screen,
         builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.send(
@@ -56,7 +59,7 @@ class ChannelNavigator : Navigator {
     }
 
     fun tryNavigateTo(
-        route: Screen,
+        route: com.lumen1024.presentation.Screen,
         builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.trySend(
@@ -67,7 +70,10 @@ class ChannelNavigator : Navigator {
         )
     }
 
-    override fun navigate(screen: Screen, builder: NavOptionsBuilder.() -> Unit) {
+    override fun navigate(
+        screen: com.lumen1024.presentation.Screen,
+        builder: NavOptionsBuilder.() -> Unit
+    ) {
         tryNavigateTo(screen, builder)
     }
 
@@ -75,7 +81,7 @@ class ChannelNavigator : Navigator {
         tryNavigateBack(inclusive = inclusive)
     }
 
-    override fun deepBack(screen: Screen, inclusive: Boolean) {
+    override fun deepBack(screen: com.lumen1024.presentation.Screen, inclusive: Boolean) {
         tryNavigateBack(screen, inclusive)
     }
 }
@@ -83,12 +89,12 @@ class ChannelNavigator : Navigator {
 sealed class NavigationIntent {
 
     data class NavigateBack(
-        val route: Screen? = null,
+        val route: com.lumen1024.presentation.Screen? = null,
         val inclusive: Boolean,
     ) : NavigationIntent()
 
     data class NavigateTo(
-        val route: Screen,
+        val route: com.lumen1024.presentation.Screen,
         val builder: NavOptionsBuilder.() -> Unit = {}
     ) : NavigationIntent()
 }

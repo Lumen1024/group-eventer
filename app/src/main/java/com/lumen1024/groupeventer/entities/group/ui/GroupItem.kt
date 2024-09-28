@@ -21,15 +21,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.entities.group.model.Group
-import com.lumen1024.groupeventer.entities.group.model.GroupColor
-import com.lumen1024.groupeventer.entities.group.model.MemberData
+import com.lumen1024.domain.Group
+import com.lumen1024.domain.GroupColor
+import com.lumen1024.domain.MemberData
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import java.util.UUID
 
 @Composable
 fun GroupItem(
-    group: Group,
+    group: com.lumen1024.domain.Group,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -77,12 +77,12 @@ fun GroupCardPreview() {
         ) {
             repeat(6) {
                 GroupItem(
-                    group = Group(
+                    group = com.lumen1024.domain.Group(
                         name = "Dota 2",
-                        color = GroupColor.RED,
+                        color = com.lumen1024.domain.GroupColor.RED,
                         members = mapOf(
-                            UUID.randomUUID().toString() to MemberData(),
-                            UUID.randomUUID().toString() to MemberData()
+                            UUID.randomUUID().toString() to com.lumen1024.domain.MemberData(),
+                            UUID.randomUUID().toString() to com.lumen1024.domain.MemberData()
                         )
                     ),
                     modifier = Modifier

@@ -1,6 +1,6 @@
 package com.lumen1024.groupeventer.entities.user.model
 
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
+import com.lumen1024.domain.AuthService
 import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import dagger.Module
 import dagger.Provides
@@ -16,9 +16,9 @@ object UserModule {
     @Singleton
     fun provideUserStateHolder(
         groupRepository: GroupRepository,
-        userDataRepository: UserDataRepository,
-        authService: AuthService,
-    ): UserStateHolder {
+        userDataRepository: com.lumen1024.domain.UserDataRepository,
+        authService: com.lumen1024.domain.AuthService,
+    ): com.lumen1024.domain.UserStateHolder {
         return FirebaseUserStateHolder(userDataRepository, groupRepository, authService)
     }
 
@@ -26,9 +26,9 @@ object UserModule {
     @Singleton
     fun provideUserActions(
         groupRepository: GroupRepository,
-        userDataRepository: UserDataRepository,
-        userStateHolder: UserStateHolder,
-    ): UserActions {
+        userDataRepository: com.lumen1024.domain.UserDataRepository,
+        userStateHolder: com.lumen1024.domain.UserStateHolder,
+    ): com.lumen1024.domain.UserActions {
         return FirebaseUserActions(userDataRepository, groupRepository, userStateHolder)
     }
 }

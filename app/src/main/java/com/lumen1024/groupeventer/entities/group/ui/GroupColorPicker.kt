@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.entities.group.model.GroupColor
+import com.lumen1024.domain.GroupColor
 import com.lumen1024.groupeventer.shared.ui.ColorCircle
 import kotlinx.coroutines.launch
 
@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun GroupColorPicker(
     modifier: Modifier = Modifier,
-    colors: List<GroupColor>,
-    selectedColor: GroupColor,
-    onSelect: (GroupColor) -> Unit,
+    colors: List<com.lumen1024.domain.GroupColor>,
+    selectedColor: com.lumen1024.domain.GroupColor,
+    onSelect: (com.lumen1024.domain.GroupColor) -> Unit,
     circleSize: Dp = 24.dp,
 ) {
     val scrollState = rememberScrollState()

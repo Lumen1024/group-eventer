@@ -13,7 +13,7 @@ class FirebaseGroupRepository @Inject constructor(
 
     private val collection = firebase.firestore.collection("groups")
 
-    override suspend fun add(group: Group): Result<Unit> {
+    override suspend fun add(group: com.lumen1024.domain.Group): Result<Unit> {
         try {
             collection.document(group.id).set(group).await()
             return Result.success(Unit)
@@ -23,7 +23,7 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override suspend fun get(id: String): Result<Group> {
+    override suspend fun get(id: String): Result<com.lumen1024.domain.Group> {
         try {
             val group = collection
                 .document(id)
@@ -39,7 +39,7 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override suspend fun get(name: String, password: String?): Result<Group> {
+    override suspend fun get(name: String, password: String?): Result<com.lumen1024.domain.Group> {
         val query = collection
             .whereEqualTo(GroupDto::name.name, name)
             .whereEqualTo(GroupDto::password.name, password)
@@ -57,7 +57,7 @@ class FirebaseGroupRepository @Inject constructor(
         }
     }
 
-    override suspend fun getList(ids: List<String>): Result<List<Group>> {
+    override suspend fun getList(ids: List<String>): Result<List<com.lumen1024.domain.Group>> {
         val query =
             if (ids.isNotEmpty()) collection.whereIn("id", ids)
             else collection
@@ -101,7 +101,7 @@ class FirebaseGroupRepository @Inject constructor(
 
     override fun listenList(
         ids: List<String>,
-        callback: (List<RepositoryObjectChange<Group?>>) -> Unit,
+        callback: (List<RepositoryObjectChange<com.lumen1024.domain.Group?>>) -> Unit,
     ): Result<() -> Unit> {
         if (ids.isEmpty()) {
             return Result.failure(Throwable("Ids must not be empty"))
