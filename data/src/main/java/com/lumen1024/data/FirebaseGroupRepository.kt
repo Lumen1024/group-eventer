@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group.model
+package com.lumen1024.data
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
