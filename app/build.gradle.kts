@@ -68,6 +68,11 @@ android {
 }
 
 dependencies {
+    // modules
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
+
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.firebase.messaging.ktx)

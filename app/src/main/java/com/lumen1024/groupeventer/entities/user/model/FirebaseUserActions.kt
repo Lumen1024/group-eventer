@@ -1,17 +1,13 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import com.google.firebase.firestore.FieldValue
-import com.lumen1024.domain.Event
-import com.lumen1024.domain.Group
-import com.lumen1024.domain.GroupColor
-import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.entities.group.model.MemberDataDto
 import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(
     private val userDataRepository: com.lumen1024.domain.UserDataRepository,
-    private val groupRepository: GroupRepository,
+    private val groupRepository: com.lumen1024.domain.GroupRepository,
     private val userStateHolder: com.lumen1024.domain.UserStateHolder,
 ) : com.lumen1024.domain.UserActions {
 

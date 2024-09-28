@@ -1,7 +1,5 @@
 package com.lumen1024.groupeventer.entities.user.model
 
-import com.lumen1024.domain.AuthService
-import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +13,7 @@ object UserModule {
     @Provides
     @Singleton
     fun provideUserStateHolder(
-        groupRepository: GroupRepository,
+        groupRepository: com.lumen1024.domain.GroupRepository,
         userDataRepository: com.lumen1024.domain.UserDataRepository,
         authService: com.lumen1024.domain.AuthService,
     ): com.lumen1024.domain.UserStateHolder {
@@ -25,7 +23,7 @@ object UserModule {
     @Provides
     @Singleton
     fun provideUserActions(
-        groupRepository: GroupRepository,
+        groupRepository: com.lumen1024.domain.GroupRepository,
         userDataRepository: com.lumen1024.domain.UserDataRepository,
         userStateHolder: com.lumen1024.domain.UserStateHolder,
     ): com.lumen1024.domain.UserActions {
