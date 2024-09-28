@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.user.model
+package com.lumen1024.data
 
 import androidx.compose.runtime.mutableStateListOf
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange

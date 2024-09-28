@@ -5,14 +5,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.auth
-import com.lumen1024.domain.UserData
 import com.lumen1024.domain.UserDataRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthService @Inject constructor(
     firebase: Firebase,
-    private val userDataRepository: com.lumen1024.domain.UserDataRepository,
+    private val userDataRepository: UserDataRepository,
 ) : com.lumen1024.domain.AuthService {
     private val auth = firebase.auth
 

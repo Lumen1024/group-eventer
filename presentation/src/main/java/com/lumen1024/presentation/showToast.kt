@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.presentation
 
 import android.content.Context
 import android.widget.Toast

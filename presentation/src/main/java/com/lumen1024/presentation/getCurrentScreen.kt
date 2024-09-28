@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

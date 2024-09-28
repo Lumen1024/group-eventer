@@ -1,6 +1,7 @@
-package com.lumen1024.groupeventer.entities.user.model
+package com.lumen1024.groupeventer.di
 
 import com.lumen1024.data.FirebaseGroupRepository
+import com.lumen1024.data.FirebaseUserDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
