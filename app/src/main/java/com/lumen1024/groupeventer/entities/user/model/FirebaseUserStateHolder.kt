@@ -1,9 +1,6 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import androidx.compose.runtime.mutableStateListOf
-import com.lumen1024.domain.AuthService
-import com.lumen1024.domain.Group
-import com.lumen1024.groupeventer.entities.group.model.GroupRepository
 import com.lumen1024.groupeventer.shared.model.RepositoryObjectChange
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +9,7 @@ import javax.inject.Inject
 
 class FirebaseUserStateHolder @Inject constructor(
     private val userDataRepository: com.lumen1024.domain.UserDataRepository,
-    private val groupRepository: GroupRepository,
+    private val groupRepository: com.lumen1024.domain.GroupRepository,
     private val authService: com.lumen1024.domain.AuthService,
 ) : com.lumen1024.domain.UserStateHolder {
 

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class FirebaseGroupRepository @Inject constructor(
     firebase: Firebase,
-) : GroupRepository {
+) : com.lumen1024.domain.GroupRepository {
 
     private val collection = firebase.firestore.collection("groups")
 
