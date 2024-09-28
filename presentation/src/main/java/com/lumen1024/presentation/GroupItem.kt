@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group.ui
+package com.lumen1024.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +29,7 @@ import java.util.UUID
 
 @Composable
 fun GroupItem(
-    group: com.lumen1024.domain.Group,
+    group: Group,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -77,12 +77,12 @@ fun GroupCardPreview() {
         ) {
             repeat(6) {
                 GroupItem(
-                    group = com.lumen1024.domain.Group(
+                    group = Group(
                         name = "Dota 2",
-                        color = com.lumen1024.domain.GroupColor.RED,
+                        color = GroupColor.RED,
                         members = mapOf(
-                            UUID.randomUUID().toString() to com.lumen1024.domain.MemberData(),
-                            UUID.randomUUID().toString() to com.lumen1024.domain.MemberData()
+                            UUID.randomUUID().toString() to MemberData(),
+                            UUID.randomUUID().toString() to MemberData()
                         )
                     ),
                     modifier = Modifier

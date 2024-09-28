@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group.ui
+package com.lumen1024.presentation
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.lumen1024.domain.GroupColor
 import com.lumen1024.groupeventer.shared.ui.ColorCircle
 import kotlinx.coroutines.launch
 

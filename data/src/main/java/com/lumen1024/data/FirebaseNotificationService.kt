@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.notification.model
+package com.lumen1024.data
 
 import android.content.Context
 import android.util.Log
@@ -32,7 +32,7 @@ class FirebaseNotificationService @Inject constructor(
     }
 
     companion object {
-        fun getToken(context: Context): String? {
+        fun getToken(context: Context): String {
             return context.getSharedPreferences("_", MODE_PRIVATE).getString("fb", "empty")
         }
     }

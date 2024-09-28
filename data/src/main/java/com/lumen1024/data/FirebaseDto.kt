@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group.model
+package com.lumen1024.data
 
 import androidx.core.net.toUri
 import com.lumen1024.domain.Event

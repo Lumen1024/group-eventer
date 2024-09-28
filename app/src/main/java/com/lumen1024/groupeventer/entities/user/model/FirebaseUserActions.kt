@@ -1,8 +1,8 @@
 package com.lumen1024.groupeventer.entities.user.model
 
 import com.google.firebase.firestore.FieldValue
-import com.lumen1024.groupeventer.entities.group.model.MemberDataDto
-import com.lumen1024.groupeventer.entities.group.model.toGroupEventDto
+import com.lumen1024.data.MemberDataDto
+import com.lumen1024.data.toGroupEventDto
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(

@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    com.lumen1024.presentation.ui.AppContent()
+                    AppContent()
                 }
             }
         }

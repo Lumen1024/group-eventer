@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.entities.group.ui
+package com.lumen1024.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
