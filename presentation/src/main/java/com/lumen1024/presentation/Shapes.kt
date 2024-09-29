@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.model
+package com.lumen1024.presentation
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
