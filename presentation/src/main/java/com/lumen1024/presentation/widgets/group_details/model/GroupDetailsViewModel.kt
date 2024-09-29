@@ -8,7 +8,7 @@ import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.UserActions
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
-import com.lumen1024.groupeventer.shared.lib.showToast
+import com.lumen1024.presentation.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +20,8 @@ import javax.inject.Inject
 class GroupDetailsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataRepository: UserDataRepository,
+    private val userActions: UserActions,
     val userStateHolder: UserStateHolder,
-    val userActions: UserActions,
 ) : ViewModel() {
     private val _admin = MutableStateFlow<UserData?>(null)
     val admin = _admin.asStateFlow()

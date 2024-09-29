@@ -18,10 +18,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.groupeventer.shared.ui.ColorCircle
+import com.lumen1024.presentation.shared.ColorCircle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,13 +62,13 @@ fun GroupColorPicker(
         ) {
             colors.forEach { color ->
                 CompositionLocalProvider(
-                    LocalRippleConfiguration provides RippleConfiguration(color.color),
+                    LocalRippleConfiguration provides RippleConfiguration(Color(color.hex)),
                 ) {
                     IconButton(
                         onClick = { onSelect(color) }
                     ) {
                         ColorCircle(
-                            color = color.color,
+                            color = Color(color.hex),
                             modifier = Modifier.size(circleSize),
                             selected = color == selectedColor,
                         )

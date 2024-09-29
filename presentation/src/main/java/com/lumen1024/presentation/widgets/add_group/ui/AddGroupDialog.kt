@@ -28,10 +28,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.groupeventer.entities.group.ui.GroupColorPicker
-import com.lumen1024.groupeventer.shared.ui.NameTextField
-import com.lumen1024.groupeventer.shared.ui.PasswordTextField
-import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
+import com.lumen1024.presentation.GroupColorPicker
+import com.lumen1024.presentation.shared.NameTextField
+import com.lumen1024.presentation.shared.PasswordTextField
+import com.lumen1024.presentation.shared.SimpleTabSwitch
 import com.lumen1024.presentation.widgets.add_group.model.AddGroupViewModel
 
 @Composable

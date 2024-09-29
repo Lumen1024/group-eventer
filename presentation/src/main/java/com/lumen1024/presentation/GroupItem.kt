@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.data.MemberData
-import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import java.util.UUID
 
 @Composable
@@ -49,7 +48,7 @@ fun GroupItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
                     .size(20.dp)
-                    .background(group.color.color)
+                    .background(Color(group.color.hex))
             )
             Text(text = group.name)
         }

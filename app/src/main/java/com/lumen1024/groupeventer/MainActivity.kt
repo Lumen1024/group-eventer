@@ -13,7 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.presentation.GroupEventerTheme
 import com.lumen1024.presentation.ui.AppContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

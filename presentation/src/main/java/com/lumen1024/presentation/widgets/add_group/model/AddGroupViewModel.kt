@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
-import com.lumen1024.groupeventer.shared.lib.showToast
+import com.lumen1024.domain.usecase.UserActions
+import com.lumen1024.presentation.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddGroupViewModel @Inject constructor(
-    private val firebaseUserActions: FirebaseUserActions,
+    private val userActions: UserActions,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
@@ -33,7 +33,7 @@ class AddGroupViewModel @Inject constructor(
 
     fun createGroup(name: String, password: String, color: GroupColor) {
         viewModelScope.launch {
-            val result = firebaseUserActions.createGroup(
+            val result = userActions.createGroup(
                 name,
                 password,
                 color
@@ -48,7 +48,7 @@ class AddGroupViewModel @Inject constructor(
 
     fun joinGroup(name: String, password: String) {
         viewModelScope.launch {
-            val r = firebaseUserActions.joinGroup(name, password)
+            val r = userActions.joinGroup(name, password)
             if (r.isSuccess) {
                 context.showToast("Joined group \"$name\"")
                 closeDialog()

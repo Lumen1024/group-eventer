@@ -166,7 +166,7 @@ private fun FromGroupText(group: Group) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
                     .size(14.dp)
-                    .background(group.color.color)
+                    .background(group.color.hex)
             )
             Text(
                 text = group.name,
