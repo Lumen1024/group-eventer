@@ -37,6 +37,9 @@ android {
 dependencies {
     implementation(project(":domain"))
 
+    // Splash
+    implementation(libs.androidx.core.splashscreen)
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
