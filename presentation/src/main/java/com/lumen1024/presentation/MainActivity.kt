@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer
+package com.lumen1024.presentation
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.presentation.GroupEventerTheme
 import com.lumen1024.presentation.ui.AppContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition { !checkedAuth }
 
         CoroutineScope(Dispatchers.IO).launch {
-            authService.refreshToken()
+            //authService.refreshToken()
             checkedAuth = true
         }
 
