@@ -70,7 +70,7 @@ dependencies {
     // modules
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":presentation"))
+    implementation(project(":ui"))
 
     // Hilt
     implementation(libs.hilt.android)
