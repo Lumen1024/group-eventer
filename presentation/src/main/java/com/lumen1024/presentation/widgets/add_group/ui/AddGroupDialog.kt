@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.groupeventer.entities.group.ui.GroupColorPicker
 import com.lumen1024.groupeventer.shared.ui.NameTextField
 import com.lumen1024.groupeventer.shared.ui.PasswordTextField
@@ -48,7 +49,7 @@ fun AddGroupDialog(
 
     val isLoading by viewModel.isLoading.collectAsState()
 
-    var selectedColor by remember { mutableStateOf(com.lumen1024.domain.GroupColor.entries[0]) }
+    var selectedColor by remember { mutableStateOf(GroupColor.entries[0]) }
 
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -101,7 +102,7 @@ fun AddGroupDialog(
 
                 if (isCreate) {
                     GroupColorPicker(
-                        colors = com.lumen1024.domain.GroupColor.entries,
+                        colors = GroupColor.entries,
                         selectedColor = selectedColor,
                         onSelect = { selectedColor = it },
                         circleSize = 24.dp

@@ -3,6 +3,7 @@ package com.lumen1024.presentation.widgets.add_group.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +31,7 @@ class AddGroupViewModel @Inject constructor(
         _dismiss.value = false
     }
 
-    fun createGroup(name: String, password: String, color: com.lumen1024.domain.GroupColor) {
+    fun createGroup(name: String, password: String, color: GroupColor) {
         viewModelScope.launch {
             val result = firebaseUserActions.createGroup(
                 name,

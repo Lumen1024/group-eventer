@@ -1,7 +1,7 @@
 package com.lumen1024.presentation.screen.events.model
 
 import androidx.lifecycle.ViewModel
-import com.lumen1024.domain.UserStateHolder
+import com.lumen1024.domain.usecase.UserStateHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

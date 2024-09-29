@@ -21,9 +21,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.lumen1024.domain.Group
-import com.lumen1024.domain.GroupColor
-import com.lumen1024.domain.MemberData
+import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.GroupColor
+import com.lumen1024.domain.data.MemberData
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import java.util.UUID
 

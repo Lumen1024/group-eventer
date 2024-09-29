@@ -1,18 +1,15 @@
 package com.lumen1024.data
 
-import android.net.Uri
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.auth
-import com.lumen1024.domain.UserDataRepository
+import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthService @Inject constructor(
     firebase: Firebase,
     private val userDataRepository: UserDataRepository,
-) : com.lumen1024.domain.AuthService {
+) : AuthService {
     private val auth = firebase.auth
 
     override val userId: String?
@@ -73,7 +70,7 @@ class FirebaseAuthService @Inject constructor(
     }
 
     private suspend fun initUserData(userId: String, name: String, avatarUrl: Uri? = null) {
-        val userData = com.lumen1024.domain.UserData(
+        val userData = UserData(
             id = userId,
             name = name,
             avatarUrl = avatarUrl
