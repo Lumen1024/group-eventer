@@ -1,7 +1,5 @@
-package com.lumen1024.groupeventer.di
+package com.lumen1024.presentation
 
-import com.lumen1024.groupeventer.shared.model.Navigator
-import com.lumen1024.presentation.ChannelNavigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
