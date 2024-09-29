@@ -44,12 +44,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.shared.lib.systemPadding
-import com.lumen1024.groupeventer.shared.ui.EmailTextField
-import com.lumen1024.groupeventer.shared.ui.NameTextField
-import com.lumen1024.groupeventer.shared.ui.PasswordTextField
+import com.lumen1024.presentation.R
 import com.lumen1024.presentation.screen.auth.model.AuthViewModel
+import com.lumen1024.presentation.shared.EmailTextField
+import com.lumen1024.presentation.shared.NameTextField
+import com.lumen1024.presentation.shared.PasswordTextField
+import com.lumen1024.presentation.tools.systemPadding
 
 @Composable
 fun AuthScreen(

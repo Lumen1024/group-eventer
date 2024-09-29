@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.model
+package com.lumen1024.presentation
 
 enum class NameErrorState {
     Normal,
