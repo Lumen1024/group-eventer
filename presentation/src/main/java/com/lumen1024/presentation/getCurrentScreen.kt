@@ -7,10 +7,10 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import com.lumen1024.presentation.Screen
+import com.lumen1024.presentation.screen.Screen
 
 @Composable
-fun NavHostController.getCurrentScreenAsState(): State<com.lumen1024.presentation.Screen?> {
+fun NavHostController.getCurrentScreenAsState(): State<Screen?> {
 
     val state = this.currentBackStackEntryFlow
         .collectAsState(null)
@@ -21,16 +21,16 @@ fun NavHostController.getCurrentScreenAsState(): State<com.lumen1024.presentatio
     }
 }
 
-fun NavDestination.getScreen(): com.lumen1024.presentation.Screen? {
+fun NavDestination.getScreen(): Screen? {
     val screens = mapOf(
-        com.lumen1024.presentation.Screen.Auth.javaClass.canonicalName to com.lumen1024.presentation.Screen.Auth,
-        com.lumen1024.presentation.Screen.Tutorial.javaClass.canonicalName to com.lumen1024.presentation.Screen.Tutorial,
+        Screen.Auth.javaClass.canonicalName to Screen.Auth,
+        Screen.Tutorial.javaClass.canonicalName to Screen.Tutorial,
 
-        com.lumen1024.presentation.Screen.Groups.javaClass.canonicalName to com.lumen1024.presentation.Screen.Groups,
-        com.lumen1024.presentation.Screen.Events.javaClass.canonicalName to com.lumen1024.presentation.Screen.Events,
-        com.lumen1024.presentation.Screen.Profile.javaClass.canonicalName to com.lumen1024.presentation.Screen.Profile,
+        Screen.Groups.javaClass.canonicalName to Screen.Groups,
+        Screen.Events.javaClass.canonicalName to Screen.Events,
+        Screen.Profile.javaClass.canonicalName to Screen.Profile,
 
-        com.lumen1024.presentation.Screen.CreateEvent.javaClass.canonicalName to com.lumen1024.presentation.Screen.CreateEvent,
+        Screen.CreateEvent.javaClass.canonicalName to Screen.CreateEvent,
     )
     val route = this.route ?: return null
     return screens[route]
