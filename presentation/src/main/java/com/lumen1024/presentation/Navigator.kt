@@ -1,7 +1,6 @@
-package com.lumen1024.domain
+package com.lumen1024.presentation
 
 import androidx.navigation.NavOptionsBuilder
-import com.lumen1024.groupeventer.shared.model.NavigationIntent
 import kotlinx.coroutines.channels.Channel
 
 interface Navigator {
