@@ -5,15 +5,6 @@ import com.lumen1024.presentation.Screen
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 
-interface Navigator {
-    val navigationChannel: Channel<NavigationIntent>
-    fun navigate(
-        screen: com.lumen1024.presentation.Screen,
-        builder: NavOptionsBuilder.() -> Unit = { }
-    )
-    fun back(inclusive: Boolean = false)
-    fun deepBack(screen: com.lumen1024.presentation.Screen, inclusive: Boolean = false)
-}
 
 class ChannelNavigator : Navigator {
 

@@ -2,7 +2,7 @@ package com.lumen1024.domain.data
 
 import java.util.UUID
 
-enum class GroupColor(val color: Long) {
+enum class GroupColor(val hex: Long) {
     RED(0xFFE53935),
     PINK(0xFFD81B60),
     DEEP_PURPLE(0xFF5E35B1),

@@ -1,5 +1,6 @@
 package com.lumen1024.presentation.widgets.group_details.ui
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.UserData
-import com.lumen1024.groupeventer.entities.user.ui.AvatarTitled
+import com.lumen1024.presentation.AvatarTitled
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -48,7 +49,7 @@ fun GroupUserListItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AvatarTitled(
-            avatarUrl = userData?.avatarUrl,
+            avatarUrl = Uri.parse(userData?.avatarUrl),
             username = userData?.name,
             textColor = textColor
         )

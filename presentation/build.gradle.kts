@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -43,6 +44,12 @@ dependencies {
 
     // Compose
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.compose.icons)
+
+    // Image
+    implementation(libs.coil.kt.coil.compose)
+    implementation(libs.android.image.cropper)
 
     // Base
 //    implementation(libs.androidx.core.ktx)
@@ -53,7 +60,6 @@ dependencies {
 //    implementation(platform(libs.androidx.compose.bom))
 //    implementation(libs.androidx.ui)
 //    implementation(libs.androidx.ui.graphics)
-//    implementation(libs.androidx.ui.tooling.preview)
 
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
