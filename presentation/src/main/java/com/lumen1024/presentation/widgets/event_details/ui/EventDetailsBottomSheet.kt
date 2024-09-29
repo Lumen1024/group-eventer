@@ -6,6 +6,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.domain.data.Event
+import com.lumen1024.domain.data.Group
 import com.lumen1024.groupeventer.entities.event.ui.EventCard
 import com.lumen1024.presentation.widgets.event_details.model.EventDetailsBottomSheetViewModel
 
@@ -14,7 +16,7 @@ import com.lumen1024.presentation.widgets.event_details.model.EventDetailsBottom
 @Composable
 fun EventDetailsBottomSheet(
     onDismiss: () -> Unit,
-    pair: Pair<com.lumen1024.domain.Event, com.lumen1024.domain.Group>,
+    pair: Pair<Event, Group>,
     viewModel: EventDetailsBottomSheetViewModel = hiltViewModel(),
 ) {
     val sheetState = rememberModalBottomSheetState(

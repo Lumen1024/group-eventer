@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import com.lumen1024.groupeventer.shared.model.Navigator
 import com.lumen1024.presentation.screen.Screen
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppTopBarViewModel @Inject constructor(
-    private val authService: com.lumen1024.domain.AuthService,
+    private val authService: AuthService,
     private val navigator: Navigator
 ) : ViewModel() {
     fun logout() {

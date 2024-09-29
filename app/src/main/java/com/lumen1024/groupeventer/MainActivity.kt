@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
 import com.lumen1024.presentation.ui.AppContent
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var authService: com.lumen1024.domain.AuthService
+    lateinit var authService: AuthService
     private var checkedAuth = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

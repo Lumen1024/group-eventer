@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.domain.data.Group
 import com.lumen1024.groupeventer.entities.group.ui.GroupColorBadge
 import com.lumen1024.presentation.widgets.group_details.model.GroupDetailsViewModel
 
@@ -42,7 +43,7 @@ import com.lumen1024.presentation.widgets.group_details.model.GroupDetailsViewMo
 fun GroupDetailsBottomSheet(
     viewModel: GroupDetailsViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
-    group: com.lumen1024.domain.Group,
+    group: Group,
 ) {
     val currentUser by viewModel.userStateHolder.userData.collectAsState()
     val admin by viewModel.admin.collectAsState()

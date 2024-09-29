@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.lumen1024.presentation.screen.MainNavGraph
 
 @Composable
 fun AppContent() {
@@ -16,7 +17,7 @@ fun AppContent() {
         bottomBar = { AppBottomBar(navController = navController) },
         floatingActionButton = { AppFloatingButton(navController = navController) },
     ) {
-        com.lumen1024.presentation.MainNavGraph(
+        MainNavGraph(
             navController,
             modifier = Modifier
                 .fillMaxSize()

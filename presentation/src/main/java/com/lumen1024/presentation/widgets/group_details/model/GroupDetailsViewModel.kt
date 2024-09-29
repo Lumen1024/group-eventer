@@ -3,6 +3,11 @@ package com.lumen1024.presentation.widgets.group_details.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.usecase.UserActions
+import com.lumen1024.domain.usecase.UserDataRepository
+import com.lumen1024.domain.usecase.UserStateHolder
 import com.lumen1024.groupeventer.shared.lib.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -14,17 +19,17 @@ import javax.inject.Inject
 @HiltViewModel
 class GroupDetailsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val userDataRepository: com.lumen1024.domain.UserDataRepository,
-    val userStateHolder: com.lumen1024.domain.UserStateHolder,
-    val userActions: com.lumen1024.domain.UserActions,
+    private val userDataRepository: UserDataRepository,
+    val userStateHolder: UserStateHolder,
+    val userActions: UserActions,
 ) : ViewModel() {
-    private val _admin = MutableStateFlow<com.lumen1024.domain.UserData?>(null)
+    private val _admin = MutableStateFlow<UserData?>(null)
     val admin = _admin.asStateFlow()
 
-    private val _users = MutableStateFlow(emptyList<com.lumen1024.domain.UserData>())
+    private val _users = MutableStateFlow(emptyList<UserData>())
     val users = _users.asStateFlow()
 
-    fun setGroup(group: com.lumen1024.domain.Group) {
+    fun setGroup(group: Group) {
         viewModelScope.launch {
             launch {
                 _users.value = emptyList()
@@ -47,13 +52,13 @@ class GroupDetailsViewModel @Inject constructor(
         }
     }
 
-    fun removeUserFromGroup(groupId: String, user: com.lumen1024.domain.UserData) {
+    fun removeUserFromGroup(groupId: String, user: UserData) {
         viewModelScope.launch {
             userActions.removeUserFromGroup(groupId, user)
         }
     }
 
-    fun transferAdministrator(groupId: String, user: com.lumen1024.domain.UserData) {
+    fun transferAdministrator(groupId: String, user: UserData) {
         viewModelScope.launch {
             userActions.transferAdministrator(groupId, user)
         }

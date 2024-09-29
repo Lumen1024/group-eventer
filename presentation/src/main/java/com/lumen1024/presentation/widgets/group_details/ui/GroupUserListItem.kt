@@ -21,13 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.lumen1024.domain.data.UserData
 import com.lumen1024.groupeventer.entities.user.ui.AvatarTitled
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupUserListItem(
     modifier: Modifier = Modifier,
-    userData: com.lumen1024.domain.UserData?,
+    userData: UserData?,
     textColor: Color = Color.Unspecified,
     showMoreButton: Boolean = false,
     onRemoveFromGroup: () -> Unit = {},

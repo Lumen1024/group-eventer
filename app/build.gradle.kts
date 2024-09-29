@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-
     alias(libs.plugins.compose.compiler)
 
     alias(libs.plugins.ksp)
@@ -73,18 +72,16 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":presentation"))
 
-
     // Hilt
     implementation(libs.hilt.android)
-    implementation(libs.firebase.messaging.ktx)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
+//    implementation(platform(libs.firebase.bom))
+//    implementation(libs.firebase.auth)
+//    implementation(libs.firebase.firestore)
+//    implementation(libs.firebase.storage)
 
     // Image
     implementation(libs.coil.kt.coil.compose)
@@ -100,9 +97,6 @@ dependencies {
 
     // Material extension
     implementation(libs.androidx.compose.icons)
-
-//    // Profiling
-//    implementation("androidx.compose.runtime:runtime-tracing:1.0.0-beta01")
 
     // Base
     implementation(libs.androidx.core.ktx)

@@ -2,6 +2,11 @@ package com.lumen1024.groupeventer.di
 
 import com.lumen1024.data.FirebaseUserActions
 import com.lumen1024.data.FirebaseUserStateHolder
+import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.usecase.GroupRepository
+import com.lumen1024.domain.usecase.UserActions
+import com.lumen1024.domain.usecase.UserDataRepository
+import com.lumen1024.domain.usecase.UserStateHolder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,20 +20,20 @@ object UserModule {
     @Provides
     @Singleton
     fun provideUserStateHolder(
-        groupRepository: com.lumen1024.domain.GroupRepository,
-        userDataRepository: com.lumen1024.domain.UserDataRepository,
-        authService: com.lumen1024.domain.AuthService,
-    ): com.lumen1024.domain.UserStateHolder {
+        groupRepository: GroupRepository,
+        userDataRepository: UserDataRepository,
+        authService: AuthService,
+    ): UserStateHolder {
         return FirebaseUserStateHolder(userDataRepository, groupRepository, authService)
     }
 
     @Provides
     @Singleton
     fun provideUserActions(
-        groupRepository: com.lumen1024.domain.GroupRepository,
-        userDataRepository: com.lumen1024.domain.UserDataRepository,
-        userStateHolder: com.lumen1024.domain.UserStateHolder,
-    ): com.lumen1024.domain.UserActions {
+        groupRepository: GroupRepository,
+        userDataRepository: UserDataRepository,
+        userStateHolder: UserStateHolder,
+    ): UserActions {
         return FirebaseUserActions(userDataRepository, groupRepository, userStateHolder)
     }
 }
