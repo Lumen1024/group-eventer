@@ -9,16 +9,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
-import com.lumen1024.presentation.Screen
-import com.lumen1024.presentation.getScreen
+import com.lumen1024.presentation.screen.Screen
 
 typealias NavHostAnimationScope = AnimatedContentTransitionScope<NavBackStackEntry>
 
 private const val animationDuration = 500
 
 fun NavHostAnimationScope.getRelativeSlideOutTransition(
-    left: List<com.lumen1024.presentation.Screen> = emptyList(),
-    right: List<com.lumen1024.presentation.Screen> = emptyList(),
+    left: List<Screen> = emptyList(),
+    right: List<Screen> = emptyList(),
     default: SlideDirection = SlideDirection.Down
 ): @JvmSuppressWildcards ExitTransition {
 
@@ -32,15 +31,15 @@ fun NavHostAnimationScope.getRelativeSlideOutTransition(
             }
         },
         animationSpec = tween(
-            durationMillis = com.lumen1024.presentation.animationDuration,
+            durationMillis = animationDuration,
             easing = FastOutSlowInEasing
         )
     ) + fadeOut()
 }
 
 fun NavHostAnimationScope.getRelativeSlideInTransition(
-    left: List<com.lumen1024.presentation.Screen> = emptyList(),
-    right: List<com.lumen1024.presentation.Screen> = emptyList(),
+    left: List<Screen> = emptyList(),
+    right: List<Screen> = emptyList(),
     default: SlideDirection = SlideDirection.Down
 ): @JvmSuppressWildcards EnterTransition {
 
@@ -54,7 +53,7 @@ fun NavHostAnimationScope.getRelativeSlideInTransition(
             }
         },
         animationSpec = tween(
-            durationMillis = com.lumen1024.presentation.animationDuration,
+            durationMillis = animationDuration,
             easing = FastOutSlowInEasing
         )
     ) + fadeIn()
