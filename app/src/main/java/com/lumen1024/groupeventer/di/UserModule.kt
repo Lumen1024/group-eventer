@@ -24,7 +24,11 @@ object UserModule {
         userDataRepository: UserDataRepository,
         authService: AuthService,
     ): UserStateHolder {
-        return FirebaseUserStateHolder(userDataRepository, groupRepository, authService)
+        return com.lumen1024.data.FirebaseUserStateHolder(
+            userDataRepository,
+            groupRepository,
+            authService
+        )
     }
 
     @Provides
@@ -34,6 +38,10 @@ object UserModule {
         userDataRepository: UserDataRepository,
         userStateHolder: UserStateHolder,
     ): UserActions {
-        return FirebaseUserActions(userDataRepository, groupRepository, userStateHolder)
+        return com.lumen1024.data.FirebaseUserActions(
+            userDataRepository,
+            groupRepository,
+            userStateHolder
+        )
     }
 }

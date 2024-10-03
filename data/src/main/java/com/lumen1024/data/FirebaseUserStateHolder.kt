@@ -1,6 +1,8 @@
 package com.lumen1024.data
 
+import androidx.compose.runtime.mutableStateListOf
 import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.RepositoryObjectChange
 import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.domain.usecase.GroupRepository
@@ -8,7 +10,6 @@ import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 class FirebaseUserStateHolder @Inject constructor(
@@ -20,8 +21,8 @@ class FirebaseUserStateHolder @Inject constructor(
     private val _userData = MutableStateFlow<UserData?>(null)
     override val userData = _userData.asStateFlow()
 
-    private val _groups = mutableStateListOf<Group>()
-    override val groups get() = MutableStateFlow(_groups.toImmutableList()).asStateFlow()
+    private val _groups = mutableStateListOf<Group>() // TODO: is android mutable state?
+    override val groups get() = MutableStateFlow(_groups.toList()).asStateFlow() // TODO: toImmutableList replaced?
 
     private var unsubscribeAuth: (() -> Unit)? = null
     private var unsubscribeGroups: (() -> Unit)? = null

@@ -14,8 +14,8 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindGroupRepository(groupRepositoryImp: FirebaseGroupRepository): GroupRepository
+    abstract fun bindGroupRepository(groupRepositoryImp: com.lumen1024.data.FirebaseGroupRepository): GroupRepository
 
     @Binds
-    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserDataRepository): UserDataRepository
+    abstract fun bindUserDataRepository(userRepositoryImp: com.lumen1024.data.FirebaseUserDataRepository): UserDataRepository
 }
