@@ -17,29 +17,29 @@ class FirebaseUserActions @Inject constructor(
     private val userStateHolder: UserStateHolder,
 ) : UserActions {
 
-    override suspend fun updateTokenInGroups(token: String): Result<Unit> {
-        val userData = userStateHolder.userData.value
-            ?: return Result.failure(Throwable("UserData is null"))
-
-        // TODO: need to handle error when updating token
-        userData.groups.forEach {
-            val group = groupRepository.get(it)
-                .fold(onSuccess = { res -> res }, onFailure = { err -> return Result.failure(err) })
-
-            group.members[userData.id]?.let { member ->
-                member.notificationIds + token
-            }
-
-            groupRepository.update(
-                id = group.id,
-                data = mapOf(
-                    Group::members.name to group.members
-                )
-            ).onFailure { return@onFailure }
-        }
-
-        return Result.success(Unit)
-    }
+//    override suspend fun updateTokenInGroups(token: String): Result<Unit> {
+//        val userData = userStateHolder.userData.value
+//            ?: return Result.failure(Throwable("UserData is null"))
+//
+//        // TODO: need to handle error when updating token
+//        userData.groups.forEach {
+//            val group = groupRepository.get(it)
+//                .fold(onSuccess = { res -> res }, onFailure = { err -> return Result.failure(err) })
+//
+//            group.members[userData.id]?.let { member ->
+//                member.notificationIds + token
+//            }
+//
+//            groupRepository.update(
+//                id = group.id,
+//                data = mapOf(
+//                    Group::members.name to group.members
+//                )
+//            ).onFailure { return@onFailure }
+//        }
+//
+//        return Result.success(Unit)
+//    }
 
     override suspend fun joinGroup(name: String, password: String): Result<Unit> {
         val userData = userStateHolder.userData.value

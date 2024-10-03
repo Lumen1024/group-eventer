@@ -8,6 +8,8 @@ import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.MemberData
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.tools.durationToString
+import com.lumen1024.domain.tools.stringToDuration
 import java.time.Instant
 
 //-------------------------Group-------------------------
@@ -129,7 +131,7 @@ data class UserDataDto(
 fun UserDataDto.toUserData() = UserData(
     id = id,
     name = name,
-    avatarUrl = avatarUrl?.toUri(),
+    avatarUrl = avatarUrl?.toUri().toString(),
     groups = groups,
 )
 

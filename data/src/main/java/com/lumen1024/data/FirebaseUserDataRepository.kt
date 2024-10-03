@@ -4,7 +4,6 @@ import android.net.Uri
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
-import com.lumen1024.data.toUserData
 import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
@@ -48,11 +47,11 @@ class FirebaseUserDataRepository @Inject constructor(
         }
     }
 
-    override suspend fun uploadAvatar(id: String, image: Uri): Result<Uri> {
+    override suspend fun uploadAvatar(id: String, imageURI: String): Result<String> {
         return try {
-            val uploadTask = avatarsRef.child(id).putFile(image).await()
+            val uploadTask = avatarsRef.child(id).putFile(Uri.parse(imageURI)).await()
             val avatarUri = uploadTask.storage.downloadUrl.await()
-            Result.success(avatarUri)
+            Result.success(avatarUri.toString())
         } catch (e: Throwable) {
             Result.failure(e)
         }
