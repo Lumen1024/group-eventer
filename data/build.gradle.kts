@@ -36,10 +36,10 @@ dependencies {
     implementation(project(":domain"))
 
     // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.auth)
+    api(libs.firebase.firestore)
+    api(libs.firebase.storage)
 
     implementation(libs.javax.inject)
 

@@ -1,4 +1,4 @@
-package com.lumen1024.domain.tools
+package com.lumen1024.ui.tools
 
 /**
  * Returns a single map of all elements in keys and parent in value
