@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.navigation
 
 import dagger.Module
 import dagger.Provides

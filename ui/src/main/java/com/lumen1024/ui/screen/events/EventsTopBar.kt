@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.events.ui
+package com.lumen1024.ui.screen.events
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList

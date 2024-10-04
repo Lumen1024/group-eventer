@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.auth.ui
+package com.lumen1024.ui.screen.auth
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -45,7 +45,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.ui.R
-import com.lumen1024.ui.screen.auth.model.AuthViewModel
 import com.lumen1024.ui.shared.EmailTextField
 import com.lumen1024.ui.shared.NameTextField
 import com.lumen1024.ui.shared.PasswordTextField

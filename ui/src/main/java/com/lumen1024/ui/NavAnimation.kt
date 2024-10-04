@@ -9,7 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavBackStackEntry
-import com.lumen1024.ui.screen.Screen
+import com.lumen1024.ui.navigation.Screen
 
 typealias NavHostAnimationScope = AnimatedContentTransitionScope<NavBackStackEntry>
 

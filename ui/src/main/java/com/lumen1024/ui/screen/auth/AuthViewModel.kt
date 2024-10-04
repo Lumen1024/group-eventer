@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.auth.model
+package com.lumen1024.ui.screen.auth
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

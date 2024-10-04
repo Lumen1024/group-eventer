@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.events.ui
+package com.lumen1024.ui.screen.events
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import com.lumen1024.groupeventer.entities.event.model.Event
 import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.shared.lib.flatMapLinked
 import com.lumen1024.groupeventer.widgets.event_details.ui.EventDetailsBottomSheet
-import com.lumen1024.ui.screen.events.model.EventsViewModel
 
 
 @Composable

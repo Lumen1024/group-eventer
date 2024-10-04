@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.navigation
 
 import androidx.navigation.NavOptionsBuilder
 import com.lumen1024.ui.Screen

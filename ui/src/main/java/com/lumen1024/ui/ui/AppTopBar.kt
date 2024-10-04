@@ -14,7 +14,9 @@ import androidx.navigation.NavHostController
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
 import com.lumen1024.groupeventer.shared.model.Navigator
-import com.lumen1024.ui.screen.Screen
+import com.lumen1024.ui.navigation.Screen
+import com.lumen1024.ui.screen.events.EventsTopBar
+import com.lumen1024.ui.screen.profile.ProfileTopBar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,9 +52,9 @@ fun AppTopBar(
             when (screen) {
                 Screen.Auth -> {} // TODO: move top bar here
 //                Screen.CreateEvent -> TODO()
-                Screen.Events -> com.lumen1024.ui.screen.events.ui.EventsTopBar()
-                Screen.Groups -> com.lumen1024.ui.screen.events.ui.EventsTopBar() // TODO
-                Screen.Profile -> com.lumen1024.ui.screen.profile.ui.ProfileTopBar { viewModel.logout() }
+                Screen.Events -> EventsTopBar()
+                Screen.Groups -> EventsTopBar() // TODO
+                Screen.Profile -> ProfileTopBar { viewModel.logout() }
                 else -> {}
             }
         }

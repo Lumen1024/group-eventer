@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
-import com.lumen1024.ui.screen.events.ui.EventCard
+import com.lumen1024.ui.screen.events.EventCard
 import com.lumen1024.ui.widgets.event_details.model.EventDetailsBottomSheetViewModel
 
 
