@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name=".MainActivity"
+            android:name="com.lumen1024.ui.MainActivity"
             android:enableOnBackInvokedCallback="true"
             android:exported="true"
             android:fitsSystemWindows="true"

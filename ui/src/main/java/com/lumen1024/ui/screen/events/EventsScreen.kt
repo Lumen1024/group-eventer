@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
-import com.lumen1024.domain.tools.flatMapLinked
+import com.lumen1024.ui.tools.flatMapLinked
 import com.lumen1024.ui.widgets.event_details.ui.EventDetailsBottomSheet
 
 
