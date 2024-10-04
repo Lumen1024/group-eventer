@@ -5,13 +5,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lumen1024.groupeventer.entities.auth.model.AuthException
-import com.lumen1024.groupeventer.entities.auth.model.AuthService
-import com.lumen1024.groupeventer.entities.auth.model.mapToResource
-import com.lumen1024.groupeventer.entities.user.model.UserDataRepository
-import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
-import com.lumen1024.groupeventer.shared.lib.showToast
-import com.lumen1024.groupeventer.shared.model.Navigator
+import com.lumen1024.domain.data.AuthException
+import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.usecase.UserDataRepository
+import com.lumen1024.domain.usecase.UserStateHolder
+import com.lumen1024.ui.navigation.Navigator
+import com.lumen1024.ui.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -34,11 +33,11 @@ class ProfileViewModel @Inject constructor(
                 )
             ).onFailure {
                 val messageResId = when (it) {
-                    is AuthException -> it.mapToResource()
-                    else -> AuthException.Unknown("Error when updating name").mapToResource()
+                    is AuthException -> it.message
+                    else -> AuthException.Unknown("Error when updating name").message
                 }
 
-                context.showToast(context.resources.getString(messageResId))
+                context.showToast(messageResId ?: "error") // TODO: res?
             }
         }
     }
@@ -49,21 +48,21 @@ class ProfileViewModel @Inject constructor(
                 val userId = userStateHolder.userData.value?.id ?: return@launch
 
                 val avatarUrl = userDataRepository.uploadAvatar(
-                    userId, imageUri
+                    userId, imageUri.toString()
                 ).onFailure {
                     val messageResId = when (it) {
-                        is AuthException -> it.mapToResource()
+                        is AuthException -> it.message
                         else -> {
                             val exception =
                                 AuthException.Unknown("Error when loading avatar image to server")
 
                             Log.e("ProfileViewModel", exception.message, exception)
 
-                            exception.mapToResource()
+                            exception.message
                         }
                     }
 
-                    context.showToast(context.resources.getString(messageResId))
+                    context.showToast(messageResId ?: "error")
                 }.getOrNull() ?: return@launch
 
                 userDataRepository.update(
@@ -72,18 +71,18 @@ class ProfileViewModel @Inject constructor(
                     )
                 ).onFailure {
                     val messageResId = when (it) {
-                        is AuthException -> it.mapToResource()
+                        is AuthException -> it.message
                         else -> {
                             val exception =
                                 AuthException.Unknown("Error when updating avatar")
 
                             Log.e("ProfileViewModel", exception.message, exception)
 
-                            exception.mapToResource()
+                            exception.message
                         }
                     }
 
-                    context.showToast(context.resources.getString(messageResId))
+                    context.showToast(messageResId ?: "error")
                 }
             } catch (e: Exception) {
                 context.showToast("Error when setting avatar")

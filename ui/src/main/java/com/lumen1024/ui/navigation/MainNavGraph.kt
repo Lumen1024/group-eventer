@@ -8,14 +8,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.groupeventer.shared.lib.getRelativeSlideInTransition
-import com.lumen1024.groupeventer.shared.lib.getRelativeSlideOutTransition
-import com.lumen1024.groupeventer.shared.ui.NavigationEffects
+import com.lumen1024.ui.getRelativeSlideInTransition
+import com.lumen1024.ui.getRelativeSlideOutTransition
 import com.lumen1024.ui.screen.auth.AuthScreen
 import com.lumen1024.ui.screen.create_event.CreateEventScreen
 import com.lumen1024.ui.screen.events.EventsScreen
 import com.lumen1024.ui.screen.groups.GroupsScreen
 import com.lumen1024.ui.screen.profile.ProfileScreen
+import com.lumen1024.ui.shared.NavigationEffects
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

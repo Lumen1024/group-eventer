@@ -1,7 +1,6 @@
 package com.lumen1024.ui.navigation
 
 import androidx.navigation.NavOptionsBuilder
-import com.lumen1024.ui.Screen
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 
@@ -14,7 +13,7 @@ class ChannelNavigator : Navigator {
     )
 
     suspend fun navigateBack(
-        route: com.lumen1024.ui.Screen? = null,
+        route: Screen? = null,
         inclusive: Boolean = false
     ) {
         navigationChannel.send(
@@ -26,7 +25,7 @@ class ChannelNavigator : Navigator {
     }
 
     fun tryNavigateBack(
-        route: com.lumen1024.ui.Screen? = null,
+        route: Screen? = null,
         inclusive: Boolean = false
     ) {
         navigationChannel.trySend(
@@ -38,7 +37,7 @@ class ChannelNavigator : Navigator {
     }
 
     suspend fun navigateTo(
-        route: com.lumen1024.ui.Screen,
+        route: Screen,
         builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.send(
@@ -50,7 +49,7 @@ class ChannelNavigator : Navigator {
     }
 
     fun tryNavigateTo(
-        route: com.lumen1024.ui.Screen,
+        route: Screen,
         builder: NavOptionsBuilder.() -> Unit
     ) {
         navigationChannel.trySend(
@@ -62,7 +61,7 @@ class ChannelNavigator : Navigator {
     }
 
     override fun navigate(
-        screen: com.lumen1024.ui.Screen,
+        screen: Screen,
         builder: NavOptionsBuilder.() -> Unit
     ) {
         tryNavigateTo(screen, builder)
@@ -72,7 +71,7 @@ class ChannelNavigator : Navigator {
         tryNavigateBack(inclusive = inclusive)
     }
 
-    override fun deepBack(screen: com.lumen1024.ui.Screen, inclusive: Boolean) {
+    override fun deepBack(screen: Screen, inclusive: Boolean) {
         tryNavigateBack(screen, inclusive)
     }
 }
@@ -80,12 +79,12 @@ class ChannelNavigator : Navigator {
 sealed class NavigationIntent {
 
     data class NavigateBack(
-        val route: com.lumen1024.ui.Screen? = null,
+        val route: Screen? = null,
         val inclusive: Boolean,
     ) : NavigationIntent()
 
     data class NavigateTo(
-        val route: com.lumen1024.ui.Screen,
+        val route: Screen,
         val builder: NavOptionsBuilder.() -> Unit = {}
     ) : NavigationIntent()
 }

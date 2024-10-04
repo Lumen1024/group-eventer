@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.data.MemberData
+import com.lumen1024.ui.config.GroupEventerTheme
 import java.util.UUID
 
 @Composable

@@ -29,14 +29,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.groupeventer.shared.lib.toStringRelative
-import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.domain.tools.toStringRelative
+import com.lumen1024.ui.config.GroupEventerTheme
 import java.time.Instant
 
 @Composable
@@ -146,7 +147,6 @@ fun EventCardTime(
 }
 
 
-
 @Composable
 private fun FromGroupText(group: Group) {
     Row(
@@ -166,7 +166,7 @@ private fun FromGroupText(group: Group) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
                     .size(14.dp)
-                    .background(group.color.hex)
+                    .background(Color(group.color.hex))
             )
             Text(
                 text = group.name,

@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
-import com.lumen1024.groupeventer.shared.model.Navigator
+import com.lumen1024.ui.getCurrentScreenAsState
+import com.lumen1024.ui.navigation.Navigator
 import com.lumen1024.ui.navigation.Screen
 import com.lumen1024.ui.screen.events.EventsTopBar
 import com.lumen1024.ui.screen.profile.ProfileTopBar

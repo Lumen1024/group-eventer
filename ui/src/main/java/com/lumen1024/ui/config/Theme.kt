@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.config
 
 import android.app.Activity
 import android.os.Build
