@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
-import com.lumen1024.ui.screen.Screen
+import com.lumen1024.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

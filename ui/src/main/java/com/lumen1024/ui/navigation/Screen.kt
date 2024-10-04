@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen
+package com.lumen1024.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

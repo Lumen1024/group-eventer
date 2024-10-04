@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.create_event.model
+package com.lumen1024.ui.screen.create_event
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

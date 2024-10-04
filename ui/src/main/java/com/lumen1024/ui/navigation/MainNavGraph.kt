@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen
+package com.lumen1024.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,8 +10,12 @@ import androidx.navigation.compose.composable
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.groupeventer.shared.lib.getRelativeSlideInTransition
 import com.lumen1024.groupeventer.shared.lib.getRelativeSlideOutTransition
-import com.lumen1024.groupeventer.shared.model.Navigator
 import com.lumen1024.groupeventer.shared.ui.NavigationEffects
+import com.lumen1024.ui.screen.auth.AuthScreen
+import com.lumen1024.ui.screen.create_event.CreateEventScreen
+import com.lumen1024.ui.screen.events.EventsScreen
+import com.lumen1024.ui.screen.groups.GroupsScreen
+import com.lumen1024.ui.screen.profile.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -45,12 +49,18 @@ fun MainNavGraph(
         navController = navController,
         startDestination = viewModel.getStartDestination()
     ) {
-        composable<Screen.Auth> { com.lumen1024.ui.screen.auth.ui.AuthScreen() }
+        composable<Screen.Auth> { AuthScreen() }
 
         composable<Screen.Groups>(
-            enterTransition = { getRelativeSlideInTransition(right = listOf(Screen.Events, Screen.Profile)) },
-            exitTransition = { getRelativeSlideOutTransition(right = listOf(Screen.Events, Screen.Profile)) },
-        ) { com.lumen1024.ui.screen.groups.ui.GroupsScreen() }
+            enterTransition = { getRelativeSlideInTransition(right = listOf(
+                Screen.Events,
+                Screen.Profile
+            )) },
+            exitTransition = { getRelativeSlideOutTransition(right = listOf(
+                Screen.Events,
+                Screen.Profile
+            )) },
+        ) { GroupsScreen() }
 
         composable<Screen.Events>(
             enterTransition = {
@@ -65,14 +75,20 @@ fun MainNavGraph(
                     right = listOf(Screen.Profile)
                 )
             },
-        ) { com.lumen1024.ui.screen.events.ui.EventsScreen() }
+        ) { EventsScreen() }
 
         composable<Screen.Profile>(
-            enterTransition = { getRelativeSlideInTransition(left = listOf(Screen.Events, Screen.Groups)) },
-            exitTransition = { getRelativeSlideOutTransition(left = listOf(Screen.Events, Screen.Groups)) },
-        ) { com.lumen1024.ui.screen.profile.ui.ProfileScreen() }
+            enterTransition = { getRelativeSlideInTransition(left = listOf(
+                Screen.Events,
+                Screen.Groups
+            )) },
+            exitTransition = { getRelativeSlideOutTransition(left = listOf(
+                Screen.Events,
+                Screen.Groups
+            )) },
+        ) { ProfileScreen() }
 
-        composable<Screen.CreateEvent> { com.lumen1024.ui.screen.create_event.ui.CreateEventScreen() }
+        composable<Screen.CreateEvent> { CreateEventScreen() }
     }
 }
 

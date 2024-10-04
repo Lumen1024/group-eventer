@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.profile.ui
+package com.lumen1024.ui.screen.profile
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons

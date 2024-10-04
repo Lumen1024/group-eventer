@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.create_event.ui
+package com.lumen1024.ui.screen.create_event
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
@@ -39,7 +39,6 @@ import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
 import com.lumen1024.groupeventer.shared.ui.TextSelect
 import com.lumen1024.groupeventer.shared.ui.TimeRangeButton
 import com.lumen1024.groupeventer.shared.ui.TimeRangePicker
-import com.lumen1024.ui.screen.create_event.model.CreateEventViewModel
 import java.time.Duration
 import java.time.Instant
 

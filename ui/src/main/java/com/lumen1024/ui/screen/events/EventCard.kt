@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.events.ui
+package com.lumen1024.ui.screen.events
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

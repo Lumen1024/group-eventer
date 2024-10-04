@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.profile.model
+package com.lumen1024.ui.screen.profile
 
 import android.content.Context
 import android.net.Uri

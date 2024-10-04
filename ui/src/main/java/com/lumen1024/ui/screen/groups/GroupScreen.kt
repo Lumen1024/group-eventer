@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.groups.ui
+package com.lumen1024.ui.screen.groups
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +21,6 @@ import com.lumen1024.groupeventer.entities.group.model.Group
 import com.lumen1024.groupeventer.entities.group.ui.GroupItem
 import com.lumen1024.groupeventer.widgets.add_group.ui.AddGroupDialog
 import com.lumen1024.groupeventer.widgets.group_details.ui.GroupDetailsBottomSheet
-import com.lumen1024.ui.screen.groups.model.GroupsViewModel
 
 
 @Composable

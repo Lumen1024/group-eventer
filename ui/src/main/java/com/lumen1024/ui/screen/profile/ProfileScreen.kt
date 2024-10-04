@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.profile.ui
+package com.lumen1024.ui.screen.profile
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,6 @@ import com.lumen1024.groupeventer.entities.user.ui.Username
 import com.lumen1024.groupeventer.shared.config.CropImageColors
 import com.lumen1024.groupeventer.shared.config.getCropperOptions
 import com.lumen1024.groupeventer.shared.ui.Avatar
-import com.lumen1024.ui.screen.profile.model.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
