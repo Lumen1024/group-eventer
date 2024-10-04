@@ -1,4 +1,4 @@
-package com.lumen1024.ui.ui
+package com.lumen1024.ui.app_components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

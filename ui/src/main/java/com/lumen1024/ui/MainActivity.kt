@@ -1,4 +1,4 @@
-package com.lumen1024.ui.navigation
+package com.lumen1024.ui
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,8 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.ui.GroupEventerTheme
-import com.lumen1024.ui.ui.AppContent
+import com.lumen1024.ui.app_components.AppContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
