@@ -3,10 +3,14 @@ package com.lumen1024.ui.screen.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lumen1024.domain.data.AuthException
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.ui.EmailErrorState
 import com.lumen1024.ui.NameErrorState
 import com.lumen1024.ui.PasswordErrorState
+import com.lumen1024.ui.navigation.Navigator
+import com.lumen1024.ui.navigation.Screen
+import com.lumen1024.ui.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,9 +53,8 @@ class AuthViewModel @Inject constructor(
                     when (it) {
                         is AuthException -> handleException(it)
                         else -> context.showToast(
-                            context.getString(
-                                AuthException.Unknown("Error when logging in").mapToResource()
-                            )
+                            AuthException.Unknown("Error when logging in")
+                                .toString() // TODO: MapToResource?
                         )
                     }
                 }
@@ -108,13 +111,14 @@ class AuthViewModel @Inject constructor(
         when (exception) {
             is AuthException.EmailAlreadyExist -> _emailError.value = EmailErrorState.AlreadyExist
             is AuthException.IncorrectCredentials -> context.showToast(
-                context.resources.getString(
-                    exception.mapToResource()
-                )
+                exception.message ?: "error" // TODO: message?
+
             )
 
             is AuthException.ShortPassword -> _passwordError.value = PasswordErrorState.Short
-            is AuthException.Unknown -> context.showToast(context.resources.getString(exception.mapToResource()))
+            is AuthException.Unknown -> context.showToast(
+                exception.message ?: "error"
+            ) // TODO: message
             is AuthException.WrongFormatEmail -> _emailError.value = EmailErrorState.WrongFormat
         }
 

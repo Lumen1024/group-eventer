@@ -2,13 +2,13 @@ package com.lumen1024.ui.screen.create_event
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
-import com.lumen1024.groupeventer.entities.group.model.Group
-import com.lumen1024.groupeventer.entities.user.model.FirebaseUserActions
-import com.lumen1024.groupeventer.entities.user.model.UserStateHolder
-import com.lumen1024.groupeventer.shared.model.Navigator
-import com.lumen1024.groupeventer.shared.model.TimeRange
+import com.lumen1024.domain.data.Event
+import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.GroupEventStatus
+import com.lumen1024.domain.data.TimeRange
+import com.lumen1024.domain.usecase.UserActions
+import com.lumen1024.domain.usecase.UserStateHolder
+import com.lumen1024.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    private val firebaseUserActions: FirebaseUserActions,
+    private val userActions: UserActions,
     val userStateHolder: UserStateHolder,
     val navigator: Navigator,
 ) : ViewModel() {
@@ -37,12 +37,12 @@ class CreateEventViewModel @Inject constructor(
             startTime = startTime
         )
 
-        viewModelScope.launch { firebaseUserActions.createEvent(event, group) }
+        viewModelScope.launch { userActions.createEvent(event, group) }
         navigator.back()
     }
 
     fun saveEvent(event: Event, group: Group) {
-        viewModelScope.launch { firebaseUserActions.createEvent(event, group) }
+        viewModelScope.launch { userActions.createEvent(event, group) }
         navigator.back()
     }
 
@@ -62,7 +62,7 @@ class CreateEventViewModel @Inject constructor(
             initialRange = initialRange
         )
 
-        viewModelScope.launch { firebaseUserActions.createEvent(event, group) }
+        viewModelScope.launch { userActions.createEvent(event, group) }
         navigator.back()
     }
 }

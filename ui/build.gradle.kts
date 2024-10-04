@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -53,6 +55,11 @@ dependencies {
     // Image
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.android.image.cropper)
+
+    // Navigation (Compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // Base
 //    implementation(libs.androidx.core.ktx)

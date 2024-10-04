@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.domain.tools
 
 /**
  * Returns a single map of all elements in keys and parent in value

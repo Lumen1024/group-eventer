@@ -7,7 +7,8 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
-import com.lumen1024.ui.R
+import com.lumen1024.presentation.R
+import kotlinx.serialization.Serializable
 
 interface HasIcon {
     val icon: ImageVector

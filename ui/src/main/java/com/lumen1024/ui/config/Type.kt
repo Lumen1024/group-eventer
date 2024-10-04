@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.config
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

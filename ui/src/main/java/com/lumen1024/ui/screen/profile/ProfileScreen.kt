@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
-import com.lumen1024.groupeventer.entities.user.ui.Username
-import com.lumen1024.groupeventer.shared.config.CropImageColors
-import com.lumen1024.groupeventer.shared.config.getCropperOptions
-import com.lumen1024.groupeventer.shared.ui.Avatar
+import com.lumen1024.ui.CropImageColors
+import com.lumen1024.ui.Username
+import com.lumen1024.ui.getCropperOptions
+import com.lumen1024.ui.shared.Avatar
 
 @Composable
 fun ProfileScreen(

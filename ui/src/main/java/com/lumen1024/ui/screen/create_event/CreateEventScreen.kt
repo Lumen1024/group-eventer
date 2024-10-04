@@ -32,13 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.groupeventer.entities.event.model.Event
-import com.lumen1024.groupeventer.entities.event.model.GroupEventStatus
-import com.lumen1024.groupeventer.shared.model.TimeRange
-import com.lumen1024.groupeventer.shared.ui.SimpleTabSwitch
-import com.lumen1024.groupeventer.shared.ui.TextSelect
-import com.lumen1024.groupeventer.shared.ui.TimeRangeButton
-import com.lumen1024.groupeventer.shared.ui.TimeRangePicker
+import com.lumen1024.domain.data.Event
+import com.lumen1024.domain.data.GroupEventStatus
+import com.lumen1024.domain.data.TimeRange
+import com.lumen1024.ui.shared.SimpleTabSwitch
+import com.lumen1024.ui.shared.TextSelect
+import com.lumen1024.ui.shared.TimeRangeButton
+import com.lumen1024.ui.shared.TimeRangePicker
 import java.time.Duration
 import java.time.Instant
 
