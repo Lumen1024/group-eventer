@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.shared.model.EmailErrorState
+import com.lumen1024.presentation.R
+import com.lumen1024.ui.EmailErrorState
 
 @Composable
 fun EmailTextField(

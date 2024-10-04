@@ -32,9 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
-import com.lumen1024.groupeventer.shared.lib.throttleLatest
-import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.domain.tools.TimeRangeFormatter
+import com.lumen1024.domain.tools.throttleLatest
+import com.lumen1024.ui.config.GroupEventerTheme
 import java.time.Duration
 import kotlin.math.roundToInt
 

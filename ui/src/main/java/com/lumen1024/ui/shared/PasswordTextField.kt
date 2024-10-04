@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.shared.model.PasswordErrorState
+import com.lumen1024.presentation.R
+import com.lumen1024.ui.PasswordErrorState
 
 
 @Composable

@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.groupeventer.shared.model.GroupEventerTheme
+import com.lumen1024.ui.config.GroupEventerTheme
 
 
 @Composable

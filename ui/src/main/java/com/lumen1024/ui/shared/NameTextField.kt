@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import com.lumen1024.groupeventer.R
-import com.lumen1024.groupeventer.shared.model.NameErrorState
+import com.lumen1024.presentation.R
+import com.lumen1024.ui.NameErrorState
 
 @Composable
 fun NameTextField(

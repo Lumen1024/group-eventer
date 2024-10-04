@@ -16,11 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.lumen1024.groupeventer.shared.lib.getCurrentScreenAsState
-import com.lumen1024.groupeventer.shared.model.Navigator
-import com.lumen1024.ui.HasIcon
-import com.lumen1024.ui.HasLabel
-import com.lumen1024.ui.Screen
+import com.lumen1024.ui.getCurrentScreenAsState
+import com.lumen1024.ui.navigation.HasIcon
+import com.lumen1024.ui.navigation.HasLabel
+import com.lumen1024.ui.navigation.Navigator
+import com.lumen1024.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class NavBarViewModel @Inject constructor(
 
 @Composable
 fun NavBar(
-    items: List<com.lumen1024.ui.Screen>,
+    items: List<Screen>,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: NavBarViewModel = hiltViewModel(),
@@ -44,7 +44,7 @@ fun NavBar(
             NavBarItem(
                 screen = screen,
                 isSelected = (currentScreen == screen),
-                onNavigate = { navigateScreen: com.lumen1024.ui.Screen ->
+                onNavigate = { navigateScreen: Screen ->
                     viewModel.navigator.navigate(
                         navigateScreen,
                     ) {
@@ -59,17 +59,17 @@ fun NavBar(
 
 @Composable
 private fun RowScope.NavBarItem(
-    screen: com.lumen1024.ui.Screen,
+    screen: Screen,
     isSelected: Boolean,
-    onNavigate: (com.lumen1024.ui.Screen) -> Unit,
+    onNavigate: (Screen) -> Unit,
 ) {
 
     val label =
-        if (screen is com.lumen1024.ui.HasLabel) stringResource(screen.label) else ""
+        if (screen is HasLabel) stringResource(screen.label) else ""
 
     val icon by remember {
         derivedStateOf {
-            if (screen is com.lumen1024.ui.HasIcon)
+            if (screen is HasIcon)
                 screen.icon
             else
                 Icons.Default.Circle
