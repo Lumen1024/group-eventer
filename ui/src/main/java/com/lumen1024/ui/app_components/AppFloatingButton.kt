@@ -1,4 +1,4 @@
-package com.lumen1024.ui.ui
+package com.lumen1024.ui.app_components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
