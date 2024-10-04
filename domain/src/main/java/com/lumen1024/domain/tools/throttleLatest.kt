@@ -1,4 +1,4 @@
-package com.lumen1024.groupeventer.shared.lib
+package com.lumen1024.domain.tools
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

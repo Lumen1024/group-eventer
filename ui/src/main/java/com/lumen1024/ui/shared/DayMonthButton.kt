@@ -15,7 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
+import com.lumen1024.domain.tools.TimeRangeFormatter
 import java.time.Instant
 
 @Composable

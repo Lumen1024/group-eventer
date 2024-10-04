@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.shared.lib.TimeRangeFormatter
+import com.lumen1024.domain.tools.TimeRangeFormatter
 import java.time.Instant
 
 @Composable

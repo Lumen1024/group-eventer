@@ -16,9 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.lumen1024.groupeventer.shared.model.FutureDates
-import com.lumen1024.groupeventer.shared.model.RoundedLeftShape
-import com.lumen1024.groupeventer.shared.model.RoundedRightShape
+import com.lumen1024.ui.FutureDates
+import com.lumen1024.ui.config.RoundedLeftShape
+import com.lumen1024.ui.config.RoundedRightShape
 import java.time.Instant
 import java.time.ZoneId
 
