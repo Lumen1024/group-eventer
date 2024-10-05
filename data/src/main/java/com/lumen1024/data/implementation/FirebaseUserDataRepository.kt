@@ -1,9 +1,12 @@
-package com.lumen1024.data
+package com.lumen1024.data.implementation
 
 import android.net.Uri
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
+import com.lumen1024.data.UserDataDto
+import com.lumen1024.data.toUserData
+import com.lumen1024.data.toUserDataDto
 import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await

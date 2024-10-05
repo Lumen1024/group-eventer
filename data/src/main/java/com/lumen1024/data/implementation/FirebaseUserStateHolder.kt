@@ -1,4 +1,4 @@
-package com.lumen1024.data
+package com.lumen1024.data.implementation
 
 import androidx.compose.runtime.mutableStateListOf
 import com.lumen1024.domain.data.Group

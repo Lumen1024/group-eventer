@@ -1,7 +1,7 @@
 package com.lumen1024.groupeventer.di
 
-import com.lumen1024.data.FirebaseUserActions
-import com.lumen1024.data.FirebaseUserStateHolder
+import com.lumen1024.data.implementation.FirebaseUserActions
+import com.lumen1024.data.implementation.FirebaseUserStateHolder
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.domain.usecase.GroupRepository
 import com.lumen1024.domain.usecase.UserActions
@@ -24,7 +24,7 @@ object UserModule {
         userDataRepository: UserDataRepository,
         authService: AuthService,
     ): UserStateHolder {
-        return com.lumen1024.data.FirebaseUserStateHolder(
+        return FirebaseUserStateHolder(
             userDataRepository,
             groupRepository,
             authService
@@ -38,7 +38,7 @@ object UserModule {
         userDataRepository: UserDataRepository,
         userStateHolder: UserStateHolder,
     ): UserActions {
-        return com.lumen1024.data.FirebaseUserActions(
+        return FirebaseUserActions(
             userDataRepository,
             groupRepository,
             userStateHolder

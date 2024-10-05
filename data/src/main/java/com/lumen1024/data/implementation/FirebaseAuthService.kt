@@ -1,4 +1,4 @@
-package com.lumen1024.data
+package com.lumen1024.data.implementation
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

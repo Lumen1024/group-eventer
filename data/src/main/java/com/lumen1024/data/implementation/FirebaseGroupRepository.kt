@@ -1,7 +1,10 @@
-package com.lumen1024.data
+package com.lumen1024.data.implementation
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.lumen1024.data.GroupDto
+import com.lumen1024.data.toGroup
+import com.lumen1024.data.toRepositoryObjectChange
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
 import com.lumen1024.domain.usecase.GroupRepository
