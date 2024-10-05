@@ -7,11 +7,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
-    <!--    <application android:name="com.lumen1024.groupeventer.App">-->
-    <!--        <activity-->
-    <!--            android:name="com.google.android.gms.common.api.GoogleApiActivity"-->
-    <!--            tools:node="remove" />-->
-    <!--    </application>-->
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,15 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroupEventer.Starting"
         tools:targetApi="31">
-
-
-        <!--        <service-->
-        <!--            android:name=".entities.notification.model.FirebaseNotificationService"-->
-        <!--            android:exported="false">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
 
     </application>
 
