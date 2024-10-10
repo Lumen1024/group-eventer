@@ -5,11 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.lumen1024.groupeventer.R
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
 open class SimpleNotificationService @Inject constructor(
@@ -44,9 +40,3 @@ open class SimpleNotificationService @Inject constructor(
 }
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class NotificationModule {
-    @Binds
-    abstract fun bindSimpleNotificationService(imp: SimpleNotificationService): SimpleNotificationService
-}
