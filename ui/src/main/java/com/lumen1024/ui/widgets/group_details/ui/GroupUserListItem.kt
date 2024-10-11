@@ -49,7 +49,7 @@ fun GroupUserListItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AvatarTitled(
-            avatarUrl = Uri.parse(userData?.avatarUrl),
+            avatarUrl = userData?.avatarUrl?.let { Uri.parse(it) },
             username = userData?.name,
             textColor = textColor
         )
