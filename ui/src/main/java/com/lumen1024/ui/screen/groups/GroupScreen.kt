@@ -1,6 +1,5 @@
 package com.lumen1024.ui.screen.groups
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,39 +40,37 @@ fun GroupsScreen(
 
     var addDialogOpen by remember { mutableStateOf(false) }
 
-    Column {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            items(groups, key = { group -> group.id })
-            {
-                GroupItem(
-                    onClick = {
-                        selectedGroupId = it.id
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    group = it,
-                )
-                HorizontalDivider()
-            }
-        }
-
-        if (addDialogOpen) {
-            AddGroupDialog(
-                onDismiss = { addDialogOpen = false }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(groups, key = { group -> group.id })
+        {
+            GroupItem(
+                onClick = {
+                    selectedGroupId = it.id
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                group = it,
             )
+            HorizontalDivider()
         }
-        if (isSheetOpen) {
-            selectedGroup?.let { group ->
-                GroupDetailsBottomSheet(
-                    onDismiss = { selectedGroupId = null },
-                    group = group,
-                )
-            }
+    }
+
+    if (addDialogOpen) {
+        AddGroupDialog(
+            onDismiss = { addDialogOpen = false }
+        )
+    }
+    if (isSheetOpen) {
+        selectedGroup?.let { group ->
+            GroupDetailsBottomSheet(
+                onDismiss = { selectedGroupId = null },
+                group = group,
+            )
         }
     }
 }
