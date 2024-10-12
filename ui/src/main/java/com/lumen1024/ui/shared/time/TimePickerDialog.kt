@@ -1,5 +1,6 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.time
 
+import android.R
 import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -84,10 +85,10 @@ fun TimePickerDialog(
             )
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onDismiss) {
-                Text(stringResource(id = android.R.string.cancel))
+                Text(stringResource(id = R.string.cancel))
             }
             TextButton(onClick = ::onConfirmClicked) {
-                Text(stringResource(id = android.R.string.ok))
+                Text(stringResource(id = R.string.ok))
             }
         },
     ) {

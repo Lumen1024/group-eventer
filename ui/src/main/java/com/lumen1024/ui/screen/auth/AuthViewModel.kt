@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.AuthException
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.ui.EmailErrorState
-import com.lumen1024.ui.NameErrorState
-import com.lumen1024.ui.PasswordErrorState
 import com.lumen1024.ui.navigation.Navigator
 import com.lumen1024.ui.navigation.Screen
-import com.lumen1024.ui.showToast
+import com.lumen1024.ui.shared.text_field.EmailErrorState
+import com.lumen1024.ui.shared.text_field.NameErrorState
+import com.lumen1024.ui.shared.text_field.PasswordErrorState
+import com.lumen1024.ui.tools.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

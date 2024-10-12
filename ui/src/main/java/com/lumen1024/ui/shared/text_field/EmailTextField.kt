@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.text_field
 
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.lumen1024.presentation.R
-import com.lumen1024.ui.EmailErrorState
 
 @Composable
 fun EmailTextField(

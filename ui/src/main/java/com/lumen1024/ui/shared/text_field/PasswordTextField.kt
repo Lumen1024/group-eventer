@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.text_field
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.lumen1024.presentation.R
-import com.lumen1024.ui.PasswordErrorState
 
 
 @Composable

@@ -1,11 +1,10 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.navigation
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.lumen1024.ui.navigation.NavigationIntent
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 

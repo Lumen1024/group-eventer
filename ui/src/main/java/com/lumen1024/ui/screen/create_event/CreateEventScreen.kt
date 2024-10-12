@@ -37,8 +37,8 @@ import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.ui.shared.SimpleTabSwitch
 import com.lumen1024.ui.shared.TextSelect
-import com.lumen1024.ui.shared.TimeRangeButton
-import com.lumen1024.ui.shared.TimeRangePicker
+import com.lumen1024.ui.shared.time.TimeRangeButton
+import com.lumen1024.ui.shared.time.TimeRangePicker
 import java.time.Duration
 import java.time.Instant
 

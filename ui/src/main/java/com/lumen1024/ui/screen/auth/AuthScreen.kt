@@ -45,9 +45,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.presentation.R
-import com.lumen1024.ui.shared.EmailTextField
-import com.lumen1024.ui.shared.NameTextField
-import com.lumen1024.ui.shared.PasswordTextField
+import com.lumen1024.ui.shared.text_field.EmailTextField
+import com.lumen1024.ui.shared.text_field.NameTextField
+import com.lumen1024.ui.shared.text_field.PasswordTextField
 import com.lumen1024.ui.tools.systemPadding
 
 @Composable

@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.time
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation

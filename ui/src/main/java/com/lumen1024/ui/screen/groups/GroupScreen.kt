@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Group
-import com.lumen1024.ui.GroupItem
+import com.lumen1024.ui.shared.GroupItem
 import com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog
 import com.lumen1024.ui.widgets.group_details.ui.GroupDetailsBottomSheet
 

@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.shared.text_field
 
 enum class NameErrorState {
     Normal,

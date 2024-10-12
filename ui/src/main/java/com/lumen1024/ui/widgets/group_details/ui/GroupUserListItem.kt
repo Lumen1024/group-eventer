@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.UserData
-import com.lumen1024.ui.AvatarTitled
+import com.lumen1024.ui.shared.AvatarTitled
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

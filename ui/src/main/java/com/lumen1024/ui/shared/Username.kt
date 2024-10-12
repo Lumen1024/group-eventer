@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.shared
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.lumen1024.ui.shared.NameTextField
+import com.lumen1024.ui.shared.text_field.NameTextField
 
 @Composable
 fun Username(

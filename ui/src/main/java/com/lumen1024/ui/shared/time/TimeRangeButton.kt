@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.time
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -16,9 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.lumen1024.ui.FutureDates
 import com.lumen1024.ui.config.RoundedLeftShape
 import com.lumen1024.ui.config.RoundedRightShape
+import com.lumen1024.ui.tools.FutureDates
 import java.time.Instant
 import java.time.ZoneId
 

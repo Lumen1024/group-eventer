@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

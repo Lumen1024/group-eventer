@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.time
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

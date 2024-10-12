@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Group
-import com.lumen1024.ui.GroupColorBadge
+import com.lumen1024.ui.shared.GroupColorBadge
 import com.lumen1024.ui.widgets.group_details.model.GroupDetailsViewModel
 
 

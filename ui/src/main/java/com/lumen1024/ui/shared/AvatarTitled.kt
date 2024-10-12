@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.shared
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.lumen1024.ui.shared.Avatar
 
 @Composable
 fun AvatarTitled(

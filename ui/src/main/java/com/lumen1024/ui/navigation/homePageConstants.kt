@@ -1,6 +1,4 @@
-package com.lumen1024.ui
-
-import com.lumen1024.ui.navigation.Screen
+package com.lumen1024.ui.navigation
 
 
 val HOME_PAGE_BOTTOM_BAR_ITEMS = listOf<Screen>(

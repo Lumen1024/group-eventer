@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.shared
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.ui.shared.ColorCircle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

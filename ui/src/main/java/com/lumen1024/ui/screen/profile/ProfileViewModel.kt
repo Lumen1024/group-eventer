@@ -10,7 +10,7 @@ import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
 import com.lumen1024.ui.navigation.Navigator
-import com.lumen1024.ui.showToast
+import com.lumen1024.ui.tools.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
