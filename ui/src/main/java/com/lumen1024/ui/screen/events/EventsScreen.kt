@@ -1,7 +1,6 @@
 package com.lumen1024.ui.screen.events
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,28 +33,28 @@ fun EventsScreen(
 
     val isSheetOpen by remember { derivedStateOf { selectedEvent != null } }
 
-    Column {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(events.toList(), key = { pair -> pair.first.id })
-            {
-                EventCard(
-                    pair = it,
-                    onClick = { selectedEvent = it },
-                    onOptionClicked = {}
-                )
-            }
-        }
 
-        if (isSheetOpen)
-            EventDetailsBottomSheet(
-                onDismiss = { selectedEvent = null },
-                pair = selectedEvent!!
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(events.toList(), key = { pair -> pair.first.id })
+        {
+            EventCard(
+                pair = it,
+                onClick = { selectedEvent = it },
+                onOptionClicked = {}
             )
+        }
     }
+
+    if (isSheetOpen)
+        EventDetailsBottomSheet(
+            onDismiss = { selectedEvent = null },
+            pair = selectedEvent!!
+        )
+
 }
 
