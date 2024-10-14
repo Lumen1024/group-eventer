@@ -43,7 +43,7 @@ private val clipShape = RoundedCornerShape(4.dp)
 // TODO: refactor
 @Composable
 fun TimeRangeSlider(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     timeRange: TimeRange,
     duration: Duration,
     onChange: (timeRange: TimeRange) -> Unit,
