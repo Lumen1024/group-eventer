@@ -74,7 +74,7 @@ fun EventCard(
                     FromGroupText(group)
                     val titleStyle = MaterialTheme.typography.titleLarge
                     Text(
-                        text = event.name,
+                        text = event.name + if (event.status == GroupEventStatus.Finish) " (завершен)" else "",
                         fontStyle = titleStyle.fontStyle,
                         fontWeight = titleStyle.fontWeight,
                         fontSize = titleStyle.fontSize,
