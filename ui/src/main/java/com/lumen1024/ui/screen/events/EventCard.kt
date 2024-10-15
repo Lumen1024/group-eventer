@@ -148,7 +148,7 @@ fun EventCardTime(
 
 
 @Composable
-private fun FromGroupText(group: Group) {
+fun FromGroupText(group: Group) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
