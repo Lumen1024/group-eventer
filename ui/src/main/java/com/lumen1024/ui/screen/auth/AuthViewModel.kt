@@ -16,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,8 +44,10 @@ class AuthViewModel @Inject constructor(
 
     fun handleLogin(email: String, password: String) {
         resetErrors()
+
         if (!handleEmptyValues(email, password))
             return
+
         viewModelScope.launch {
             _isLoading.value = true
 
@@ -63,8 +66,9 @@ class AuthViewModel @Inject constructor(
                         popUpTo(Screen.Auth) { inclusive = true }
                     }
 
-                    _isLoading.value = false
-                }
+                }.wait()
+
+            _isLoading.value = false
         }
     }
 
