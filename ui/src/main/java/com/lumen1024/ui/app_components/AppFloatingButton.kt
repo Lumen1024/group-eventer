@@ -16,40 +16,51 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.lumen1024.domain.usecase.UserStateHolder
 import com.lumen1024.ui.navigation.Screen
 import com.lumen1024.ui.navigation.getCurrentScreenAsState
+import com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FloatingButtonViewModel @Inject constructor(
-
+    val userStateHolder: UserStateHolder
 ) : ViewModel()
 
 @Composable
 fun AppFloatingButton(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: FloatingButtonViewModel = hiltViewModel()
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
+
+    val hasGroups by remember { derivedStateOf { !viewModel.userStateHolder.groups.value.isEmpty() } }
+
     var showAddGroupDialog by remember { mutableStateOf(false) }
 
     val showAddButton by remember {
         derivedStateOf {
-            currentScreen in listOf( // TODO: move to const?
-                Screen.Groups,
-                Screen.Events
-            )
+            when (currentScreen) {
+                Screen.Groups -> true
+                Screen.Events -> hasGroups
+                else -> false
+            }
         }
     }
+
     val action = {
-        if (currentScreen == Screen.Events)
+        if (currentScreen == Screen.Events) {
             navController.navigate(Screen.CreateEvent)
-        else if (currentScreen == Screen.Groups)
+        } else if (currentScreen == Screen.Groups) {
             showAddGroupDialog = true
+        }
     }
+
     AnimatedVisibility(
         visible = showAddButton,
         enter = fadeIn(),
@@ -64,7 +75,5 @@ fun AppFloatingButton(
     }
 
     if (showAddGroupDialog)
-        com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog(onDismiss = {
-            showAddGroupDialog = false
-        })
+        AddGroupDialog(onDismiss = { showAddGroupDialog = false })
 }
