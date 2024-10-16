@@ -159,7 +159,7 @@ fun GroupDetailsBottomSheet(
                 Button(
                     modifier = Modifier.padding(vertical = 8.dp),
                     onClick = {
-                        viewModel.leaveGroup(group.id)
+                        viewModel.leaveGroup(group)
                         onDismiss()
                     }
                 ) {

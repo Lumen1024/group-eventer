@@ -59,7 +59,6 @@ fun CreateEventScreen(
     var initialRange: TimeRange by remember { mutableStateOf(TimeRange()) }
     var startTime: Instant by remember { mutableStateOf(Instant.now()) }
 
-
     var selectedGroupName by remember(groupNames) { mutableStateOf(groupNames.getOrElse(0) { "" }) }
 
     Scaffold(
@@ -70,7 +69,7 @@ fun CreateEventScreen(
             CreateEventTopBar(
                 title = name,
                 onBackClick = { viewModel.navigator.back() },
-                onSafeClicked = {
+                onSaveClicked = {
                     val group = groups.find { group -> group.name == selectedGroupName }
                         ?: return@CreateEventTopBar
 
@@ -112,14 +111,12 @@ fun CreateEventScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             // Group Select
-            AnimatedVisibility(visible = groupNames.isNotEmpty()) {
-                TextSelect(
-                    selected = selectedGroupName,
-                    options = groupNames,
-                    onSelect = { selectedGroupName = it },
-                    shape = RoundedCornerShape(16.dp)
-                )
-            }
+            TextSelect(
+                selected = selectedGroupName,
+                options = groupNames,
+                onSelect = { selectedGroupName = it },
+                shape = RoundedCornerShape(16.dp)
+            )
 
             // Name and Description
             Column(

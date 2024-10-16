@@ -28,6 +28,7 @@ fun TextSelect(
     selected: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     shape: Shape = TextFieldDefaults.shape,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -35,9 +36,13 @@ fun TextSelect(
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = expanded,
-        onExpandedChange = { expanded = it }
+        onExpandedChange = {
+            if (!enabled) return@ExposedDropdownMenuBox
+            expanded = it
+        }
     ) {
         TextField(
+            enabled = enabled,
             modifier = Modifier
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
                 .fillMaxWidth(),

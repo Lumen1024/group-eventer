@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 fun CreateEventTopBar(
     title: String,
     onBackClick: () -> Unit,
-    onSafeClicked: () -> Unit,
+    onSaveClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -35,7 +35,7 @@ fun CreateEventTopBar(
             style = MaterialTheme.typography.titleLarge
         )
         TextButton(modifier = Modifier.padding(horizontal = 8.dp),
-            onClick = { onSafeClicked() }
+            onClick = { onSaveClicked() }
         ) {
             Text(text = "save")
         }
