@@ -62,64 +62,84 @@ fun EventDetailsBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .navigationBarsPadding()
-                .background(Color.Blue),
+                .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // header
-            Row(
+            Header(
+                group = pair.second,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Red),
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // title
-                FromGroupText(pair.second)
-                IconButton(
-                    onClick = {}
-                ) {
-                    Icon(Icons.Outlined.Edit, null)
-                }
-            }
-            // ranges
-            Spacer(Modifier.height(200.dp))
-
-            // footer
+            )
             HorizontalDivider()
-            Row(
+            Spacer(
+                modifier = Modifier.height(200.dp)
+            )
+            HorizontalDivider()
+            Footer(
+                initialRange = pair.first.initialRange,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.Yellow)
                     .height(56.dp)
-                    .padding(16.dp, 8.dp)
-            ) {
-                FilledIconButton(
-                    onClick = {},
-                    shape = CircleShape,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    )
-                ) {
-                    Icon(Icons.Rounded.Done, null)
-                }
-                TimeRangeSlider(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    timeRange = TimeRange(),
-                    duration = Duration.ofHours(1),
-                    onChange = {}
-                )
-            }
+                    .padding(16.dp, 0.dp, 16.dp, 8.dp)
+            )
         }
 
     }
 }
 
 @Composable
-fun UserRange(modifier: Modifier = Modifier) {
+private fun Header(
+    group: Group,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // title
+        FromGroupText(group)
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(Icons.Outlined.Edit, null)
+        }
+    }
+}
+
+@Composable
+private fun Footer(
+    modifier: Modifier = Modifier,
+    initialRange: TimeRange,
+) {
+    Row(
+        modifier = modifier
+    ) {
+        FilledIconButton(
+            onClick = {},
+            shape = CircleShape,
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            )
+        ) {
+            Icon(Icons.Rounded.Done, null)
+        }
+        TimeRangeSlider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            initialRange = initialRange,
+            duration = Duration.ofHours(1),
+            onChange = {}
+        )
+    }
+}
+
+@Composable
+private fun UserRange(modifier: Modifier = Modifier) {
 
 }
 
@@ -148,12 +168,11 @@ private fun ded(pair: Pair<Event, Group>) {
                 modifier = Modifier
                     .height(40.dp)
                     .fillMaxWidth(),
-                timeRange = timeRange,
+                initialRange = timeRange,
                 duration = Duration.ofHours(1),
                 onChange = {}
             )
         }
-
     }
 }
 
