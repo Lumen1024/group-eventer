@@ -64,11 +64,11 @@ class GroupDetailsViewModel @Inject constructor(
         }
     }
 
-    fun leaveGroup(groupId: String) {
+    fun leaveGroup(group: Group) {
         viewModelScope.launch {
-            val r = userActions.leaveGroup(groupId)
+            val r = userActions.leaveGroup(group.id)
             if (r.isSuccess) {
-                context.showToast("Leaved group \"$groupId\"")
+                context.showToast("Leaved from group \"${group.name}\"")
             } else if (r.isFailure) {
                 context.showToast(r.exceptionOrNull()?.message ?: "Error leaving group")
             }
