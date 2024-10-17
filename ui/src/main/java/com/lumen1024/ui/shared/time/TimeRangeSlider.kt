@@ -1,5 +1,8 @@
 package com.lumen1024.ui.shared.time
 
+import androidx.annotation.FloatRange
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
@@ -9,6 +12,7 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,24 +29,27 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.domain.tools.TimeRangeFormatter
-import com.lumen1024.domain.tools.throttleLatest
 import com.lumen1024.ui.config.GroupEventerTheme
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.math.roundToInt
 
 private val clipShape = RoundedCornerShape(4.dp)
 
@@ -65,6 +72,7 @@ fun TimeRangeSlider(
 
     val stepPx by remember { derivedStateOf { containerWidth / all } }
     var offsetPx by remember { mutableIntStateOf(0) }
+
     val animatedOffset by animateIntAsState(
         targetValue = offsetPx,
         label = "offset animation"
@@ -73,6 +81,20 @@ fun TimeRangeSlider(
     val animatedIndicatorScale by animateFloatAsState(
         targetValue = indicatorScale,
         label = "indicator scale animation"
+    )
+    var targetDividersWidth by remember { mutableStateOf(1.dp) }
+    val animatedDividersWidth by animateDpAsState(
+        targetValue = targetDividersWidth, label = ""
+    )
+    var targetDividersHeightWeight by remember { mutableFloatStateOf(0.5f) }
+    val animatedDividersHeightWeight by animateFloatAsState(
+        targetValue = targetDividersHeightWeight, label = ""
+    )
+    val unfocusedDividerColor = MaterialTheme.colorScheme.outlineVariant
+    val focusedDividerColor = MaterialTheme.colorScheme.tertiary
+    var targetDividersColor by remember { mutableStateOf(unfocusedDividerColor) }
+    val animatedDividersColor by animateColorAsState(
+        targetValue = targetDividersColor, label = ""
     )
 
     val startTime by remember {
@@ -86,6 +108,10 @@ fun TimeRangeSlider(
 
     val onDrag: (Float) -> Unit = onDrag@{ delta ->
         indicatorScale = 1.1f
+        targetDividersWidth = 4.dp
+        targetDividersHeightWeight = 0.8f
+        targetDividersColor = focusedDividerColor
+
         if (delta + offsetPx + indicatorWidth > containerWidth) return@onDrag
         if (delta + offsetPx < 0) return@onDrag
 
@@ -93,8 +119,15 @@ fun TimeRangeSlider(
 
     }
     val onDragStopped: () -> Unit = {
-        offsetPx.roundToNearestMultiple(stepPx)
+        offsetPx = offsetPx.roundToNearestMultiple(stepPx)
+        offset = offsetPx / stepPx
+
         indicatorScale = 1f
+        targetDividersWidth = 2.dp
+        targetDividersHeightWeight = 0.5f
+        targetDividersColor = unfocusedDividerColor
+
+
         onChange(
             TimeRange(
                 startTime,
@@ -103,10 +136,19 @@ fun TimeRangeSlider(
         )
     }
 
+
     Box(
         modifier
             .height(IntrinsicSize.Min)
+            .width(IntrinsicSize.Min)
+            .defaultMinSize(minWidth = 200.dp)
             .background(MaterialTheme.colorScheme.surfaceContainerHighest, clipShape)
+            .dashedHorizontalDivider(
+                count = all,
+                color = animatedDividersColor,
+                thickness = animatedDividersWidth,
+                heightWeight = animatedDividersHeightWeight
+            )
             .offset { IntOffset(animatedOffset, 0) }
             .onGloballyPositioned { layoutCoordinates ->
                 containerWidth = layoutCoordinates.size.width
@@ -129,106 +171,6 @@ fun TimeRangeSlider(
                 ),
             ratio = ratio,
             timeText = startTimeText
-        )
-    }
-}
-
-// TODO: refactor
-@Composable
-fun TimeRangeSlider1(
-    modifier: Modifier,
-    timeRange: TimeRange,
-    duration: Duration,
-    onChange: (timeRange: TimeRange) -> Unit,
-    step: Duration = Duration.ofMinutes(15),
-) {
-    val ratio by remember {
-        derivedStateOf {
-            duration.toMillis().toFloat() / timeRange.duration.toMillis().toFloat()
-        }
-    }
-
-    var startTime by remember { mutableStateOf(timeRange.start) }
-
-    val timeText by remember { derivedStateOf { TimeRangeFormatter.formatTimeWithZone(startTime) } }
-
-    var containerWidth by remember { mutableIntStateOf(0) }
-
-    var indicatorWidth by remember { mutableIntStateOf(0) }
-    var indicatorOffsetX by remember { mutableFloatStateOf(0f) }
-    var finalIndicatorOffsetX by remember { mutableFloatStateOf(0f) }
-
-
-    val stepPx by remember {
-        derivedStateOf {
-            (step.toMillis().toFloat() / timeRange.duration.toMillis()
-                .toFloat() * containerWidth).toLong()
-        }
-    }
-
-    val updateStartTime: (Float) -> Unit = { offsetX ->
-        val start = timeRange.start.plusMillis(
-            (offsetX / containerWidth * timeRange.duration.toMillis()).toLong()
-        )
-
-        startTime = start
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-    val updateStartTimeThrottle: (Float) -> Unit =
-        throttleLatest(
-            intervalMs = 32,
-            coroutineScope = coroutineScope,
-            destinationFunction = updateStartTime
-        )
-
-
-    val onIndicatorDrag: (Float) -> Unit = onIndicatorDrag@{ delta ->
-        val newOffset = indicatorOffsetX + delta
-
-        val leftBound = 0
-        val rightBound = containerWidth - indicatorWidth
-
-        if (newOffset < leftBound || newOffset > rightBound) {
-            return@onIndicatorDrag
-        }
-
-
-        indicatorOffsetX = newOffset
-
-        val fraction = newOffset % stepPx
-        finalIndicatorOffsetX = newOffset - fraction
-        updateStartTimeThrottle(finalIndicatorOffsetX)
-    }
-
-    Box(
-        modifier
-            .clip(clipShape)
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-            .offset { IntOffset(finalIndicatorOffsetX.roundToInt(), 0) }
-            .onGloballyPositioned { layoutCoordinates ->
-                containerWidth = layoutCoordinates.size.width
-            }
-    ) {
-        TimeRangeSliderIndicator(
-            modifier = Modifier
-                .onGloballyPositioned { layoutCoordinates ->
-                    indicatorWidth = layoutCoordinates.size.width
-                }
-                .draggable(
-                    orientation = Orientation.Horizontal,
-                    state = rememberDraggableState(onIndicatorDrag),
-                    onDragStopped = {
-                        onChange(
-                            TimeRange(
-                                startTime,
-                                startTime.plusMillis(duration.toMillis())
-                            )
-                        )
-                    }
-                ),
-            ratio = ratio,
-            timeText = timeText
         )
     }
 }
@@ -279,14 +221,37 @@ private fun TimeRangeSliderPreview() {
             TimeRangeSlider(
                 modifier = Modifier
                     .padding(16.dp)
-                    .width(325.dp)
-                    .height(32.dp),
+                    //.width(325.dp)
+                    .height(44.dp),
                 initialRange = timeRange,
                 duration = duration,
                 onChange = { newTimeRange = it },
-                step = Duration.ofMinutes(15)
+                step = Duration.ofMinutes(60)
             )
         }
+    }
+}
+
+@Composable
+fun Modifier.dashedHorizontalDivider(
+    count: Int,
+    color: Color = Color.Gray,
+    thickness: Dp = 1.dp,
+    @FloatRange(from = 0.0, to = 1.0) heightWeight: Float = 0.8f
+): Modifier {
+    val thicknessPx = with(LocalDensity.current) { thickness.toPx() }
+    return drawBehind {
+        val step = size.width / count
+        val lineWidth = thicknessPx
+        val lineHeight = size.height * heightWeight
+
+        for (i in 1 until count)
+            drawRoundRect(
+                color = color,
+                topLeft = Offset(step * i - lineWidth / 2, (size.height - lineHeight) / 2),
+                size = size.copy(width = lineWidth, height = lineHeight),
+                cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
+            )
     }
 }
 
