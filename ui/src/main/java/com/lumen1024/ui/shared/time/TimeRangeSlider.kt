@@ -1,6 +1,5 @@
 package com.lumen1024.ui.shared.time
 
-import androidx.annotation.FloatRange
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -33,20 +32,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.domain.tools.TimeRangeFormatter
 import com.lumen1024.ui.config.GroupEventerTheme
+import com.lumen1024.ui.tools.dashedHorizontalDivider
+import com.lumen1024.ui.tools.roundToNearestMultiple
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -63,7 +58,6 @@ fun TimeRangeSlider(
 ) {
     val all: Int = (initialRange.duration.toMillis() / step.toMillis()).toInt()
     val selected: Int = (duration.toMillis() / step.toMillis()).toInt()
-
     val ratio = selected.toFloat() / all.toFloat()
     var offset by remember { mutableIntStateOf(0) }
 
@@ -91,7 +85,7 @@ fun TimeRangeSlider(
         targetValue = targetDividersHeightWeight, label = ""
     )
     val unfocusedDividerColor = MaterialTheme.colorScheme.outlineVariant
-    val focusedDividerColor = MaterialTheme.colorScheme.tertiary
+    val focusedDividerColor = MaterialTheme.colorScheme.outline
     var targetDividersColor by remember { mutableStateOf(unfocusedDividerColor) }
     val animatedDividersColor by animateColorAsState(
         targetValue = targetDividersColor, label = ""
@@ -108,7 +102,7 @@ fun TimeRangeSlider(
 
     val onDrag: (Float) -> Unit = onDrag@{ delta ->
         indicatorScale = 1.1f
-        targetDividersWidth = 4.dp
+        targetDividersWidth = 2.dp
         targetDividersHeightWeight = 0.8f
         targetDividersColor = focusedDividerColor
 
@@ -232,43 +226,3 @@ private fun TimeRangeSliderPreview() {
     }
 }
 
-@Composable
-fun Modifier.dashedHorizontalDivider(
-    count: Int,
-    color: Color = Color.Gray,
-    thickness: Dp = 1.dp,
-    @FloatRange(from = 0.0, to = 1.0) heightWeight: Float = 0.8f
-): Modifier {
-    val thicknessPx = with(LocalDensity.current) { thickness.toPx() }
-    return drawBehind {
-        val step = size.width / count
-        val lineWidth = thicknessPx
-        val lineHeight = size.height * heightWeight
-
-        for (i in 1 until count)
-            drawRoundRect(
-                color = color,
-                topLeft = Offset(step * i - lineWidth / 2, (size.height - lineHeight) / 2),
-                size = size.copy(width = lineWidth, height = lineHeight),
-                cornerRadius = CornerRadius(4.dp.toPx(), 4.dp.toPx())
-            )
-    }
-}
-
-/**
- * Rounds this integer to the nearest multiple of the given [multiple].
- *
- * If this integer is exactly halfway between two multiples, it is rounded up.
- *
- * @param multiple The multiple to round to.
- * @return The rounded integer.
- * @throws IllegalArgumentException if [multiple] is 0.
- */
-fun Int.roundToNearestMultiple(multiple: Int): Int {
-    val remainder = this % multiple
-    return if (remainder < multiple / 2) {
-        this - remainder
-    } else {
-        this + (multiple - remainder)
-    }
-}
