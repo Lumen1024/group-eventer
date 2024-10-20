@@ -1,5 +1,6 @@
 package com.lumen1024.ui.widgets.group_details.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import com.lumen1024.ui.shared.GroupColorBadge
 import com.lumen1024.ui.widgets.group_details.model.GroupDetailsViewModel
 
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupDetailsBottomSheet(
@@ -90,7 +92,7 @@ fun GroupDetailsBottomSheet(
 
             Column(
                 modifier = Modifier
-                    .heightIn(min = 371.dp)
+                    .heightIn(min = 371.dp) // TODO: hardcode?
                     .fillMaxHeight(heightProgressFraction)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
