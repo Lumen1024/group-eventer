@@ -6,6 +6,7 @@ import com.lumen1024.data.toGroupEventDto
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
+import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.GroupRepository
 import com.lumen1024.domain.usecase.UserActions
@@ -248,6 +249,44 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
+    // TODO: refactor
+    override suspend fun voteEventTime(
+        eventId: String,
+        time: TimeRange
+    ): Result<Unit> {
+        val userId = userStateHolder.userData.value?.id
+            ?: return Result.failure(Exception("not authorized"))
+
+        val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
+            group.events.forEach {
+                if (eventId == it.id) return@firstNotNullOfOrNull it to group
+            }
+            return@firstNotNullOfOrNull null
+        } ?: return Result.failure(Exception("event not found"))
+
+
+        groupRepository.update(
+            id = group.id,
+            data = mapOf(
+                Group::events.name to group.events.map {
+                    if (it.id == eventId) {
+                        it.copy(
+                            proposalRanges = it.proposalRanges + (userId to time)
+                        )
+                    }
+                }
+            )
+        ).onFailure { return Result.failure(Exception("cant update event")) }
+        return Result.success(Unit)
+    }
+
+    override suspend fun setFinalEventTime(
+        eventId: String,
+        time: TimeRange
+    ): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun createEvent(
         event: Event,
         group: Group
@@ -310,7 +349,6 @@ class FirebaseUserActions @Inject constructor(
 
     private fun userInGroup(group: Group): Boolean {
         return userStateHolder.userData.value?.groups
-            ?.let { return@let (group.id in it) }
-            ?: false
+            ?.let { return@let (group.id in it) } == true
     }
 }
