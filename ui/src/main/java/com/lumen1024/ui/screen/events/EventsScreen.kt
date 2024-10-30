@@ -72,8 +72,10 @@ fun EventsScreen(
 
     if (isSheetOpen) {
         val viewModel: EventDetailsViewModel = hiltViewModel(
-            creationCallback = { factory: EventDetailsViewModel.EventDetailsViewModelFactory ->
-                factory.create(selectedEvent!!.second, selectedEvent!!.first)
+            creationCallback = { factory: EventDetailsViewModel.Factory ->
+                selectedEvent?.let {
+                    factory.create(it.second, it.first)
+                } ?: throw IllegalArgumentException("selected event is null")
             }
         )
         val state by viewModel.state.collectAsState()

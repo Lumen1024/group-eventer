@@ -2,12 +2,10 @@ package com.lumen1024.ui.widgets.group_details.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -19,18 +17,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Group
 import com.lumen1024.ui.shared.GroupColorBadge
+import com.lumen1024.ui.shared.ScalableBottomSheet
 import com.lumen1024.ui.widgets.group_details.model.GroupDetailsViewModel
 
 
@@ -63,36 +57,15 @@ fun GroupDetailsBottomSheet(
         viewModel.setGroup(group)
     }
 
-    val sheetState = rememberModalBottomSheetState()
-
-    //region Height animation on sliding
-    var fullHeight by remember { mutableIntStateOf(0) }
-    var heightProgressFraction by remember { mutableFloatStateOf(0f) }
-
-    // TODO: maybe move it in a right way to something like
-    //  LaunchedEffect as it says in documentation
-    // Try catch because requireOffset can throw an exception
-    // if call it before first composition
-    try {
-        val offset = sheetState.requireOffset()
-        heightProgressFraction = 1 - (offset / fullHeight)
-    } catch (_: Exception) {
-    }
-    //endregion
-
-    ModalBottomSheet(
+    ScalableBottomSheet(
         modifier = Modifier
             .fillMaxHeight()
             .statusBarsPadding(),
-        sheetState = sheetState,
         onDismissRequest = onDismiss,
-    ) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            fullHeight = constraints.maxHeight
-
+    ) { heightProgressFraction, minHeight ->
             Column(
                 modifier = Modifier
-                    .heightIn(min = 371.dp) // TODO: hardcode?
+                    .heightIn(min = minHeight)
                     .fillMaxHeight(heightProgressFraction)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,7 +141,6 @@ fun GroupDetailsBottomSheet(
                     Text(text = "Leave group") // TODO: res
                 }
             }
-        }
     }
 }
 

@@ -21,9 +21,11 @@ data class EventDetailsState(
     val event: Event,
 )
 
-interface EventDetailsActions
+interface EventDetailsActions {
+    fun onSomethingClick()
+}
 
-@HiltViewModel(assistedFactory = EventDetailsViewModel.EventDetailsViewModelFactory::class)
+@HiltViewModel(assistedFactory = EventDetailsViewModel.Factory::class)
 class EventDetailsViewModel @AssistedInject constructor(
     @Assisted val event: Event,
     @Assisted val group: Group,
@@ -39,11 +41,13 @@ class EventDetailsViewModel @AssistedInject constructor(
     )
     val state = _state.asStateFlow()
     val actions = object : EventDetailsActions {
-
+        override fun onSomethingClick() {
+            TODO("Not yet implemented")
+        }
     }
 
     @AssistedFactory
-    interface EventDetailsViewModelFactory {
+    interface Factory {
         fun create(group: Group, event: Event): EventDetailsViewModel
     }
 

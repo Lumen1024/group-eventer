@@ -63,11 +63,11 @@ fun EventDetailsBottomSheet(
     ScalableBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = Modifier.statusBarsPadding(),
-    ) { heightProgressFraction ->
+    ) { heightProgressFraction, minHeight ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 371.dp)
+                .heightIn(min = minHeight)
                 .fillMaxHeight(heightProgressFraction)
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
