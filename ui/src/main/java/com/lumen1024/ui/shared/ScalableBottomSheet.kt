@@ -2,10 +2,7 @@ package com.lumen1024.ui.shared
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -42,9 +39,8 @@ fun ScalableBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        modifier = modifier
-            .width(IntrinsicSize.Min)
-            .height(IntrinsicSize.Min),
+        modifier = modifier,
+        sheetState = sheetState,
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             fullHeight = constraints.maxHeight

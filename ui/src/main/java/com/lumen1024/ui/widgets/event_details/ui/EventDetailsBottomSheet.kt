@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,118 +32,94 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.lumen1024.domain.data.Event
-import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.ui.screen.events.FromGroupText
 import com.lumen1024.ui.shared.Avatar
+import com.lumen1024.ui.shared.ScalableBottomSheet
 import com.lumen1024.ui.shared.time.TimeRangeSlider
-import com.lumen1024.ui.widgets.event_details.model.EventDetailsBottomSheetViewModel
+import com.lumen1024.ui.widgets.event_details.model.EventDetailsActions
+import com.lumen1024.ui.widgets.event_details.model.EventDetailsState
 import java.time.Duration
-
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailsBottomSheet(
-    onDismiss: () -> Unit,
-    pair: Pair<Event, Group>,
-    viewModel: EventDetailsBottomSheetViewModel = hiltViewModel(),
+    onDismissRequest: () -> Unit,
+    state: EventDetailsState,
+    actions: EventDetailsActions,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    //region Height animation on sliding
-    var fullHeight by remember { mutableIntStateOf(0) }
-    var heightProgressFraction by remember { mutableFloatStateOf(0f) }
 
-    // TODO: maybe move it in a right way to something like
-    //  LaunchedEffect as it says in documentation
-    //  Try catch because requireOffset can throw an exception
-    //  if call it before first composition
-    try {
-        val offset = sheetState.requireOffset()
-        heightProgressFraction = 1 - (offset / fullHeight)
-    } catch (_: Exception) {
-    }
-    //endregion
-    ModalBottomSheet(
+    ScalableBottomSheet(
+        onDismissRequest = onDismissRequest,
         modifier = Modifier.statusBarsPadding(),
-        onDismissRequest = onDismiss,
-        sheetState = sheetState
-    ) {
-
-        // Sheet content
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            fullHeight = constraints.maxHeight
-            Column(
+    ) { heightProgressFraction ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 371.dp)
+                .fillMaxHeight(heightProgressFraction)
+                .navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Header(
+                groupName = state.groupName,
+                groupColor = state.groupColor,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(heightProgressFraction)
-                    .navigationBarsPadding(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(horizontal = 20.dp),
+            )
+            HorizontalDivider()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Header(
-                    group = pair.second,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                )
-                HorizontalDivider()
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    repeat(3) {
-                        item {
-                            UserRange(
-                                avatar = null,
-                                timeRange = pair.first.initialRange,
-                                duration = pair.first.duration,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(40.dp)
-                            )
-                        }
+                repeat(3) {
+                    item {
+                        UserRange(
+                            avatar = null,
+                            timeRange = state.event.initialRange,
+                            duration = state.event.duration,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(40.dp)
+                        )
                     }
                 }
-                HorizontalDivider()
-                Footer(
-                    initialRange = pair.first.initialRange,
-                    duration = pair.first.duration,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .padding(16.dp, 0.dp, 16.dp, 8.dp)
-                )
             }
+            HorizontalDivider()
+            Footer(
+                initialRange = state.event.initialRange,
+                duration = state.event.duration,
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(16.dp, 0.dp, 16.dp, 8.dp)
+            )
         }
-
 
     }
 }
 
 @Composable
 private fun Header(
-    group: Group,
+    groupName: String,
+    groupColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -155,7 +131,7 @@ private fun Header(
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FromGroupText(group)
+            FromGroupText(groupName, groupColor)
             Text("Name", style = MaterialTheme.typography.titleLarge)
         }
         IconButton(
@@ -170,6 +146,7 @@ private fun Header(
 private fun Footer(
     initialRange: TimeRange,
     duration: Duration,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -177,7 +154,7 @@ private fun Footer(
         verticalAlignment = Alignment.CenterVertically
     ) {
         FilledIconButton(
-            onClick = {},
+            onClick = onClick,
             shape = CircleShape,
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.tertiary,
@@ -239,3 +216,8 @@ private fun UserRange(
 
 }
 
+@Preview
+@Composable
+private fun EventDetailsPreview() {
+
+}
