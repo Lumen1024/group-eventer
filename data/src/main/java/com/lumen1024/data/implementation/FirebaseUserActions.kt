@@ -2,7 +2,9 @@ package com.lumen1024.data.implementation
 
 import com.google.firebase.firestore.FieldValue
 import com.lumen1024.data.MemberDataDto
+import com.lumen1024.data.toGroupDto
 import com.lumen1024.data.toGroupEventDto
+import com.lumen1024.data.toTimeRangeDto
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
@@ -259,7 +261,7 @@ class FirebaseUserActions @Inject constructor(
 
         val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
             group.events.forEach {
-                if (eventId == it.id) return@firstNotNullOfOrNull it to group
+                if (eventId == it.id) return@firstNotNullOfOrNull it to group.toGroupDto()
             }
             return@firstNotNullOfOrNull null
         } ?: return Result.failure(Exception("event not found"))
@@ -270,13 +272,13 @@ class FirebaseUserActions @Inject constructor(
             data = mapOf(
                 Group::events.name to group.events.map {
                     if (it.id == eventId) {
-                        it.copy(
-                            proposalRanges = it.proposalRanges + (userId to time)
+                        return@map it.copy(
+                            proposalRanges = it.proposalRanges + (userId to time.toTimeRangeDto())
                         )
                     }
                 }
             )
-        ).onFailure { return Result.failure(Exception("cant update event")) }
+        ).onFailure { return Result.failure(Exception("cant update event: $it")) }
         return Result.success(Unit)
     }
 
@@ -293,10 +295,11 @@ class FirebaseUserActions @Inject constructor(
     ): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 
+        val eventWithCreator = event.copy(creator = userStateHolder.userData.value?.id!!) // TODO
         groupRepository.update(
             id = group.id,
             data = mapOf(
-                "events" to (group.events.map { it.toGroupEventDto() } + event.toGroupEventDto())
+                "events" to (group.events.map { it.toGroupEventDto() } + eventWithCreator.toGroupEventDto())
             )
         ).onFailure { return Result.failure(it) }
         return Result.success(Unit)

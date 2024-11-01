@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +56,7 @@ fun TimeRangeSlider(
     onChange: (TimeRange) -> Unit,
     modifier: Modifier = Modifier,
     step: Duration = Duration.ofMinutes(1),
+    indicatorColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     val all: Int = (initialRange.duration.toMillis() / step.toMillis()).toInt()
     val selected: Int = (duration.toMillis() / step.toMillis()).toInt()
@@ -162,7 +164,9 @@ fun TimeRangeSlider(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState(onDrag),
                     onDragStopped = { onDragStopped() }
-                ),
+                )
+                .clip(clipShape)
+                .background(indicatorColor),
             ratio = ratio,
             timeText = startTimeText
         )
@@ -177,9 +181,7 @@ private fun TimeRangeSliderIndicator(
 ) {
     Box(
         modifier = modifier
-            .clip(clipShape)
             .fillMaxWidth(ratio)
-            .background(MaterialTheme.colorScheme.tertiary)
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),

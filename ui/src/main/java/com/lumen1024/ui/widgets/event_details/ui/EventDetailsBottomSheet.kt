@@ -33,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
@@ -49,19 +50,19 @@ import com.lumen1024.ui.shared.ScalableBottomSheet
 import com.lumen1024.ui.shared.time.TimeRangeSlider
 import com.lumen1024.ui.widgets.event_details.model.EventDetailsActions
 import com.lumen1024.ui.widgets.event_details.model.EventDetailsState
+import com.lumen1024.ui.widgets.event_details.model.TimeSliderUiStyle
 import java.time.Duration
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailsBottomSheet(
-    onDismissRequest: () -> Unit,
     state: EventDetailsState,
     actions: EventDetailsActions,
 ) {
 
     ScalableBottomSheet(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = actions::onDismissRequest,
         modifier = Modifier.statusBarsPadding(),
     ) { heightProgressFraction, minHeight ->
         Column(
@@ -105,7 +106,9 @@ fun EventDetailsBottomSheet(
             Footer(
                 initialRange = state.event.initialRange,
                 duration = state.event.duration,
-                onClick = {},
+                onConfirmClick = actions::onConfirmRange,
+                onRangeChange = actions::onRangeChange,
+                timeSliderState = state.timeSliderState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
@@ -146,32 +149,42 @@ private fun Header(
 private fun Footer(
     initialRange: TimeRange,
     duration: Duration,
-    onClick: () -> Unit,
+    onConfirmClick: () -> Unit,
+    onRangeChange: (TimeRange) -> Unit,
     modifier: Modifier = Modifier,
+    timeSliderState: TimeSliderUiStyle,
 ) {
-    Row(
-        modifier = modifier.height(IntrinsicSize.Min),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        FilledIconButton(
-            onClick = onClick,
-            shape = CircleShape,
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                contentColor = MaterialTheme.colorScheme.onSecondary
-            )
+    if (timeSliderState != TimeSliderUiStyle.Gone) {
+        val mainColor = if (timeSliderState == TimeSliderUiStyle.Proposal)
+            MaterialTheme.colorScheme.primary
+        else
+            MaterialTheme.colorScheme.tertiary
+
+        Row(
+            modifier = modifier.height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Rounded.Done, null)
+            FilledIconButton(
+                onClick = onConfirmClick,
+                shape = CircleShape,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = mainColor,
+                    contentColor = contentColorFor(mainColor)
+                )
+            ) {
+                Icon(Icons.Rounded.Done, null)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            TimeRangeSlider(
+                modifier = Modifier
+                    .fillMaxSize(),
+                initialRange = initialRange,
+                duration = duration,
+                onChange = onRangeChange,
+                step = Duration.ofMinutes(15),
+                indicatorColor = mainColor
+            )
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        TimeRangeSlider(
-            modifier = Modifier
-                .fillMaxSize(),
-            initialRange = initialRange,
-            duration = duration,
-            onChange = {},
-            step = Duration.ofMinutes(15)
-        )
     }
 }
 

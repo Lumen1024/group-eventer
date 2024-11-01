@@ -74,13 +74,12 @@ fun EventsScreen(
         val viewModel: EventDetailsViewModel = hiltViewModel(
             creationCallback = { factory: EventDetailsViewModel.Factory ->
                 selectedEvent?.let {
-                    factory.create(it.second, it.first)
+                    factory.create(it.second, it.first) { selectedEvent = null }
                 } ?: throw IllegalArgumentException("selected event is null")
             }
         )
         val state by viewModel.state.collectAsState()
         EventDetailsBottomSheet(
-            onDismissRequest = { selectedEvent = null },
             state = state,
             actions = viewModel.actions
         )
