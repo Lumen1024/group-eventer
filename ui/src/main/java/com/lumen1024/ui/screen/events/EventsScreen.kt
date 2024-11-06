@@ -76,7 +76,8 @@ fun EventsScreen(
                 selectedEvent?.let {
                     factory.create(it.second, it.first) { selectedEvent = null }
                 } ?: throw IllegalArgumentException("selected event is null")
-            }
+            },
+            key = selectedEvent?.second.toString() + selectedEvent?.first.toString() // TODO: is that right?
         )
         val state by viewModel.state.collectAsState()
         EventDetailsBottomSheet(

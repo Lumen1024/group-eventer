@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,11 +38,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.TimeRange
@@ -89,17 +96,15 @@ fun EventDetailsBottomSheet(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                repeat(3) {
-                    item {
-                        UserRange(
-                            avatar = null,
-                            timeRange = state.event.initialRange,
-                            duration = state.event.duration,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                        )
-                    }
+                items(state.event.proposalRanges.toList()) {
+                    UserRange(
+                        avatar = null,
+                        initialRange = state.event.initialRange,
+                        votedTimeRange = it.second,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                    )
                 }
             }
             HorizontalDivider()
@@ -191,15 +196,27 @@ private fun Footer(
 @Composable
 private fun UserRange(
     avatar: Uri?,
-    timeRange: TimeRange,
-    duration: Duration,
+    initialRange: TimeRange,
+    votedTimeRange: TimeRange,
     indicatorColor: Color = MaterialTheme.colorScheme.primary,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
     modifier: Modifier = Modifier,
 ) {
-    val ratio = remember {
-        derivedStateOf { duration.toMillis().toFloat() / timeRange.duration.toMillis() }
-    }.value // TODO: hz
+    val ratio by remember {
+        derivedStateOf {
+            votedTimeRange.duration.toMillis() / initialRange.duration.toMillis().toFloat()
+        }
+    }
+
+    val timeOffset by remember {
+        derivedStateOf { Duration.between(initialRange.start, votedTimeRange.start) }
+    }
+    val offsetRatio by remember {
+        derivedStateOf { initialRange.duration.toMillis() / timeOffset.toMillis().toFloat() }
+    }
+
+    var containerWidth by remember { mutableIntStateOf(0) }
+    val offset by remember { derivedStateOf { (containerWidth * offsetRatio).toInt() } }
 
     Row(
         modifier = modifier.padding(start = 4.dp),
@@ -213,9 +230,14 @@ private fun UserRange(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .offset()
                 .height(40.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .background(backgroundColor)
+                .onGloballyPositioned {
+                    containerWidth = it.size.width
+                }
+                .offset(x = with(LocalDensity.current) { offset.toDp() })
         ) {
             Spacer(
                 modifier = Modifier

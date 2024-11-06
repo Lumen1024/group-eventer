@@ -49,7 +49,6 @@ class EventDetailsViewModel @AssistedInject constructor(
     private val userStateHolder: UserStateHolder,
     private val userActions: UserActions,
 ) : ViewModel() {
-
     var initSliderUiState = TimeSliderUiStyle.Gone // TODO
 
     init {
@@ -98,7 +97,10 @@ class EventDetailsViewModel @AssistedInject constructor(
 
                 TimeSliderUiStyle.Finish -> {
                     viewModelScope.launch {
-                        userActions.setFinalEventTime(event.id, state.value.selectiveTimeRange)
+                        userActions.setFinalEventTime(
+                            event.id,
+                            state.value.selectiveTimeRange.start
+                        )
                     }
                     this@EventDetailsViewModel.onDismissRequest()
                 }
