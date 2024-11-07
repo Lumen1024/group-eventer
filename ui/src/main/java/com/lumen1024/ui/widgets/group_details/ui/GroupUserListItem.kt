@@ -22,14 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 import com.lumen1024.ui.shared.AvatarTitled
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupUserListItem(
     modifier: Modifier = Modifier,
-    userData: UserData?,
+    user: User?,
     textColor: Color = Color.Unspecified,
     showMoreButton: Boolean = false,
     onRemoveFromGroup: () -> Unit = {},
@@ -49,8 +49,8 @@ fun GroupUserListItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AvatarTitled(
-            avatarUrl = userData?.avatarUrl?.let { Uri.parse(it) },
-            username = userData?.name,
+            avatarUrl = user?.avatarUrl?.let { Uri.parse(it) },
+            username = user?.name,
             textColor = textColor
         )
 

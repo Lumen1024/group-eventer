@@ -8,7 +8,7 @@ import com.lumen1024.data.toGroup
 import com.lumen1024.data.toRepositoryObjectChange
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
-import com.lumen1024.domain.usecase.GroupRepository
+import com.lumen1024.domain.repository.GroupRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

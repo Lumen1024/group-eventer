@@ -7,7 +7,7 @@ import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.MemberData
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 import com.lumen1024.domain.tools.durationToString
 import com.lumen1024.domain.tools.stringToDuration
 import java.time.Instant
@@ -129,14 +129,14 @@ data class UserDataDto(
     val groups: List<String> = emptyList(),
 )
 
-fun UserDataDto.toUserData() = UserData(
+fun UserDataDto.toUserData() = User(
     id = id,
     name = name,
     avatarUrl = avatarUrl?.toUri().toString(),
     groups = groups,
 )
 
-fun UserData.toUserDataDto() =
+fun User.toUserDataDto() =
     UserDataDto(
         id = id,
         name = name,

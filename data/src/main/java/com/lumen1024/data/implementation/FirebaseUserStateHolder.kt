@@ -3,9 +3,9 @@ package com.lumen1024.data.implementation
 import androidx.compose.runtime.mutableStateListOf
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
+import com.lumen1024.domain.repository.GroupRepository
 import com.lumen1024.domain.usecase.AuthService
-import com.lumen1024.domain.usecase.GroupRepository
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +18,8 @@ class FirebaseUserStateHolder @Inject constructor(
     private val authService: AuthService,
 ) : UserStateHolder {
 
-    private val _userData = MutableStateFlow<UserData?>(null)
-    override val userData = _userData.asStateFlow()
+    private val _user = MutableStateFlow<User?>(null)
+    override val user = _user.asStateFlow()
 
     private val _groups = mutableStateListOf<Group>() // TODO: is android mutable state?
     override val groups get() = MutableStateFlow(_groups.toList()).asStateFlow() // TODO: toImmutableList replaced?
@@ -41,10 +41,10 @@ class FirebaseUserStateHolder @Inject constructor(
     }
 
     private fun listenUserDataChanges(): (() -> Unit)? {
-        val userId = userData.value?.id ?: authService.userId ?: return null
+        val userId = user.value?.id ?: authService.userId ?: return null
 
         return userDataRepository.listen(userId) { data ->
-            _userData.value = data
+            _user.value = data
 
             unsubscribeGroups?.let { it() }
             unsubscribeGroups = listenGroupChanges()
@@ -53,13 +53,13 @@ class FirebaseUserStateHolder @Inject constructor(
 
     private fun listenGroupChanges(): (() -> Unit)? {
         // Remove groups that no more in user data
-        userData.value?.groups.let {
+        user.value?.groups.let {
             if (it !== null) {
                 _groups.removeIf { group -> group.id !in it }
             }
         }
 
-        userData.value?.groups?.takeIf { it.isNotEmpty() }?.let { groups ->
+        user.value?.groups?.takeIf { it.isNotEmpty() }?.let { groups ->
             return groupRepository.listenList(groups) { changes ->
                 processGroupsChange(changes)
             }.getOrNull()

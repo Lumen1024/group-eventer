@@ -25,7 +25,7 @@ import com.lumen1024.ui.tools.getCropperOptions
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val userData by viewModel.userStateHolder.userData.collectAsState()
+    val userData by viewModel.userStateHolder.user.collectAsState()
 
     val galleryLauncher =
         rememberLauncherForActivityResult(contract = CropImageContract()) { result ->

@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.auth
 import com.lumen1024.domain.data.AuthException
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 import com.lumen1024.domain.usecase.AuthService
 import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
@@ -75,11 +75,11 @@ class FirebaseAuthService @Inject constructor(
     }
 
     private suspend fun initUserData(userId: String, name: String, avatarUrl: String? = null) {
-        val userData = UserData(
+        val user = User(
             id = userId,
             name = name,
             avatarUrl = avatarUrl
         )
-        userDataRepository.add(userData).onFailure { throw it }
+        userDataRepository.add(user).onFailure { throw it }
     }
 }

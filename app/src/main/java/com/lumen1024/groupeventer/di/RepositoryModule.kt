@@ -2,7 +2,7 @@ package com.lumen1024.groupeventer.di
 
 import com.lumen1024.data.implementation.FirebaseGroupRepository
 import com.lumen1024.data.implementation.FirebaseUserDataRepository
-import com.lumen1024.domain.usecase.GroupRepository
+import com.lumen1024.domain.repository.GroupRepository
 import com.lumen1024.domain.usecase.UserDataRepository
 import dagger.Binds
 import dagger.Module

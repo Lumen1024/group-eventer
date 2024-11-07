@@ -52,7 +52,7 @@ class EventDetailsViewModel @AssistedInject constructor(
     var initSliderUiState = TimeSliderUiStyle.Gone // TODO
 
     init {
-        val userId = userStateHolder.userData.value?.id!! // TODO
+        val userId = userStateHolder.user.value?.id!! // TODO
 
         val isVoting = event.status == GroupEventStatus.Voting
 
