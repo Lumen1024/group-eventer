@@ -1,6 +1,6 @@
 package com.lumen1024.domain.data
 
-data class UserData(
+data class User(
     val id: String = "",
     val name: String = "",
     val avatarUrl: String? = null,

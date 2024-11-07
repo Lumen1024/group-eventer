@@ -27,7 +27,7 @@ class ProfileViewModel @Inject constructor(
     fun updateName(name: String) {
         viewModelScope.launch {
             userDataRepository.update(
-                userStateHolder.userData.value?.id ?: return@launch,
+                this@ProfileViewModel.user.user.value?.id ?: return@launch,
                 mapOf(
                     "name" to name
                 )
@@ -45,7 +45,7 @@ class ProfileViewModel @Inject constructor(
     fun updateAvatar(imageUri: Uri) {
         viewModelScope.launch {
             try {
-                val userId = userStateHolder.userData.value?.id ?: return@launch
+                val userId = this@ProfileViewModel.user.user.value?.id ?: return@launch
 
                 val avatarUrl = userDataRepository.uploadAvatar(
                     userId, imageUri.toString()

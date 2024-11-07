@@ -7,7 +7,7 @@ import com.google.firebase.storage.storage
 import com.lumen1024.data.UserDataDto
 import com.lumen1024.data.toUserData
 import com.lumen1024.data.toUserDataDto
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -18,16 +18,16 @@ class FirebaseUserDataRepository @Inject constructor(
     private val collection = firebase.firestore.collection("users")
     private val avatarsRef = firebase.storage.reference.child("avatars")
 
-    override suspend fun add(userData: UserData): Result<Unit> {
+    override suspend fun add(user: User): Result<Unit> {
         return try {
-            collection.document(userData.id).set(userData.toUserDataDto()).await()
+            collection.document(user.id).set(user.toUserDataDto()).await()
             Result.success(Unit)
         } catch (e: Throwable) {
             Result.failure(e)
         }
     }
 
-    override suspend fun get(id: String): Result<UserData> {
+    override suspend fun get(id: String): Result<User> {
         return try {
             val userData = collection.document(id)
                 .get()
@@ -62,7 +62,7 @@ class FirebaseUserDataRepository @Inject constructor(
 
     override fun listen(
         id: String,
-        callback: (UserData?) -> Unit,
+        callback: (User?) -> Unit,
     ): Result<() -> Unit> {
         return try {
             val unsubscribeFunc = collection.document(id).addSnapshotListener { snapshot, e ->

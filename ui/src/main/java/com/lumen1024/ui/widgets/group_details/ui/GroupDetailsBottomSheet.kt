@@ -43,7 +43,7 @@ fun GroupDetailsBottomSheet(
     onDismiss: () -> Unit,
     group: Group,
 ) {
-    val currentUser by viewModel.userStateHolder.userData.collectAsState()
+    val currentUser by viewModel.userStateHolder.user.collectAsState()
     val admin by viewModel.admin.collectAsState()
     val users by viewModel.users.collectAsState()
 
@@ -100,7 +100,7 @@ fun GroupDetailsBottomSheet(
                     item(key = "${admin?.id ?: "unknown"}-admin") {
                         GroupUserListItem(
                             modifier = Modifier.fillMaxWidth(1f),
-                            userData = admin,
+                            user = admin,
                             textColor = MaterialTheme.colorScheme.primary,
                             showMoreButton = false,
                         )
@@ -109,7 +109,7 @@ fun GroupDetailsBottomSheet(
                     items(users, key = { it.id }) {
                         GroupUserListItem(
                             modifier = Modifier.fillMaxWidth(1f),
-                            userData = it,
+                            user = it,
                             showMoreButton = currentUserIsAdmin,
                             onRemoveFromGroup = {
                                 viewModel.removeUserFromGroup(group.id, it)

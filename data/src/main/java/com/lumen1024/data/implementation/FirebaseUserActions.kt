@@ -11,8 +11,8 @@ import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.domain.data.UserData
-import com.lumen1024.domain.usecase.GroupRepository
+import com.lumen1024.domain.data.User
+import com.lumen1024.domain.repository.GroupRepository
 import com.lumen1024.domain.usecase.UserActions
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
@@ -52,7 +52,7 @@ class FirebaseUserActions @Inject constructor(
 // endregion
 
     override suspend fun joinGroup(name: String, password: String): Result<Unit> {
-        val userData = userStateHolder.userData.value
+        val userData = userStateHolder.user.value
             ?: return Result.failure(Throwable("UserData is null"))
 
         val group = groupRepository.get(name, password)
@@ -80,7 +80,7 @@ class FirebaseUserActions @Inject constructor(
     }
 
     override suspend fun leaveGroup(id: String): Result<Unit> {
-        val userData = userStateHolder.userData.value
+        val userData = userStateHolder.user.value
             ?: return Result.failure(Throwable("UserData is null"))
 
         val group = groupRepository.get(id)
@@ -142,7 +142,7 @@ class FirebaseUserActions @Inject constructor(
             return Result.failure(Throwable("Group with same name already exist"))
         } // now we cant create group with same name
 
-        val userData = userStateHolder.userData.value
+        val userData = userStateHolder.user.value
             ?: return Result.failure(Throwable("UserData is null"))
 
         val group = Group(
@@ -174,9 +174,9 @@ class FirebaseUserActions @Inject constructor(
 
     override suspend fun transferAdministrator(
         groupId: String,
-        user: UserData
+        user: User
     ): Result<Unit> {
-        val userData = userStateHolder.userData.value
+        val userData = userStateHolder.user.value
             ?: return Result.failure(Throwable("UserData is null"))
 
         if (userData.id == user.id) {
@@ -216,9 +216,9 @@ class FirebaseUserActions @Inject constructor(
 
     override suspend fun removeUserFromGroup(
         groupId: String,
-        user: UserData
+        user: User
     ): Result<Unit> {
-        val userData = userStateHolder.userData.value
+        val userData = userStateHolder.user.value
             ?: return Result.failure(Throwable("UserData is null"))
 
         if (userData.id == user.id) {
@@ -261,7 +261,7 @@ class FirebaseUserActions @Inject constructor(
         eventId: String,
         time: TimeRange
     ): Result<Unit> {
-        val userId = userStateHolder.userData.value?.id
+        val userId = userStateHolder.user.value?.id
             ?: return Result.failure(Exception("not authorized"))
 
         val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
@@ -291,7 +291,7 @@ class FirebaseUserActions @Inject constructor(
         eventId: String,
         time: Instant
     ): Result<Unit> {
-        userStateHolder.userData.value?.id
+        userStateHolder.user.value?.id
             ?: return Result.failure(Exception("not authorized"))
 
         val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
@@ -323,7 +323,7 @@ class FirebaseUserActions @Inject constructor(
     ): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 
-        val eventWithCreator = event.copy(creator = userStateHolder.userData.value?.id!!) // TODO
+        val eventWithCreator = event.copy(creator = userStateHolder.user.value?.id!!) // TODO
         groupRepository.update(
             id = group.id,
             data = mapOf(
@@ -342,7 +342,7 @@ class FirebaseUserActions @Inject constructor(
             return@let null
         } ?: return Result.failure(Throwable("User groups don't have this event"))
 
-        val id = userStateHolder.userData.value?.id
+        val id = userStateHolder.user.value?.id
             ?: return Result.failure(Throwable("UserData is null"))
 
         if (id != event.creator) return Result.failure(Throwable("User is not event creator"))
@@ -365,7 +365,7 @@ class FirebaseUserActions @Inject constructor(
             return@let null
         } ?: return Result.failure(Throwable("User groups don't have this event"))
 
-        val id = userStateHolder.userData.value?.id
+        val id = userStateHolder.user.value?.id
             ?: return Result.failure(Throwable("UserData is null"))
 
         if (id != event.creator) return Result.failure(Throwable("User is not event creator"))
@@ -379,7 +379,7 @@ class FirebaseUserActions @Inject constructor(
     }
 
     private fun userInGroup(group: Group): Boolean {
-        return userStateHolder.userData.value?.groups
+        return userStateHolder.user.value?.groups
             ?.let { return@let (group.id in it) } == true
     }
 }

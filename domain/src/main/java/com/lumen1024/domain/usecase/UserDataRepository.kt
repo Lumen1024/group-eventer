@@ -1,16 +1,16 @@
 package com.lumen1024.domain.usecase
 
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 
 interface UserDataRepository {
 
-    suspend fun add(userData: UserData): Result<Unit>
-    suspend fun get(id: String): Result<UserData>
+    suspend fun add(user: User): Result<Unit>
+    suspend fun get(id: String): Result<User>
     suspend fun update(id: String, data: Map<String, Any>): Result<Unit>
     suspend fun uploadAvatar(id: String, imageURI: String): Result<String>
 
     fun listen(
         id: String,
-        callback: (UserData?) -> Unit,
+        callback: (User?) -> Unit,
     ): Result<() -> Unit>
 }

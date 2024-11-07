@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.Group
-import com.lumen1024.domain.data.UserData
+import com.lumen1024.domain.data.User
 import com.lumen1024.domain.usecase.UserActions
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
@@ -23,10 +23,10 @@ class GroupDetailsViewModel @Inject constructor(
     private val userActions: UserActions,
     val userStateHolder: UserStateHolder,
 ) : ViewModel() {
-    private val _admin = MutableStateFlow<UserData?>(null)
+    private val _admin = MutableStateFlow<User?>(null)
     val admin = _admin.asStateFlow()
 
-    private val _users = MutableStateFlow(emptyList<UserData>())
+    private val _users = MutableStateFlow(emptyList<User>())
     val users = _users.asStateFlow()
 
     fun setGroup(group: Group) {
@@ -52,13 +52,13 @@ class GroupDetailsViewModel @Inject constructor(
         }
     }
 
-    fun removeUserFromGroup(groupId: String, user: UserData) {
+    fun removeUserFromGroup(groupId: String, user: User) {
         viewModelScope.launch {
             userActions.removeUserFromGroup(groupId, user)
         }
     }
 
-    fun transferAdministrator(groupId: String, user: UserData) {
+    fun transferAdministrator(groupId: String, user: User) {
         viewModelScope.launch {
             userActions.transferAdministrator(groupId, user)
         }
