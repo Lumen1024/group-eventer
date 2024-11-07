@@ -214,7 +214,7 @@ private fun UserRange(
         derivedStateOf { Duration.between(initialRange.start, votedTimeRange.start) }
     }
     val offsetRatio by remember {
-        derivedStateOf { initialRange.duration.toMillis() / timeOffset.toMillis().toFloat() }
+        derivedStateOf { timeOffset.toMillis().toFloat() / initialRange.duration.toMillis() }
     }
 
     var containerWidth by remember { mutableIntStateOf(0) }
