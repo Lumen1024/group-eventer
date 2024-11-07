@@ -69,7 +69,6 @@ fun EventsScreen(
         }
     }
 
-
     if (isSheetOpen) {
         val viewModel: EventDetailsViewModel = hiltViewModel(
             creationCallback = { factory: EventDetailsViewModel.Factory ->
@@ -80,11 +79,5 @@ fun EventsScreen(
             key = selectedEvent?.second.toString() + selectedEvent?.first.toString() // TODO: is that right?
         )
         val state by viewModel.state.collectAsState()
-        EventDetailsBottomSheet(
-            state = state,
-            actions = viewModel.actions
-        )
     }
-
 }
-
