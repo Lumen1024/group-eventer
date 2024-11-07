@@ -71,7 +71,7 @@ fun EventCard(
             ) {
                 // group title
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FromGroupText(group)
+                    FromGroupText(group.name, Color(group.color.hex))
                     val titleStyle = MaterialTheme.typography.titleLarge
                     Text(
                         text = event.name + if (event.status == GroupEventStatus.Finish) " (завершен)" else "",
@@ -148,7 +148,10 @@ fun EventCardTime(
 
 
 @Composable
-private fun FromGroupText(group: Group) {
+fun FromGroupText(
+    groupName: String,
+    groupColor: Color,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -166,10 +169,10 @@ private fun FromGroupText(group: Group) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
                     .size(14.dp)
-                    .background(Color(group.color.hex))
+                    .background(groupColor)
             )
             Text(
-                text = group.name,
+                text = groupName,
                 fontStyle = style.fontStyle,
                 fontSize = style.fontSize,
                 fontWeight = style.fontWeight

@@ -1,16 +1,22 @@
 package com.lumen1024.data.implementation
 
+import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.lumen1024.data.MemberDataDto
+import com.lumen1024.data.toGroupDto
 import com.lumen1024.data.toGroupEventDto
+import com.lumen1024.data.toTimeRangeDto
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
+import com.lumen1024.domain.data.GroupEventStatus
+import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.domain.data.UserData
 import com.lumen1024.domain.usecase.GroupRepository
 import com.lumen1024.domain.usecase.UserActions
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
+import java.time.Instant
 import javax.inject.Inject
 
 class FirebaseUserActions @Inject constructor(
@@ -19,6 +25,7 @@ class FirebaseUserActions @Inject constructor(
     private val userStateHolder: UserStateHolder,
 ) : UserActions {
 
+// region tokens
 //    override suspend fun updateTokenInGroups(token: String): Result<Unit> {
 //        val userData = userStateHolder.userData.value
 //            ?: return Result.failure(Throwable("UserData is null"))
@@ -42,6 +49,7 @@ class FirebaseUserActions @Inject constructor(
 //
 //        return Result.success(Unit)
 //    }
+// endregion
 
     override suspend fun joinGroup(name: String, password: String): Result<Unit> {
         val userData = userStateHolder.userData.value
@@ -248,16 +256,78 @@ class FirebaseUserActions @Inject constructor(
         return Result.success(Unit)
     }
 
+    // TODO: refactor
+    override suspend fun voteEventTime(
+        eventId: String,
+        time: TimeRange
+    ): Result<Unit> {
+        val userId = userStateHolder.userData.value?.id
+            ?: return Result.failure(Exception("not authorized"))
+
+        val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
+            group.events.forEach {
+                if (eventId == it.id) return@firstNotNullOfOrNull it to group.toGroupDto()
+            }
+            return@firstNotNullOfOrNull null
+        } ?: return Result.failure(Exception("event not found"))
+
+        Log.d("ded", "group vote event: $group")
+        groupRepository.update(
+            id = group.id,
+            data = mapOf(
+                Group::events.name to group.events.map {
+                    if (it.id == eventId) {
+                        return@map it.copy(
+                            proposalRanges = it.proposalRanges + (userId to time.toTimeRangeDto())
+                        )
+                    } else return@map it
+                }
+            )
+        ).onFailure { return Result.failure(Exception("cant update event: $it")) }
+        return Result.success(Unit)
+    }
+
+    override suspend fun setFinalEventTime(
+        eventId: String,
+        time: Instant
+    ): Result<Unit> {
+        userStateHolder.userData.value?.id
+            ?: return Result.failure(Exception("not authorized"))
+
+        val (_, group) = userStateHolder.groups.value.firstNotNullOfOrNull { group ->
+            group.events.forEach {
+                if (eventId == it.id) return@firstNotNullOfOrNull it to group.toGroupDto()
+            }
+            return@firstNotNullOfOrNull null
+        } ?: return Result.failure(Exception("event not found"))
+
+        groupRepository.update(
+            id = group.id,
+            data = mapOf(
+                Group::events.name to group.events.map {
+                    if (it.id == eventId) {
+                        return@map it.copy(
+                            startTime = time.toEpochMilli(),
+                            status = GroupEventStatus.Scheduled
+                        )
+                    } else return@map it
+                }
+            )
+        ).onFailure { return Result.failure(Exception("cant update event: $it")) }
+        return Result.success(Unit)
+    }
+
     override suspend fun createEvent(
         event: Event,
         group: Group
     ): Result<Unit> {
         if (!userInGroup(group)) return Result.failure(Throwable("User not in group"))
 
+        val eventWithCreator = event.copy(creator = userStateHolder.userData.value?.id!!) // TODO
         groupRepository.update(
             id = group.id,
             data = mapOf(
-                "events" to (group.events.map { it.toGroupEventDto() } + event.toGroupEventDto())
+                "events" to (group.events.map { it.toGroupEventDto() } + eventWithCreator.toGroupEventDto())
             )
         ).onFailure { return Result.failure(it) }
         return Result.success(Unit)
@@ -310,7 +380,6 @@ class FirebaseUserActions @Inject constructor(
 
     private fun userInGroup(group: Group): Boolean {
         return userStateHolder.userData.value?.groups
-            ?.let { return@let (group.id in it) }
-            ?: false
+            ?.let { return@let (group.id in it) } == true
     }
 }

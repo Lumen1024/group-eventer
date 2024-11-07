@@ -51,24 +51,24 @@ fun Avatar(
             )
 
     ) {
-        if (url != null) {
-            SubcomposeAsyncImage(
-                model = url,
-                contentDescription = "User avatar",
-                contentScale = ContentScale.Crop,
-                loading = {
-                    CircularProgressIndicator(modifier.fillMaxSize())
-                },
-                error = {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .scale(1.2f),
-                        imageVector = Icons.Filled.AccountCircle,
-                        contentDescription = "Default avatar",
-                    )
-                },
-            )
-        }
+        //if (url != null) {
+        SubcomposeAsyncImage(
+            model = url,
+            contentDescription = "User avatar",
+            contentScale = ContentScale.Crop,
+            loading = {
+                CircularProgressIndicator(modifier.fillMaxSize())
+            },
+            error = {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(1.2f),
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "Default avatar",
+                )
+            },
+        )
+        // }
     }
 }

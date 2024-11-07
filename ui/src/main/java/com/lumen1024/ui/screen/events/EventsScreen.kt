@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
 import com.lumen1024.ui.tools.flatMapLinked
+import com.lumen1024.ui.widgets.event_details.model.EventDetailsViewModel
 import com.lumen1024.ui.widgets.event_details.ui.EventDetailsBottomSheet
 
 
@@ -68,12 +69,15 @@ fun EventsScreen(
         }
     }
 
-
-    if (isSheetOpen)
-        EventDetailsBottomSheet(
-            onDismiss = { selectedEvent = null },
-            pair = selectedEvent!!
+    if (isSheetOpen) {
+        val viewModel: EventDetailsViewModel = hiltViewModel(
+            creationCallback = { factory: EventDetailsViewModel.Factory ->
+                selectedEvent?.let {
+                    factory.create(it.second, it.first) { selectedEvent = null }
+                } ?: throw IllegalArgumentException("selected event is null")
+            },
+            key = selectedEvent?.second.toString() + selectedEvent?.first.toString() // TODO: is that right?
         )
-
+        val state by viewModel.state.collectAsState()
+    }
 }
-

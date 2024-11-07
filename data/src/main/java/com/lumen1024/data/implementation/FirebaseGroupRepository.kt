@@ -1,5 +1,6 @@
 package com.lumen1024.data.implementation
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.lumen1024.data.GroupDto
@@ -80,6 +81,7 @@ class FirebaseGroupRepository @Inject constructor(
         id: String,
         data: Map<String, Any>,
     ): Result<Unit> {
+        Log.d("ded", "group: ${id}")
         return try {
             collection.document(id).update(data)
                 .await()

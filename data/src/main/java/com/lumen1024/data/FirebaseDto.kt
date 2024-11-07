@@ -38,6 +38,7 @@ fun GroupDto.toGroup() = Group(
 )
 
 fun Group.toGroupDto() = GroupDto(
+    id = id,
     name = name,
     color = color,
     description = description,
