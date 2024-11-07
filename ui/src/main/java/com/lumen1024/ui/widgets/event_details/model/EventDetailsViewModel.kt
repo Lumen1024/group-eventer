@@ -110,7 +110,10 @@ class EventDetailsViewModel @AssistedInject constructor(
         }
 
         override fun onRangeChange(range: TimeRange) {
-            _state.value = _state.value.copy(event = event.copy())
+            _state.value = _state.value.copy(
+                selectiveTimeRange = range
+                //event = event.copy(proposalRanges = state.value.event.proposalRanges + (userStateHolder.userData.value!!.id to range)) // TODO: check
+            )
         }
 
         override fun onDismissRequest() = this@EventDetailsViewModel.onDismissRequest()

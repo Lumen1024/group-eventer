@@ -2,6 +2,7 @@ package com.lumen1024.ui.widgets.event_details.ui
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,6 +68,7 @@ fun EventDetailsBottomSheet(
     state: EventDetailsState,
     actions: EventDetailsActions,
 ) {
+    Log.d("ded", state.event.proposalRanges.toString())
 
     ScalableBottomSheet(
         onDismissRequest = actions::onDismissRequest,
