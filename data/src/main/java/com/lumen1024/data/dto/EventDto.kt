@@ -17,7 +17,7 @@ data class EventDto(
     val startTime: InstantDto? = null,
 )
 
-fun Event.toGroupEventDto() = EventDto(
+fun Event.toEventDto() = EventDto(
     id = id,
     creator = creator,
 
@@ -31,7 +31,7 @@ fun Event.toGroupEventDto() = EventDto(
     startTime = startTime?.toInstantDto(),
 )
 
-fun EventDto.toGroupEvent() = Event(
+fun EventDto.toEvent() = Event(
     id = id,
     creator = creator,
 
