@@ -2,84 +2,60 @@ package com.lumen1024.data.implementation.service
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.auth
-import com.lumen1024.domain.data.AuthException
+import com.lumen1024.data.tryCatchDerived
 import com.lumen1024.domain.data.User
+import com.lumen1024.domain.repository.UserRepository
 import com.lumen1024.domain.service.AuthService
-import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthService @Inject constructor(
     firebase: Firebase,
-    private val userDataRepository: UserDataRepository,
+    private val userRepository: UserRepository,
 ) : AuthService {
     private val auth = firebase.auth
 
     override val userId: String?
         get() = auth.currentUser?.uid
 
-//    override suspend fun refreshToken(): Result<Unit> {
-//        return try {
-//            auth.currentUser?.reload()?.await()
-//            Result.success(Unit)
-//        } catch (e: Throwable) {
-//            return Result.failure(e)
-//        }
-//    }
-
     override suspend fun login(email: String, password: String): Result<Unit> {
-        try {
+        return tryCatchDerived("Failed login") {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
-
-            val user = authResult.user ?: throw AuthException.Unknown("User is null")
-            if (userDataRepository.get(user.uid).isFailure) {
-                initUserData(user.uid, user.displayName ?: "User", user.photoUrl.toString())
+            val user = authResult.user ?: throw Exception("User is null")
+            if (userRepository.getUserById(user.uid).isFailure) {
+                initUserData(user.uid, user.displayName)
             }
-
-            return Result.success(Unit)
-        } catch (e: Exception) {
-            return if (e is FirebaseAuthException)
-                Result.failure(e) // .toAuthException()
-            else
-                Result.failure(e)
         }
     }
 
     override suspend fun register(name: String, email: String, password: String): Result<Unit> {
-        try {
+        return tryCatchDerived("Failed register") {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
-
-            initUserData(authResult.user?.uid ?: throw AuthException.Unknown("User is null"), name)
-
-            return Result.success(Unit)
-        } catch (e: Exception) {
-            return if (e is FirebaseAuthException)
-                Result.failure(e) // .toAuthException()
-            else
-                Result.failure(e)
+            val user = authResult.user ?: throw Exception("User is null")
+            initUserData(user.uid, name)
         }
     }
 
     override suspend fun logout(): Result<Unit> {
-        auth.signOut()
-        return Result.success(Unit)
+        return tryCatchDerived("Failed logout") { auth.signOut() }
     }
 
     override fun listen(callback: () -> Unit): Result<() -> Unit> {
         val listener: (FirebaseAuth) -> Unit = { callback() }
-        auth.addAuthStateListener(listener)
 
-        return Result.success { auth.removeAuthStateListener(listener) }
+        return tryCatchDerived("Failed listen auth state") {
+            auth.addAuthStateListener(listener)
+            return@tryCatchDerived { auth.removeAuthStateListener(listener) }
+        }
     }
 
-    private suspend fun initUserData(userId: String, name: String, avatarUrl: String? = null) {
-        val user = User(
-            id = userId,
-            name = name,
-            avatarUrl = avatarUrl
-        )
-        userDataRepository.add(user).onFailure { throw it }
+    private suspend fun initUserData(userId: String, name: String?) {
+        var user = User(id = userId)
+        if (name != null) user = user.copy(name = name)
+
+        tryCatchDerived("Failed init user data") {
+            userRepository.addUser(user).onFailure { throw it }
+        }
     }
 }
