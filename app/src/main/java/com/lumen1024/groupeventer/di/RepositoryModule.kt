@@ -1,7 +1,7 @@
 package com.lumen1024.groupeventer.di
 
-import com.lumen1024.data.implementation.FirebaseUserDataRepository
 import com.lumen1024.data.implementation.repository.FirebaseGroupRepository
+import com.lumen1024.data.implementation.repository.FirebaseUserRepository
 import com.lumen1024.domain.repository.GroupRepository
 import com.lumen1024.domain.usecase.UserDataRepository
 import dagger.Binds
@@ -17,5 +17,5 @@ abstract class RepositoryModule {
     abstract fun bindGroupRepository(groupRepositoryImp: FirebaseGroupRepository): GroupRepository
 
     @Binds
-    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserDataRepository): UserDataRepository
+    abstract fun bindUserDataRepository(userRepositoryImp: FirebaseUserRepository): UserDataRepository
 }

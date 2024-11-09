@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.AuthException
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.navigation.Navigator
 import com.lumen1024.ui.navigation.Screen
 import com.lumen1024.ui.shared.text_field.EmailErrorState

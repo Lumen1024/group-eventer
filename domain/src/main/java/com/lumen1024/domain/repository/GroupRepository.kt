@@ -19,6 +19,6 @@ interface GroupRepository {
 
     fun listenChanges(
         groupId: String,
-        callback: (RepositoryObjectChange<Group>) -> Unit,
+        callback: (Group) -> Unit,
     ): Result<() -> Unit>
 }

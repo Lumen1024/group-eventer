@@ -40,7 +40,7 @@ class FirebaseEventRepository @Inject constructor(
             .document(eventId)
             .get()
 
-        return tryCatchDerived<Event>("Failed get event by id") {
+        return tryCatchDerived("Failed get event by id") {
             val event = query.await().toObject(EventDto::class.java)?.toEvent()
                 ?: throw Exception("Event not found")
             return@tryCatchDerived event
@@ -56,7 +56,7 @@ class FirebaseEventRepository @Inject constructor(
             .collection(EVENTS_COLLECTION)
             .add(event.toEventDto())
 
-        return tryCatchDerived<Unit>("Failed delete event") { task.await() }
+        return tryCatchDerived("Failed delete event") { task.await() }
     }
 
     override suspend fun updateEvent(
@@ -70,7 +70,7 @@ class FirebaseEventRepository @Inject constructor(
             .document(eventId)
             .update(data)
 
-        return tryCatchDerived<Unit>("Failed delete event") { task.await() }
+        return tryCatchDerived("Failed delete event") { task.await() }
     }
 
     override suspend fun deleteEvent(
@@ -83,6 +83,6 @@ class FirebaseEventRepository @Inject constructor(
             .document(eventId)
             .delete()
 
-        return tryCatchDerived<Unit>("Failed delete event") { task.await() }
+        return tryCatchDerived("Failed delete event") { task.await() }
     }
 }

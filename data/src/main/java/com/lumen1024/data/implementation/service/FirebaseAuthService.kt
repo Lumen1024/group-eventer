@@ -1,4 +1,4 @@
-package com.lumen1024.data.implementation
+package com.lumen1024.data.implementation.service
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.auth
 import com.lumen1024.domain.data.AuthException
 import com.lumen1024.domain.data.User
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.domain.usecase.UserDataRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

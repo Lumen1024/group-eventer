@@ -9,6 +9,7 @@ import com.lumen1024.data.toRepositoryObjectChange
 import com.lumen1024.data.tryCatchDerived
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
+import com.lumen1024.domain.data.transform
 import com.lumen1024.domain.repository.GroupRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -54,70 +55,60 @@ class FirebaseGroupRepository @Inject constructor(
     }
 
     override suspend fun addGroup(group: Group): Result<Unit> {
-        try {
-            collection.add(group.toGroupDto()).await()
-            return Result.success(Unit)
-        } catch (e: Exception) {
-            val message = "Failed add group: " + (e.message ?: "no exception message provided")
-            return Result.failure(Exception(message))
-        }
+        val task = collection.add(group.toGroupDto())
+        return tryCatchDerived("Failed add group") { task.await() }
     }
 
     override suspend fun deleteGroup(groupId: String): Result<Unit> {
-        try {
-            collection.document(groupId).delete().await()
-            return Result.success(Unit)
-        } catch (e: Exception) {
-            val message = "Failed delete group: " + (e.message ?: "no exception message provided")
-            return Result.failure(Exception(message))
-        }
+        val task = collection.document(groupId).delete()
+        return tryCatchDerived("Failed delete group") { task.await() }
     }
 
     //  TODO: map dto fields
     override suspend fun updateGroup(
         groupId: String, data: Map<String, Any>
     ): Result<Unit> {
-        try {
-            collection.document(groupId).update(data).await()
-            Result.success(Unit)
-
-        } catch (e: Exception) {
-            val message = "Failed update group: " + (e.message ?: "no exception message provided")
-            return Result.failure(Exception(message))
-        }
+        val task = collection.document(groupId).update(data)
+        return tryCatchDerived("Failed update group") { task.await() }
     }
 
     override fun listenChanges(
         groupIds: List<String>, callback: (List<RepositoryObjectChange<Group>>) -> Unit
     ): Result<() -> Unit> {
-        if (groupIds.isEmpty()) {
-            return Result.failure(Throwable("Ids must not be empty"))
-        }
+        if (groupIds.isEmpty())
+            return Result.failure(Exception("Can't listen changes, groupIds must not be empty"))
 
         val query = collection.whereIn("id", groupIds)
 
-        val registration = query.addSnapshotListener { snapshot, e ->
-            if (e != null) return@addSnapshotListener
+        return tryCatchDerived("Can't listen changes") {
+            val registration = query.addSnapshotListener { snapshot, e ->
+                if (e != null) return@addSnapshotListener
 
-            val changes = snapshot?.documentChanges?.map { firebaseChange ->
-                val changeDto = firebaseChange.toRepositoryObjectChange<GroupDto>()
-                RepositoryObjectChange(changeDto.type, changeDto.data?.toGroup())
-                changeDto.copy(_data = changeDto.data.toGroup())
-            } ?: return@addSnapshotListener
+                val changes = snapshot?.documentChanges?.mapNotNull { firebaseChange ->
+                    val changesDto = firebaseChange.toRepositoryObjectChange<GroupDto>()
+                        ?: return@mapNotNull null
+                    return@mapNotNull changesDto.transform { it.toGroup() }
+                } ?: return@addSnapshotListener
 
-            callback(changes.filterNotNull())
+                callback(changes)
+            }
+            return@tryCatchDerived  { registration.remove() }
         }
-
-        return Result.success { registration.remove() }
     }
 
     override fun listenChanges(
-        groupId: String, callback: (RepositoryObjectChange<Group>) -> Unit
+        groupId: String, callback: (Group) -> Unit
     ): Result<() -> Unit> {
         val query = collection.document(groupId)
-        val registration = query.addSnapshotListener { snapshot, e ->
 
+        return tryCatchDerived("Can't listen changes") {
+            val registration = query.addSnapshotListener { snapshot, e ->
+                if (e != null) return@addSnapshotListener
+                val data = snapshot?.toObject(GroupDto::class.java)?.toGroup()
+                    ?: return@addSnapshotListener
+                callback(data)
+            }
+            return@tryCatchDerived { registration.remove() }
         }
-        return Result.success { registration.remove() }
     }
 }

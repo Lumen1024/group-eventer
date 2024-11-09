@@ -11,3 +11,7 @@ data class RepositoryObjectChange<T>(
     }
 }
 
+inline fun <T, R> RepositoryObjectChange<T>.transform(transform: (T) -> R): RepositoryObjectChange<R> {
+    return RepositoryObjectChange(type, transform(data))
+}
+

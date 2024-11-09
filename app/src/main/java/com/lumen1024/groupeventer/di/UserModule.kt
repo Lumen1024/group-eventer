@@ -3,7 +3,7 @@ package com.lumen1024.groupeventer.di
 import com.lumen1024.data.implementation.FirebaseUserActions
 import com.lumen1024.data.implementation.FirebaseUserStateHolder
 import com.lumen1024.domain.repository.GroupRepository
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.domain.usecase.UserActions
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
