@@ -12,7 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.app_components.AppContent
 import com.lumen1024.ui.config.GroupEventerTheme
 import dagger.hilt.android.AndroidEntryPoint

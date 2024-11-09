@@ -1,4 +1,4 @@
-package com.lumen1024.domain.usecase
+package com.lumen1024.domain.service
 
 interface AuthService {
 

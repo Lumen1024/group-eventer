@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.screen.auth.AuthScreen
 import com.lumen1024.ui.screen.create_event.CreateEventScreen
 import com.lumen1024.ui.screen.events.EventsScreen

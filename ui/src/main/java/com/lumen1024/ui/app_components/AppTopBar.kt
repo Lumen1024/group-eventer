@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.navigation.Navigator
 import com.lumen1024.ui.navigation.Screen
 import com.lumen1024.ui.navigation.getCurrentScreenAsState

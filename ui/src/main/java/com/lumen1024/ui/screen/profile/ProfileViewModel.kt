@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.AuthException
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
 import com.lumen1024.ui.navigation.Navigator

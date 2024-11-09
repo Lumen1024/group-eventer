@@ -5,7 +5,7 @@ import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.GroupRepository
-import com.lumen1024.domain.usecase.AuthService
+import com.lumen1024.domain.service.AuthService
 import com.lumen1024.domain.usecase.UserDataRepository
 import com.lumen1024.domain.usecase.UserStateHolder
 import kotlinx.coroutines.flow.MutableStateFlow
