@@ -12,13 +12,11 @@ data class UserDto(
 fun User.toUserDto() = UserDto(
     id = id,
     name = name,
-    avatarUrl = avatarUrl,
     groups = groups,
 )
 
 fun UserDto.toUser() = User(
     id = id,
     name = name,
-    avatarUrl = avatarUrl,
     groups = groups,
 )
