@@ -1,10 +1,12 @@
 package com.lumen1024.domain.repository
 
+import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Event
+import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    suspend fun getEventsByGroupId(groupId: String): Result<List<Event>>
-    suspend fun getEventById(groupId: String, eventId: String): Result<Event>
+    suspend fun getEventsByGroupId(groupId: String): FlowList<Event?>
+    suspend fun getEventById(groupId: String, eventId: String): Flow<Event?>
 
     suspend fun addEvent(groupId: String, event: Event): Result<Unit>
     suspend fun updateEvent(groupId: String, eventId: String, data: Map<String, Any>): Result<Unit>
