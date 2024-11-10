@@ -1,12 +1,14 @@
 package com.lumen1024.domain.repository
 
+import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
+import kotlinx.coroutines.flow.Flow
 
 interface GroupRepository {
-    suspend fun getGroupById(id: String): Result<Group>
-    suspend fun getGroupByCredentials(name: String, password: String? = null): Result<Group>
-    suspend fun getGroupsByIds(groupIds: List<String> = emptyList()): Result<List<Group>>
+    suspend fun getGroupById(id: String): Flow<Group?>
+    suspend fun getGroupByCredentials(name: String, password: String? = null): Flow<Group?>
+    suspend fun getGroupsByIds(groupIds: List<String> = emptyList()): FlowList<Group>
 
     suspend fun addGroup(group: Group): Result<Unit>
     suspend fun deleteGroup(groupId: String): Result<Unit>
