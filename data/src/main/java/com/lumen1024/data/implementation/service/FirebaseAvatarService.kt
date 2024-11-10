@@ -13,15 +13,6 @@ class FirebaseAvatarService @Inject constructor(
 ) : AvatarService {
     val storage = firebase.storage.reference.child("avatars")
 
-    override suspend fun getAvatar(userId: String): Result<String?> {
-        val task = storage.child(userId).downloadUrl
-
-        return tryCatchDerived("Failed get avatar") {
-            val url = task.await().toString()
-            return@tryCatchDerived url
-        }
-    }
-
     override suspend fun updateAvatar(
         userId: String,
         imageURI: String
