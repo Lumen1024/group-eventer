@@ -6,8 +6,12 @@ import com.lumen1024.data.dto.EventDto
 import com.lumen1024.data.dto.toEvent
 import com.lumen1024.data.dto.toEventDto
 import com.lumen1024.data.tryCatchDerived
+import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.repository.EventRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -18,33 +22,34 @@ class FirebaseEventRepository @Inject constructor(
 ) : EventRepository {
     val collection = firebase.firestore.collection("groups")
 
-    override suspend fun getEventsByGroupId(groupId: String): Result<List<Event>> {
+    override suspend fun getEventsByGroupId(groupId: String): FlowList<Event?> = callbackFlow {
         val query = collection
             .document(groupId)
             .collection(EVENTS_COLLECTION)
-            .get()
 
-        return tryCatchDerived("Failed get events by group id") {
-            val events = query.await().toObjects(EventDto::class.java).map { it.toEvent() }
-            return@tryCatchDerived events
+        val registration = query.addSnapshotListener { snapshot, e ->
+            if (e != null) return@addSnapshotListener
+            val events = snapshot?.toObjects(EventDto::class.java)?.map { it.toEvent() }
+            trySend(events ?: emptyList())
         }
+        awaitClose { registration.remove() }
     }
 
     override suspend fun getEventById(
         groupId: String,
         eventId: String
-    ): Result<Event> {
+    ): Flow<Event?> = callbackFlow {
         val query = collection
             .document(groupId)
             .collection(EVENTS_COLLECTION)
             .document(eventId)
-            .get()
 
-        return tryCatchDerived("Failed get event by id") {
-            val event = query.await().toObject(EventDto::class.java)?.toEvent()
-                ?: throw Exception("Event not found")
-            return@tryCatchDerived event
+        val registration = query.addSnapshotListener { snapshot, e ->
+            if (e != null) return@addSnapshotListener
+            val event = snapshot?.toObject(EventDto::class.java)?.toEvent()
+            trySend(event)
         }
+        awaitClose { registration.remove() }
     }
 
     override suspend fun addEvent(
