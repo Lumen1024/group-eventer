@@ -7,10 +7,14 @@ import com.lumen1024.data.dto.toGroup
 import com.lumen1024.data.dto.toGroupDto
 import com.lumen1024.data.toRepositoryObjectChange
 import com.lumen1024.data.tryCatchDerived
+import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.RepositoryObjectChange
 import com.lumen1024.domain.data.transform
 import com.lumen1024.domain.repository.GroupRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -19,39 +23,45 @@ class FirebaseGroupRepository @Inject constructor(
 ) : GroupRepository {
     private val collection = firebase.firestore.collection("groups")
 
-    override suspend fun getGroupById(id: String): Result<Group> {
-        val query = collection.document(id).get()
+    override suspend fun getGroupById(id: String): Flow<Group?> = callbackFlow {
+        val query = collection.document(id)
 
-        return tryCatchDerived("Failed get group by id") {
-            val group = query.await().toObject(GroupDto::class.java)?.toGroup()
-                ?: throw Exception("Group not found")
-            return@tryCatchDerived group
+        val registration = query.addSnapshotListener { snapshot, e ->
+            if (e != null) return@addSnapshotListener
+
+            val group = snapshot?.toObject(GroupDto::class.java)?.toGroup()
+            trySend(group)
         }
+        awaitClose { registration.remove() }
     }
 
     override suspend fun getGroupByCredentials(
         name: String, password: String?
-    ): Result<Group> {
+    ): Flow<Group?> = callbackFlow {
         val query = collection
             .whereEqualTo(GroupDto::name.name, name)
             .whereEqualTo(GroupDto::password.name, password ?: "")
 
-        return tryCatchDerived("Failed get group by credentials") {
-            val group = query.get().await().toObjects(GroupDto::class.java).map { it.toGroup() }
-                .takeIf { it.isNotEmpty() }?.get(0)
-                ?: throw Exception("Group not found")
-
-            return@tryCatchDerived group
+        val registration = query.addSnapshotListener { snapshot, e ->
+            query.addSnapshotListener { snapshot, e ->
+                if (e != null) return@addSnapshotListener
+                val group = snapshot?.toObjects(GroupDto::class.java)?.map { it.toGroup() }
+                    ?.takeIf { it.isNotEmpty() }?.get(0)
+                trySend(group)
+            }
         }
+        awaitClose { registration.remove() }
     }
 
-    override suspend fun getGroupsByIds(groupIds: List<String>): Result<List<Group>> {
+    override suspend fun getGroupsByIds(groupIds: List<String>): FlowList<Group> = callbackFlow {
         val query = collection.whereIn("id", groupIds)
 
-        return tryCatchDerived("Failed get groups by ids") {
-            val groups = query.get().await().toObjects(GroupDto::class.java).map { it.toGroup() }
-            return@tryCatchDerived groups
+        val registration = query.addSnapshotListener { snapshot, e ->
+            if (e != null) return@addSnapshotListener
+            val groups = snapshot?.toObjects(GroupDto::class.java)?.map { it.toGroup() }
+            trySend(groups ?: emptyList())
         }
+        awaitClose { registration.remove() }
     }
 
     override suspend fun addGroup(group: Group): Result<Unit> {
@@ -92,7 +102,7 @@ class FirebaseGroupRepository @Inject constructor(
 
                 callback(changes)
             }
-            return@tryCatchDerived  { registration.remove() }
+            return@tryCatchDerived { registration.remove() }
         }
     }
 
