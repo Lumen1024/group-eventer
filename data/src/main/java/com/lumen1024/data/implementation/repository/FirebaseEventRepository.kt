@@ -22,7 +22,7 @@ class FirebaseEventRepository @Inject constructor(
 ) : EventRepository {
     val collection = firebase.firestore.collection("groups")
 
-    override suspend fun getEventsByGroupId(groupId: String): FlowList<Event?> = callbackFlow {
+    override fun getEventsByGroupId(groupId: String): FlowList<Event?> = callbackFlow {
         val query = collection
             .document(groupId)
             .collection(EVENTS_COLLECTION)
@@ -35,7 +35,7 @@ class FirebaseEventRepository @Inject constructor(
         awaitClose { registration.remove() }
     }
 
-    override suspend fun getEventById(
+    override fun getEventById(
         groupId: String,
         eventId: String
     ): Flow<Event?> = callbackFlow {

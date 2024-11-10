@@ -19,7 +19,7 @@ class FirebaseUserRepository @Inject constructor(
 ) : UserRepository {
     private val collection = firebase.firestore.collection("users")
 
-    override suspend fun getUserById(id: String): Flow<User?> = callbackFlow {
+    override fun getUserById(id: String): Flow<User?> = callbackFlow {
         val query = collection.document(id)
 
         val registration = query.addSnapshotListener { snapshot, e ->

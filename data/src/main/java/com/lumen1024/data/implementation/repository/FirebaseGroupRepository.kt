@@ -20,7 +20,7 @@ class FirebaseGroupRepository @Inject constructor(
 ) : GroupRepository {
     private val collection = firebase.firestore.collection("groups")
 
-    override suspend fun getGroupById(id: String): Flow<Group?> = callbackFlow {
+    override fun getGroupById(id: String): Flow<Group?> = callbackFlow {
         val query = collection.document(id)
 
         val registration = query.addSnapshotListener { snapshot, e ->
@@ -32,7 +32,7 @@ class FirebaseGroupRepository @Inject constructor(
         awaitClose { registration.remove() }
     }
 
-    override suspend fun getGroupByCredentials(
+    override fun getGroupByCredentials(
         name: String, password: String?
     ): Flow<Group?> = callbackFlow {
         val query = collection
@@ -50,7 +50,7 @@ class FirebaseGroupRepository @Inject constructor(
         awaitClose { registration.remove() }
     }
 
-    override suspend fun getGroupsByIds(groupIds: List<String>): FlowList<Group> = callbackFlow {
+    override fun getGroupsByIds(groupIds: List<String>): FlowList<Group> = callbackFlow {
         val query = collection.whereIn("id", groupIds)
 
         val registration = query.addSnapshotListener { snapshot, e ->
