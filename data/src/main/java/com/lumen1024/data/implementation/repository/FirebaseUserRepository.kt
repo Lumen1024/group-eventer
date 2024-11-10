@@ -8,6 +8,9 @@ import com.lumen1024.data.dto.toUserDto
 import com.lumen1024.data.tryCatchDerived
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.UserRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -16,14 +19,16 @@ class FirebaseUserRepository @Inject constructor(
 ) : UserRepository {
     private val collection = firebase.firestore.collection("users")
 
-    override suspend fun getUserById(id: String): Result<User> {
-        val query = collection.document(id).get()
+    override suspend fun getUserById(id: String): Flow<User?> = callbackFlow {
+        val query = collection.document(id)
 
-        return tryCatchDerived("Failed get user by id") {
-            val user = query.await().toObject(UserDto::class.java)?.toUser()
-                ?: throw Exception("User not found")
-            return@tryCatchDerived user
+        val registration = query.addSnapshotListener { snapshot, e ->
+            if (e != null) return@addSnapshotListener
+            val user = snapshot?.toObject(UserDto::class.java)?.toUser()
+            trySend(user)
         }
+
+        awaitClose { registration.remove() }
     }
 
     override suspend fun addUser(user: User): Result<Unit> {
@@ -39,21 +44,5 @@ class FirebaseUserRepository @Inject constructor(
         val task = collection.document(id).update(data)
 
         return tryCatchDerived("Failed update user") { task.await() }
-    }
-
-    override fun listenChanges(
-        id: String,
-        callback: (User) -> Unit
-    ): Result<() -> Unit> {
-        val query = collection.document(id)
-
-        return tryCatchDerived<() -> Unit>("Failed listen changes") {
-            val registration = query.addSnapshotListener { snapshot, e ->
-                if (e != null) return@addSnapshotListener
-                val data = snapshot?.toObject(UserDto::class.java)?.toUser()
-                if (data != null) callback(data)
-            }
-            return@tryCatchDerived { registration.remove() }
-        }
     }
 }
