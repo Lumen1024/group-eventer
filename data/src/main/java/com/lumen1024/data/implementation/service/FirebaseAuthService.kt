@@ -25,6 +25,8 @@ class FirebaseAuthService @Inject constructor(
 ) : AuthService {
     private val auth = firebase.auth
 
+    override val isUserAuthorized: Boolean = auth.currentUser != null
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCurrentUser(): Flow<User?> = flow {
         getCurrentFirebaseUser().flatMapLatest { firebaseUser ->
