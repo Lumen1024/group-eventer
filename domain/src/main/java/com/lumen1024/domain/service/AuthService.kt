@@ -4,6 +4,7 @@ import com.lumen1024.domain.data.User
 import kotlinx.coroutines.flow.Flow
 
 interface AuthService {
+    val isUserAuthorized: Boolean
     fun getCurrentUser(): Flow<User?>
 
     suspend fun login(email: String, password: String): Result<Unit>
