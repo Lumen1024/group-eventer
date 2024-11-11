@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -25,7 +26,9 @@ class FirebaseAuthService @Inject constructor(
 ) : AuthService {
     private val auth = firebase.auth
 
-    override val isUserAuthorized: Boolean = auth.currentUser != null
+    override val isUserAuthorized: Flow<Boolean> = getCurrentUserId().transform {
+        emit(it != null)
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCurrentUser(): Flow<User?> = flow {
@@ -67,6 +70,10 @@ class FirebaseAuthService @Inject constructor(
         tryCatchDerived("Failed init user data") {
             userRepository.addUser(user).onFailure { throw it }
         }
+    }
+
+    override fun getCurrentUserId(): Flow<String?> = getCurrentFirebaseUser().transform {
+        emit(it?.uid)
     }
 
     private fun getCurrentFirebaseUser(): Flow<FirebaseUser?> = callbackFlow {
