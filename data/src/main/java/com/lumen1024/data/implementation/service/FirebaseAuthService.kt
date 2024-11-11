@@ -26,7 +26,7 @@ class FirebaseAuthService @Inject constructor(
 ) : AuthService {
     private val auth = firebase.auth
 
-    override val isUserAuthorized: Flow<Boolean> = getCurrentUserId().transform {
+    override fun getUserAuthorizedState(): Flow<Boolean> = getCurrentUserId().transform {
         emit(it != null)
     }
 
