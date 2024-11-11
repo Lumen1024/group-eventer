@@ -1,9 +1,13 @@
 package com.lumen1024.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +18,10 @@ import com.lumen1024.ui.screen.events.EventsScreen
 import com.lumen1024.ui.screen.groups.GroupsScreen
 import com.lumen1024.ui.screen.profile.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MainNavGraphViewModel @Inject constructor(
@@ -23,8 +30,21 @@ class MainNavGraphViewModel @Inject constructor(
 ) : ViewModel() {
 
     val navigationChannel = navigator.navigationChannel
+    var startDestination = mutableStateOf<Screen>(Screen.Auth)
 
-    fun getStartDestination(): Screen = if (authService.checkAuthorized())
+    init {
+        viewModelScope.launch {
+            authService.getCurrentUser().collect {
+                startDestination.value = if (it != null) {
+                    Screen.Events
+                } else {
+                    Screen.Auth
+                }
+            }
+        }
+    }
+
+    suspend fun getStartDestination(): Screen = if (authService.getCurrentUser().first() != null)
         Screen.Events
     else
         Screen.Auth
@@ -40,11 +60,11 @@ fun MainNavGraph(
         navigationChannel = viewModel.navigationChannel,
         navHostController = navController
     )
-
+    val startDestination by remember { viewModel.startDestination } // TODO: loading animation
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = viewModel.getStartDestination()
+        startDestination = startDestination
     ) {
         composable<Screen.Auth> { AuthScreen() }
 
