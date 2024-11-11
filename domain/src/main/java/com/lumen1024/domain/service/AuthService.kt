@@ -1,13 +1,12 @@
 package com.lumen1024.domain.service
 
-interface AuthService {
+import com.lumen1024.domain.data.User
+import kotlinx.coroutines.flow.Flow
 
-    val userId: String?
-    fun checkAuthorized() = (userId != null)
+interface AuthService {
+    fun getCurrentUser(): Flow<User?>
 
     suspend fun login(email: String, password: String): Result<Unit>
     suspend fun register(name: String, email: String, password: String): Result<Unit>
     suspend fun logout(): Result<Unit>
-
-    fun listen(callback: () -> Unit): Result<() -> Unit>
 }
