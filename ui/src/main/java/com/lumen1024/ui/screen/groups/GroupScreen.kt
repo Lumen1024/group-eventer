@@ -7,50 +7,34 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Group
 import com.lumen1024.ui.shared.GroupItem
-import com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog
 import com.lumen1024.ui.widgets.group_details.ui.GroupDetailsBottomSheet
 
 
 @Composable
 fun GroupsScreen(
-    viewModel: GroupsViewModel = hiltViewModel(),
+    state: GroupsScreenState,
+    actions: GroupsScreenActions,
 ) {
-    val groups by viewModel.userStateHolder.groups.collectAsState()
-
-    var selectedGroupId by remember { mutableStateOf<String?>(null) }
-    var selectedGroup by remember { mutableStateOf<Group?>(null) }
-
-    LaunchedEffect(groups, selectedGroupId) {
-        selectedGroup = groups.find { group -> group.id == selectedGroupId }
-    }
-
-    val isSheetOpen by remember { derivedStateOf { selectedGroup !== null } }
-
-    var addDialogOpen by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(groups, key = { group -> group.id })
+        items(state.groups, key = { group -> group.id })
         {
             GroupItem(
-                onClick = {
-                    selectedGroupId = it.id
-                },
+                onClick = { actions.onGroupClicked(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
@@ -60,17 +44,39 @@ fun GroupsScreen(
         }
     }
 
-    if (addDialogOpen) {
-        AddGroupDialog(
-            onDismiss = { addDialogOpen = false }
+    if (state.detailsBottomSheetState is DetailsBottomSheetState.Opened) {
+        GroupDetailsBottomSheet(
+            onDismiss = state.detailsBottomSheetState.onDismiss,
+            group = state.detailsBottomSheetState.group,
         )
     }
-    if (isSheetOpen) {
-        selectedGroup?.let { group ->
-            GroupDetailsBottomSheet(
-                onDismiss = { selectedGroupId = null },
-                group = group,
+}
+
+@Composable
+fun GroupsScreenWithVM() {
+    val viewModel: GroupsViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsState()
+    val actions: GroupsScreenActions = viewModel
+
+    GroupsScreen(state, actions)
+}
+
+@Preview
+@Composable
+fun GroupsScreenPreview() {
+    val state by remember {
+        mutableStateOf(
+            GroupsScreenState(
+
             )
-        }
+        )
     }
+    val actions: GroupsScreenActions = object : GroupsScreenActions {
+        override fun onGroupClicked(group: Group) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
+    GroupsScreen(state, actions)
 }

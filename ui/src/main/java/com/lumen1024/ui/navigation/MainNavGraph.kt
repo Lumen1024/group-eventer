@@ -15,10 +15,9 @@ import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.screen.auth.AuthScreen
 import com.lumen1024.ui.screen.create_event.CreateEventScreen
 import com.lumen1024.ui.screen.events.EventsScreen
-import com.lumen1024.ui.screen.groups.GroupsScreen
+import com.lumen1024.ui.screen.groups.GroupsScreenWithVM
 import com.lumen1024.ui.screen.profile.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,11 +42,6 @@ class MainNavGraphViewModel @Inject constructor(
             }
         }
     }
-
-    suspend fun getStartDestination(): Screen = if (authService.getUserAuthorizedState().first())
-        Screen.Events
-    else
-        Screen.Auth
 }
 
 @Composable
@@ -77,7 +71,7 @@ fun MainNavGraph(
                 Screen.Events,
                 Screen.Profile
             )) },
-        ) { GroupsScreen() }
+        ) { GroupsScreenWithVM() }
 
         composable<Screen.Events>(
             enterTransition = {
