@@ -44,7 +44,7 @@ class MainNavGraphViewModel @Inject constructor(
         }
     }
 
-    suspend fun getStartDestination(): Screen = if (authService.getCurrentUser().first() != null)
+    suspend fun getStartDestination(): Screen = if (authService.getUserAuthorizedState().first())
         Screen.Events
     else
         Screen.Auth
