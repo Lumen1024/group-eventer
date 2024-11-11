@@ -19,6 +19,11 @@ data class GroupsScreenState(
     val detailsBottomSheetState: DetailsBottomSheetState = DetailsBottomSheetState.Closed,
 )
 
+@Immutable
+interface GroupsScreenActions {
+    fun onGroupClicked(group: Group)
+}
+
 sealed interface DetailsBottomSheetState {
     object Closed : DetailsBottomSheetState
 
@@ -28,9 +33,6 @@ sealed interface DetailsBottomSheetState {
     ) : DetailsBottomSheetState
 }
 
-interface GroupsScreenActions {
-    fun onGroupClicked(group: Group)
-}
 
 @HiltViewModel
 class GroupsViewModel @Inject constructor(
