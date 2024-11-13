@@ -1,77 +1,87 @@
 package com.lumen1024.ui.widgets.group_details.model
 
-import android.content.Context
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.GroupRole
 import com.lumen1024.domain.data.User
-import com.lumen1024.domain.usecase.UserActions
-import com.lumen1024.domain.usecase.UserDataRepository
-import com.lumen1024.domain.usecase.UserStateHolder
-import com.lumen1024.ui.tools.showToast
+import com.lumen1024.domain.usecase.GetUsersByGroupUseCase
+import com.lumen1024.domain.usecase.LeaveGroupUseCase
+import com.lumen1024.domain.usecase.RemoveUserFromGroupUseCase
+import com.lumen1024.domain.usecase.TransferGroupAdminUseCase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+
+@Immutable
+data class GroupDetailsState(
+    val group: Group,
+    val onDismissRequest: () -> Unit,
+    val users: Map<User, GroupRole> = emptyMap(),
+    val showAdminActions: Boolean = false,
+)
+
+@Immutable
+interface GroupDetailsActions {
+    fun removeUserFromGroup(userId: String)
+    fun transferAdministrator(userId: String)
+    fun leaveGroup()
+    fun onDismissRequest()
+}
 
 @HiltViewModel
-class GroupDetailsViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val userDataRepository: UserDataRepository,
-    private val userActions: UserActions,
-    val userStateHolder: UserStateHolder,
-) : ViewModel() {
-    private val _admin = MutableStateFlow<User?>(null)
-    val admin = _admin.asStateFlow()
+class GroupDetailsViewModel @AssistedInject constructor(
+    @Assisted val group: Group,
+    @Assisted val onDismissRequest: () -> Unit,
+    private val getUsersByGroupUseCase: GetUsersByGroupUseCase,
+    private val transferGroupAdminUseCase: TransferGroupAdminUseCase,
+    private val removeUserFromGroupUseCase: RemoveUserFromGroupUseCase,
+    private val leaveGroupUseCase: LeaveGroupUseCase,
+) : ViewModel(), GroupDetailsActions {
+    private val _state = MutableStateFlow(
+        GroupDetailsState(
+            group = group,
+            onDismissRequest = onDismissRequest,
+        )
+    )
+    val state = _state.asStateFlow()
 
-    private val _users = MutableStateFlow(emptyList<User>())
-    val users = _users.asStateFlow()
-
-    fun setGroup(group: Group) {
+    init {
         viewModelScope.launch {
-            launch {
-                _users.value = emptyList()
-                group.members.keys.forEach { key ->
-                    launch {
-                        userDataRepository.get(key).onSuccess { user ->
-                            _users.value += user
-                        }
-                    }
-                }
-            }
-
-            launch {
-                userDataRepository.get(group.admin).onSuccess { user ->
-                    _admin.value = user
-                }.onFailure {
-                    _admin.value = null
-                }
+            getUsersByGroupUseCase(group).collect {
+                _state.value = _state.value.copy(users = it)
             }
         }
     }
 
-    fun removeUserFromGroup(groupId: String, user: User) {
+    override fun removeUserFromGroup(userId: String) {
         viewModelScope.launch {
-            userActions.removeUserFromGroup(groupId, user)
+            removeUserFromGroupUseCase(group.id, userId)
         }
     }
 
-    fun transferAdministrator(groupId: String, user: User) {
+    override fun transferAdministrator(userId: String) {
         viewModelScope.launch {
-            userActions.transferAdministrator(groupId, user)
+            transferGroupAdminUseCase(group.id, userId)
         }
     }
 
-    fun leaveGroup(group: Group) {
+    override fun leaveGroup() {
         viewModelScope.launch {
-            val r = userActions.leaveGroup(group.id)
-            if (r.isSuccess) {
-                context.showToast("Leaved from group \"${group.name}\"")
-            } else if (r.isFailure) {
-                context.showToast(r.exceptionOrNull()?.message ?: "Error leaving group")
-            }
+            leaveGroupUseCase(group.id)
+            onDismissRequest()
         }
+    }
+
+    override fun onDismissRequest() = this@GroupDetailsViewModel.onDismissRequest.invoke()
+
+    @AssistedFactory
+    interface Factory {
+        fun create(group: Group, onDismissRequest: () -> Unit): GroupDetailsViewModel
     }
 }
