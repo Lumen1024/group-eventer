@@ -19,19 +19,23 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.domain.data.Group
+import com.lumen1024.domain.data.GroupRole
 import com.lumen1024.ui.shared.GroupColorBadge
 import com.lumen1024.ui.shared.ScalableBottomSheet
+import com.lumen1024.ui.widgets.group_details.model.GroupDetailsActions
+import com.lumen1024.ui.widgets.group_details.model.GroupDetailsState
 import com.lumen1024.ui.widgets.group_details.model.GroupDetailsViewModel
 
 
@@ -39,109 +43,147 @@ import com.lumen1024.ui.widgets.group_details.model.GroupDetailsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupDetailsBottomSheet(
-    viewModel: GroupDetailsViewModel = hiltViewModel(),
-    onDismiss: () -> Unit,
-    group: Group,
+    state: GroupDetailsState,
+    actions: GroupDetailsActions,
 ) {
-    val currentUser by viewModel.userStateHolder.user.collectAsState()
-    val admin by viewModel.admin.collectAsState()
-    val users by viewModel.users.collectAsState()
-
-    val currentUserIsAdmin by remember {
-        derivedStateOf {
-            currentUser?.id == admin?.id
-        }
-    }
-
-    LaunchedEffect(group) {
-        viewModel.setGroup(group)
-    }
 
     ScalableBottomSheet(
         modifier = Modifier
             .fillMaxHeight()
             .statusBarsPadding(),
-        onDismissRequest = onDismiss,
+        onDismissRequest = actions::onDismissRequest,
     ) { heightProgressFraction, minHeight ->
-            Column(
+        Column(
+            modifier = Modifier
+                .heightIn(min = minHeight)
+                .fillMaxHeight(heightProgressFraction)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        )
+        {
+            Row(
                 modifier = Modifier
-                    .heightIn(min = minHeight)
-                    .fillMaxHeight(heightProgressFraction)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            )
-            {
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        GroupColorBadge(color = Color(group.color.hex))
-                        Text(text = group.name)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                HorizontalDivider()
-
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                ) {
-                    item(key = "${admin?.id ?: "unknown"}-admin") {
-                        GroupUserListItem(
-                            modifier = Modifier.fillMaxWidth(1f),
-                            user = admin,
-                            textColor = MaterialTheme.colorScheme.primary,
-                            showMoreButton = false,
-                        )
-                    }
-
-                    items(users, key = { it.id }) {
-                        GroupUserListItem(
-                            modifier = Modifier.fillMaxWidth(1f),
-                            user = it,
-                            showMoreButton = currentUserIsAdmin,
-                            onRemoveFromGroup = {
-                                viewModel.removeUserFromGroup(group.id, it)
-                            },
-                            onTransferAdministrator = {
-                                viewModel.transferAdministrator(group.id, it)
-                            }
-                        )
-                    }
-                }
-
-                Text(
-                    modifier = Modifier
-                        .padding(bottom = 4.dp),
-                    text = "${group.members.size + 1} people", // TODO: res
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                HorizontalDivider()
-
-                Button(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    onClick = {
-                        viewModel.leaveGroup(group)
-                        onDismiss()
-                    }
-                ) {
-                    Text(text = "Leave group") // TODO: res
+                    GroupColorBadge(color = Color(state.group.color.hex))
+                    Text(text = state.group.name)
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            HorizontalDivider()
+
+
+            val admin by remember {
+                derivedStateOf {
+                    state.users.firstNotNullOf {
+                        it.takeIf { it.value == GroupRole.Admin }?.key
+                    }
+                }
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            ) {
+
+                item(key = admin.id) {
+                    GroupUserListItem(
+                        modifier = Modifier.fillMaxWidth(1f),
+                        user = admin,
+                        textColor = MaterialTheme.colorScheme.primary,
+                        showMoreButton = false,
+                    )
+                }
+                items(state.users.toList(), key = { it.first.id + it.second.toString() }) {
+                    GroupUserListItem(
+                        modifier = Modifier.fillMaxWidth(1f),
+                        user = it.first,
+                        showMoreButton = state.showAdminActions,
+                        onRemoveFromGroup = {
+                            actions.removeUserFromGroup(it.first.id)
+                        },
+                        onTransferAdministrator = {
+                            actions.transferAdministrator(it.first.id)
+                        }
+                    )
+                }
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+                text = "${state.group.members.size + 1} people", // TODO: res
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            HorizontalDivider()
+
+            Button(
+                modifier = Modifier.padding(vertical = 8.dp),
+                onClick = { actions.leaveGroup() }
+            ) {
+                Text(text = "Leave group") // TODO: res
+            }
+        }
     }
+}
+
+@Composable
+fun GroupDetailsBottomSheet(
+    onDismiss: () -> Unit,
+    group: Group,
+) {
+    val viewModel: GroupDetailsViewModel =
+        hiltViewModel(creationCallback = { factory: GroupDetailsViewModel.Factory ->
+            factory.create(group) { onDismiss() }
+        }
+        )
+    val state by viewModel.state.collectAsState()
+    val actions: GroupDetailsActions = viewModel
+
+    GroupDetailsBottomSheet(state, actions)
+}
+
+@Preview
+@Composable
+fun GroupDetailsBottomSheetPreview() {
+    val state by remember {
+        mutableStateOf(GroupDetailsState(
+            group = Group(id = ""),
+            onDismissRequest = {}
+        ))
+    }
+    val actions: GroupDetailsActions = object : GroupDetailsActions {
+        override fun removeUserFromGroup(userId: String) {
+            TODO("Not yet implemented")
+        }
+
+        override fun transferAdministrator(userId: String) {
+            TODO("Not yet implemented")
+        }
+
+        override fun leaveGroup() {
+            TODO("Not yet implemented")
+        }
+
+        override fun onDismissRequest() {
+            TODO("Not yet implemented")
+        }
+
+    }
+
+    GroupDetailsBottomSheet(state, actions)
 }
 
 
