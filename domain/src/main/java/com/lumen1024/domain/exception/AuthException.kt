@@ -1,4 +1,4 @@
-package com.lumen1024.domain.data
+package com.lumen1024.domain.exception
 
 sealed class AuthException(message: String?) : Exception(message) {
     class WrongFormatEmail(message: String?) : AuthException(message)

@@ -3,7 +3,7 @@ package com.lumen1024.ui.screen.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lumen1024.domain.data.AuthException
+import com.lumen1024.domain.exception.AuthException
 import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.navigation.Navigator
 import com.lumen1024.ui.navigation.Screen
