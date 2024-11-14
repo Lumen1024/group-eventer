@@ -44,16 +44,16 @@ fun GroupsScreen(
         }
     }
 
-    if (state.detailsBottomSheetState is DetailsBottomSheetState.Opened) {
+    if (state.groupDetailsBottomSheetState is GroupDetailsBottomSheetState.Opened) {
         GroupDetailsBottomSheet(
-            onDismiss = state.detailsBottomSheetState.onDismiss,
-            group = state.detailsBottomSheetState.group,
+            onDismiss = state.groupDetailsBottomSheetState.onDismiss,
+            group = state.groupDetailsBottomSheetState.group,
         )
     }
 }
 
 @Composable
-fun GroupsScreenWithVM() {
+fun GroupsScreen() {
     val viewModel: GroupsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
     val actions: GroupsScreenActions = viewModel
