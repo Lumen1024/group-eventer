@@ -34,7 +34,7 @@ interface GroupDetailsActions {
     fun onDismissRequest()
 }
 
-@HiltViewModel
+@HiltViewModel(assistedFactory = GroupDetailsViewModel.Factory::class)
 class GroupDetailsViewModel @AssistedInject constructor(
     @Assisted val group: Group,
     @Assisted val onDismissRequest: () -> Unit,
