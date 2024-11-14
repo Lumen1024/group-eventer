@@ -15,7 +15,7 @@ import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.screen.auth.AuthScreen
 import com.lumen1024.ui.screen.create_event.CreateEventScreen
 import com.lumen1024.ui.screen.events.EventsScreen
-import com.lumen1024.ui.screen.groups.GroupsScreenWithVM
+import com.lumen1024.ui.screen.groups.GroupsScreen
 import com.lumen1024.ui.screen.profile.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -71,7 +71,7 @@ fun MainNavGraph(
                 Screen.Events,
                 Screen.Profile
             )) },
-        ) { GroupsScreenWithVM() }
+        ) { GroupsScreen() }
 
         composable<Screen.Events>(
             enterTransition = {

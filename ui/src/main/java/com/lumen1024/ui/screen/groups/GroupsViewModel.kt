@@ -16,7 +16,7 @@ import javax.inject.Inject
 @Immutable
 data class GroupsScreenState(
     val groups: List<Group> = emptyList(),
-    val detailsBottomSheetState: DetailsBottomSheetState = DetailsBottomSheetState.Closed,
+    val groupDetailsBottomSheetState: GroupDetailsBottomSheetState = GroupDetailsBottomSheetState.Closed,
 )
 
 @Immutable
@@ -24,13 +24,14 @@ interface GroupsScreenActions {
     fun onGroupClicked(group: Group)
 }
 
-sealed interface DetailsBottomSheetState {
-    object Closed : DetailsBottomSheetState
+@Immutable
+sealed interface GroupDetailsBottomSheetState {
+    object Closed : GroupDetailsBottomSheetState
 
     data class Opened(
         val onDismiss: () -> Unit,
         val group: Group,
-    ) : DetailsBottomSheetState
+    ) : GroupDetailsBottomSheetState
 }
 
 
@@ -44,10 +45,10 @@ class GroupsViewModel @Inject constructor(
 
     override fun onGroupClicked(group: Group) {
         _state.value = _state.value.copy(
-            detailsBottomSheetState = DetailsBottomSheetState.Opened(
+            groupDetailsBottomSheetState = GroupDetailsBottomSheetState.Opened(
                 onDismiss = {
                     _state.value = _state.value.copy(
-                        detailsBottomSheetState = DetailsBottomSheetState.Closed
+                        groupDetailsBottomSheetState = GroupDetailsBottomSheetState.Closed
                     )
                 },
                 group = group,
