@@ -3,7 +3,7 @@ package com.lumen1024.data.dto
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.GroupEventStatus
 
-data class EventDto(
+internal data class EventDto(
     val id: String = "",
     val creator: String = "",
 
@@ -17,7 +17,7 @@ data class EventDto(
     val startTime: InstantDto? = null,
 )
 
-fun Event.toEventDto() = EventDto(
+internal fun Event.toEventDto() = EventDto(
     id = id,
     creator = creator,
 
@@ -31,7 +31,7 @@ fun Event.toEventDto() = EventDto(
     startTime = startTime?.toInstantDto(),
 )
 
-fun EventDto.toEvent() = Event(
+internal fun EventDto.toEvent() = Event(
     id = id,
     creator = creator,
 

@@ -4,7 +4,7 @@ import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.data.GroupRole
 
-data class GroupDto(
+internal data class GroupDto(
     val id: String = "",
 
     val name: String = "",
@@ -14,7 +14,7 @@ data class GroupDto(
     val members: Map<String, GroupRole> = emptyMap(),
 )
 
-fun Group.toGroupDto() = GroupDto(
+internal fun Group.toGroupDto() = GroupDto(
     id = id,
 
     name = name,
@@ -24,7 +24,7 @@ fun Group.toGroupDto() = GroupDto(
     members = members,
 )
 
-fun GroupDto.toGroup() = Group(
+internal fun GroupDto.toGroup() = Group(
     id = id,
 
     name = name,
