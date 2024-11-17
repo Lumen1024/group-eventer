@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.0.21"
-agp = "8.7.1"
+agp = "8.7.2"
 coreKtx = "1.13.1"
 ksp = "2.0.21-1.0.26"
 lifecycleRuntimeKtx = "2.8.6"
