@@ -1,16 +1,16 @@
 package com.lumen1024.ui.widgets.event_details.model
 
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.data.Group
-import com.lumen1024.domain.data.GroupEventStatus
 import com.lumen1024.domain.data.TimeRange
-import com.lumen1024.domain.usecase.UserActions
-import com.lumen1024.domain.usecase.UserStateHolder
+import com.lumen1024.domain.data.VoteRequirement
+import com.lumen1024.domain.usecase.GetCurrentUserEventVoteRequirement
+import com.lumen1024.domain.usecase.SetEventFinalTimeUseCase
+import com.lumen1024.domain.usecase.VoteEventRangeUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,13 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
-@Immutable
-enum class TimeSliderUiStyle {
-    Gone,
-    Proposal,
-    Finish,
-}
 
 @Immutable
 data class EventDetailsState(
@@ -41,83 +34,81 @@ interface EventDetailsActions {
     fun onDismissRequest()
 }
 
+@Immutable
+enum class TimeSliderUiStyle {
+    Gone,
+    Proposal,
+    Finish,
+}
+
 @HiltViewModel(assistedFactory = EventDetailsViewModel.Factory::class)
 class EventDetailsViewModel @AssistedInject constructor(
     @Assisted val event: Event,
     @Assisted val group: Group,
     @Assisted val onDismissRequest: () -> Unit,
-    private val userStateHolder: UserStateHolder,
-    private val userActions: UserActions,
-) : ViewModel() {
-    var initSliderUiState = TimeSliderUiStyle.Gone // TODO
+    private val getCurrentUserEventVoteRequirement: GetCurrentUserEventVoteRequirement,
+    private val voteEventRangeUseCase: VoteEventRangeUseCase,
+    private val setEventFinalTimeUseCase: SetEventFinalTimeUseCase,
 
-    init {
-        val userId = userStateHolder.user.value?.id!! // TODO
-
-        val isVoting = event.status == GroupEventStatus.Voting
-
-
-        var alreadyVote = false
-        event.proposalRanges.keys.forEach { if (it == userId) alreadyVote = true }
-        Log.d("ded", event.proposalRanges.keys.toString())
-
-        initSliderUiState =
-            if (isVoting && !alreadyVote) {
-                TimeSliderUiStyle.Proposal
-            } else if (userId == event.creator && isVoting) {
-                TimeSliderUiStyle.Finish
-            } else {
-                TimeSliderUiStyle.Gone
-            }
-    }
+    ) : ViewModel(), EventDetailsActions {
 
     private val _state: MutableStateFlow<EventDetailsState> = MutableStateFlow(
         EventDetailsState(
             groupName = group.name,
             groupColor = Color(group.color.hex),
             event = event,
-            timeSliderState = initSliderUiState,
+            timeSliderState = TimeSliderUiStyle.Gone,
             selectiveTimeRange = TimeRange(
-                event.initialRange.start,
-                event.initialRange.start + event.duration
+                event.initialRange!!.start, // TODO: null check problem
+                event.initialRange!!.start + event.duration
             )
         )
     )
     val state = _state.asStateFlow()
-    val actions = object : EventDetailsActions {
-        override fun onConfirmRange() {
-            when (state.value.timeSliderState) {
-                TimeSliderUiStyle.Proposal -> {
-                    viewModelScope.launch {
-                        userActions.voteEventTime(event.id, state.value.selectiveTimeRange)
-                            .onFailure { Log.d("ded", it.message!!) }
-                    }
-                    this@EventDetailsViewModel.onDismissRequest()
-                }
 
-                TimeSliderUiStyle.Finish -> {
-                    viewModelScope.launch {
-                        userActions.setFinalEventTime(
-                            event.id,
-                            state.value.selectiveTimeRange.start
-                        )
-                    }
-                    this@EventDetailsViewModel.onDismissRequest()
+    init {
+        viewModelScope.launch {
+            getCurrentUserEventVoteRequirement(event.id, group.id).collect {
+                val newUiState = when (it) {
+                    VoteRequirement.VoteProposalRange -> TimeSliderUiStyle.Proposal
+                    VoteRequirement.VoteConfirmRange -> TimeSliderUiStyle.Finish
+                    else -> TimeSliderUiStyle.Gone
                 }
-
-                else -> TODO()
+                _state.value = _state.value.copy(
+                    timeSliderState = newUiState
+                )
             }
         }
-
-        override fun onRangeChange(range: TimeRange) {
-            _state.value = _state.value.copy(
-                selectiveTimeRange = range
-                //event = event.copy(proposalRanges = state.value.event.proposalRanges + (userStateHolder.userData.value!!.id to range)) // TODO: check
-            )
-        }
-
-        override fun onDismissRequest() = this@EventDetailsViewModel.onDismissRequest()
     }
+
+    override fun onConfirmRange() {
+        viewModelScope.launch {
+            when (state.value.timeSliderState) {
+                TimeSliderUiStyle.Proposal -> voteEventRangeUseCase(
+                    event.id,
+                    group.id,
+                    state.value.selectiveTimeRange
+                )
+
+                TimeSliderUiStyle.Finish -> setEventFinalTimeUseCase(
+                    event.id,
+                    group.id,
+                    state.value.selectiveTimeRange.start
+                )
+
+                else -> {}
+            }
+        }
+        onDismissRequest()
+    }
+
+    override fun onRangeChange(range: TimeRange) {
+        _state.value = _state.value.copy(
+            selectiveTimeRange = range
+        )
+    }
+
+    override fun onDismissRequest() = (this@EventDetailsViewModel.onDismissRequest).invoke()
 
     @AssistedFactory
     interface Factory {

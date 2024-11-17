@@ -2,7 +2,6 @@ package com.lumen1024.ui.widgets.event_details.ui
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -51,6 +51,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.lumen1024.domain.data.Event
+import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.TimeRange
 import com.lumen1024.ui.screen.events.FromGroupText
 import com.lumen1024.ui.shared.Avatar
@@ -58,6 +61,7 @@ import com.lumen1024.ui.shared.ScalableBottomSheet
 import com.lumen1024.ui.shared.time.TimeRangeSlider
 import com.lumen1024.ui.widgets.event_details.model.EventDetailsActions
 import com.lumen1024.ui.widgets.event_details.model.EventDetailsState
+import com.lumen1024.ui.widgets.event_details.model.EventDetailsViewModel
 import com.lumen1024.ui.widgets.event_details.model.TimeSliderUiStyle
 import java.time.Duration
 
@@ -68,7 +72,6 @@ fun EventDetailsBottomSheet(
     state: EventDetailsState,
     actions: EventDetailsActions,
 ) {
-    Log.d("ded", state.event.proposalRanges.toString())
 
     ScalableBottomSheet(
         onDismissRequest = actions::onDismissRequest,
@@ -101,7 +104,7 @@ fun EventDetailsBottomSheet(
                 items(state.event.proposalRanges.toList()) {
                     UserRange(
                         avatar = null,
-                        initialRange = state.event.initialRange,
+                        initialRange = state.event.initialRange!!, // TODO
                         votedTimeRange = it.second,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -111,7 +114,7 @@ fun EventDetailsBottomSheet(
             }
             HorizontalDivider()
             Footer(
-                initialRange = state.event.initialRange,
+                initialRange = state.event.initialRange!!, // TODO
                 duration = state.event.duration,
                 onConfirmClick = actions::onConfirmRange,
                 onRangeChange = actions::onRangeChange,
@@ -251,6 +254,27 @@ private fun UserRange(
         }
     }
 
+}
+
+@Composable
+fun EventDetailsBottomSheet(
+    event: Event,
+    group: Group,
+    onDismissRequest: () -> Unit,
+) {
+    val viewModel: EventDetailsViewModel = hiltViewModel(
+        creationCallback = { factory: EventDetailsViewModel.Factory ->
+            factory.create(
+                event = event,
+                group = group,
+                onDismissRequest = onDismissRequest
+            )
+        }
+    )
+    val state by viewModel.state.collectAsState()
+    val actions: EventDetailsActions = viewModel
+
+    EventDetailsBottomSheet(state, actions)
 }
 
 @Preview
