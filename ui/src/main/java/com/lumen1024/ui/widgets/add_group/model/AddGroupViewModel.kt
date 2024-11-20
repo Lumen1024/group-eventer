@@ -1,61 +1,107 @@
 package com.lumen1024.ui.widgets.add_group.model
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.domain.usecase.UserActions
-import com.lumen1024.ui.tools.showToast
+import com.lumen1024.domain.usecase.CreateGroupUseCase
+import com.lumen1024.domain.usecase.JoinGroupUseCase
+import com.lumen1024.ui.ToastService
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
+data class AddGroupUiState(
+    val onDismissRequest: () -> Unit,
+    val addGroupMethod: AddGroupMethod = AddGroupMethod.Join,
+    val name: String = "",
+    val password: String = "",
+    val color: GroupColor = GroupColor.entries[0],
+    val isLoading: Boolean = false,
+)
+
+enum class AddGroupMethod {
+    Join,
+    Create,
+}
+
+interface AddGroupUiActions {
+    fun changeGroupAdditionMethod(method: AddGroupMethod)
+    fun onConfirm()
+    fun onDismissRequest()
+}
+
+@HiltViewModel(assistedFactory = AddGroupViewModel.Factory::class)
 class AddGroupViewModel @Inject constructor(
-    private val userActions: UserActions,
-    @ApplicationContext private val context: Context,
-) : ViewModel() {
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
+    @Assisted private val onDismissRequest: () -> Unit,
+    private val createGroupUseCase: CreateGroupUseCase,
+    private val joinGroupUseCase: JoinGroupUseCase,
+    private val toastService: ToastService,
+) : ViewModel(), AddGroupUiActions {
+    private val _state = MutableStateFlow(AddGroupUiState(onDismissRequest))
+    val state = _state.asStateFlow()
 
-    private val _dismiss = MutableStateFlow(false)
-    val dismiss = _dismiss.asStateFlow()
-    private fun closeDialog() {
-        _dismiss.value = true
+
+    override fun changeGroupAdditionMethod(method: AddGroupMethod) {
+        _state.value = _state.value.copy(addGroupMethod = method)
     }
 
-    fun resetDismiss() {
-        _dismiss.value = false
-    }
-
-    fun createGroup(name: String, password: String, color: GroupColor) {
+    override fun onConfirm() {
         viewModelScope.launch {
-            val result = userActions.createGroup(
-                name,
-                password,
-                color
-            ) // todo: maybe color don't work
-            if (result.isSuccess) {
-                context.showToast("\"$name\" group added")
-                closeDialog()
+            _state.value = _state.value.copy(isLoading = true)
+            when (state.value.addGroupMethod) {
+                AddGroupMethod.Join -> joinGroup(
+                    state.value.name,
+                    state.value.password
+                )
+
+                AddGroupMethod.Create -> createGroup(
+                    state.value.name,
+                    state.value.password,
+                    state.value.color
+                )
             }
-            // TODO: add error handle
+            _state.value = _state.value.copy(isLoading = false)
         }
     }
 
-    fun joinGroup(name: String, password: String) {
-        viewModelScope.launch {
-            val r = userActions.joinGroup(name, password)
-            if (r.isSuccess) {
-                context.showToast("Joined group \"$name\"")
-                closeDialog()
-            } else if (r.isFailure) {
-                context.showToast(r.exceptionOrNull()?.message ?: "Error join group")
-            }
-            // TODO: add error handle
+
+    private suspend fun createGroup(
+        name: String,
+        password: String,
+        color: GroupColor
+    ): Result<Unit> {
+        val result = createGroupUseCase(
+            name,
+            password,
+            color
+        ) // todo: maybe color don't work
+        if (result.isSuccess) {
+            toastService.showToast("\"$name\" group added")
+            onDismissRequest()
         }
+        return result
+    }
+
+    private suspend fun joinGroup(name: String, password: String): Result<Unit> {
+        val r = joinGroupUseCase(name, password)
+        if (r.isSuccess) {
+            toastService.showToast("Joined group \"$name\"")
+            onDismissRequest()
+        } else if (r.isFailure) {
+            toastService.showToast(r.exceptionOrNull()?.message ?: "Error join group")
+        }
+        // TODO: add error handle
+        return r
+    }
+
+    override fun onDismissRequest() = this@AddGroupViewModel.onDismissRequest.invoke()
+
+    @AssistedFactory
+    interface Factory {
+        fun create(onDismissRequest: () -> Unit): AddGroupViewModel
     }
 }
