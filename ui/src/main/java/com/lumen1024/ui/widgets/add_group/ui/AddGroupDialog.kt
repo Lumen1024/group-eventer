@@ -12,9 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,41 +29,26 @@ import com.lumen1024.ui.shared.GroupColorPicker
 import com.lumen1024.ui.shared.SimpleTabSwitch
 import com.lumen1024.ui.shared.text_field.NameTextField
 import com.lumen1024.ui.shared.text_field.PasswordTextField
+import com.lumen1024.ui.widgets.add_group.model.AddGroupMethod
+import com.lumen1024.ui.widgets.add_group.model.AddGroupUiActions
+import com.lumen1024.ui.widgets.add_group.model.AddGroupUiState
 import com.lumen1024.ui.widgets.add_group.model.AddGroupViewModel
 
 @Composable
 fun AddGroupDialog(
-    onDismiss: () -> Unit,
-    viewModel: AddGroupViewModel = hiltViewModel(),
+    state: AddGroupUiState,
+    actions: AddGroupUiActions,
 ) {
-    val dismiss by viewModel.dismiss.collectAsState()
-    LaunchedEffect(dismiss) {
-        if (dismiss) {
-            onDismiss()
-            viewModel.resetDismiss()
-        }
-    }
 
-    val isLoading by viewModel.isLoading.collectAsState()
+    //val isLoading by viewModel.isLoading.collectAsState()
 
     var selectedColor by remember { mutableStateOf(GroupColor.entries[0]) }
 
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isCreate by remember { mutableStateOf(false) }
-
-    val onConfirm by remember {
-        derivedStateOf {
-            // TODO: refactor
-            if (isCreate)
-                return@derivedStateOf { viewModel.createGroup(name, password, selectedColor) }
-            else
-                return@derivedStateOf { viewModel.joinGroup(name, password) }
-        }
-    }
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = actions::onDismissRequest,
         properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
     ) {
         Column(
@@ -86,7 +68,12 @@ fun AddGroupDialog(
                 SimpleTabSwitch(
                     initialTab = 0,
                     tabs = listOf("Join", "Create"),
-                    onChange = { index -> isCreate = (index == 1) }
+                    onChange = { index ->
+                        when (index) {
+                            0 -> actions.changeGroupAdditionMethod(AddGroupMethod.Join)
+                            1 -> actions.changeGroupAdditionMethod(AddGroupMethod.Create)
+                        }
+                    }
                 )
 
                 NameTextField(
@@ -100,7 +87,7 @@ fun AddGroupDialog(
                     onChange = { password = it },
                 )
 
-                if (isCreate) {
+                if (state.addGroupMethod == AddGroupMethod.Create) {
                     GroupColorPicker(
                         colors = GroupColor.entries,
                         selectedColor = selectedColor,
@@ -112,9 +99,9 @@ fun AddGroupDialog(
 
             DialogButtons(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isLoading = isLoading,
-                onDismiss = onDismiss,
-                onConfirm = onConfirm
+                isLoading = state.isLoading,
+                onDismiss = actions::onDismissRequest,
+                onConfirm = actions::onConfirm
             )
         }
     }
@@ -145,4 +132,13 @@ fun DialogButtons(
             }
         }
     }
+}
+
+@Composable
+fun AddGroupDialog(onDismissRequest: () -> Unit) {
+    hiltViewModel(
+        creationCallback = { factory: AddGroupViewModel.Factory ->
+            factory.create(onDismissRequest)
+        }
+    )
 }
