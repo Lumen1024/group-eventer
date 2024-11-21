@@ -12,11 +12,13 @@ internal data class UserDto(
 internal fun User.toUserDto() = UserDto(
     id = id,
     name = name,
+    avatarUrl = avatarUrl,
     groups = groups,
 )
 
 internal fun UserDto.toUser() = User(
     id = id,
     name = name,
+    avatarUrl = avatarUrl,
     groups = groups,
 )

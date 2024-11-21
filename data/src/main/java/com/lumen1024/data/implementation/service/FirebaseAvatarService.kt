@@ -13,7 +13,7 @@ class FirebaseAvatarService @Inject constructor(
 ) : AvatarService {
     val storage = firebase.storage.reference.child("avatars")
 
-    override suspend fun updateAvatar(
+    override suspend fun uploadAvatar(
         userId: String,
         imageURI: String
     ): Result<Unit> {
