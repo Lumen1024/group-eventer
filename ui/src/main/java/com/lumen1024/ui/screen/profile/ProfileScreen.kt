@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.canhub.cropper.CropImageContract
 import com.lumen1024.ui.shared.Avatar
 import com.lumen1024.ui.shared.Username
@@ -23,14 +20,14 @@ import com.lumen1024.ui.tools.getCropperOptions
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(),
+    state: ProfileUiState,
+    actions: ProfileUiActions,
 ) {
-    val userData by viewModel.userStateHolder.user.collectAsState()
 
     val galleryLauncher =
         rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
             result.uriContent?.let {
-                viewModel.updateAvatar(it)
+                actions.updateAvatar(it)
             }
         }
 
@@ -57,12 +54,12 @@ fun ProfileScreen(
                 modifier = Modifier
                     .size(232.dp),
                 onClick = { galleryLauncher.launch(getCropperOptions(cropImageColors)) },
-                url = userData?.avatarUrl
+                url = state.avatarUri
             )
             Username(
-                username = userData?.name ?: "",
+                username = state.name,
                 showEdit = true,
-                onEdited = { viewModel.updateName(it) }
+                onEdited = { actions.updateName(it) }
             )
         }
     }

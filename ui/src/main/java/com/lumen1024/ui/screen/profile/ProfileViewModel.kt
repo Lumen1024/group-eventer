@@ -1,92 +1,64 @@
 package com.lumen1024.ui.screen.profile
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lumen1024.domain.exception.AuthException
-import com.lumen1024.domain.service.AuthService
-import com.lumen1024.domain.usecase.UserDataRepository
-import com.lumen1024.domain.usecase.UserStateHolder
+import com.lumen1024.domain.usecase.ChangeUserAvatarUseCase
+import com.lumen1024.domain.usecase.ChangeUserNameUseCase
+import com.lumen1024.domain.usecase.GetCurrentUserUseCase
+import com.lumen1024.ui.ToastService
 import com.lumen1024.ui.navigation.Navigator
-import com.lumen1024.ui.tools.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Immutable
+data class ProfileUiState(
+    val avatarUri: Uri? = null,
+    val name: String = "",
+)
+
+@Immutable
+interface ProfileUiActions {
+    fun updateName(name: String)
+    fun updateAvatar(imageUri: Uri)
+}
+
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val toastService: ToastService,
     private val navigator: Navigator,
-    private val authService: AuthService,
-    private val userDataRepository: UserDataRepository,
-    val userStateHolder: UserStateHolder,
-) : ViewModel() {
-    fun updateName(name: String) {
-        viewModelScope.launch {
-            userDataRepository.update(
-                this@ProfileViewModel.user.user.value?.id ?: return@launch,
-                mapOf(
-                    "name" to name
-                )
-            ).onFailure {
-                val messageResId = when (it) {
-                    is AuthException -> it.message
-                    else -> AuthException.Unknown("Error when updating name").message
-                }
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val changeUserNameUseCase: ChangeUserNameUseCase,
+    private val changeUserAvatarUseCase: ChangeUserAvatarUseCase,
+) : ViewModel(), ProfileUiActions {
 
-                context.showToast(messageResId ?: "error") // TODO: res?
+    private val _state = MutableStateFlow(ProfileUiState())
+    val state = _state.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+
+            getCurrentUserUseCase().collect {
+                if (it == null) throw Exception("User not found")
+
+                _state.value = _state.value.copy(
+                    avatarUri = it.avatarUrl?.let { Uri.parse(it) },
+                    name = it.name,
+                )
             }
+
         }
     }
 
-    fun updateAvatar(imageUri: Uri) {
-        viewModelScope.launch {
-            try {
-                val userId = this@ProfileViewModel.user.user.value?.id ?: return@launch
+    override fun updateName(name: String) {
+        viewModelScope.launch { changeUserNameUseCase(name) }
+    }
 
-                val avatarUrl = userDataRepository.uploadAvatar(
-                    userId, imageUri.toString()
-                ).onFailure {
-                    val messageResId = when (it) {
-                        is AuthException -> it.message
-                        else -> {
-                            val exception =
-                                AuthException.Unknown("Error when loading avatar image to server")
-
-                            Log.e("ProfileViewModel", exception.message, exception)
-
-                            exception.message
-                        }
-                    }
-
-                    context.showToast(messageResId ?: "error")
-                }.getOrNull() ?: return@launch
-
-                userDataRepository.update(
-                    userId, mapOf(
-                        "avatarUrl" to avatarUrl.toString()
-                    )
-                ).onFailure {
-                    val messageResId = when (it) {
-                        is AuthException -> it.message
-                        else -> {
-                            val exception =
-                                AuthException.Unknown("Error when updating avatar")
-
-                            Log.e("ProfileViewModel", exception.message, exception)
-
-                            exception.message
-                        }
-                    }
-
-                    context.showToast(messageResId ?: "error")
-                }
-            } catch (e: Exception) {
-                context.showToast("Error when setting avatar")
-            }
-        }
+    override fun updateAvatar(imageUri: Uri) {
+        viewModelScope.launch { changeUserAvatarUseCase(imageUri.toString()) }
     }
 }
