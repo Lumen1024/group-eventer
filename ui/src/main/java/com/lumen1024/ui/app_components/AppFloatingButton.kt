@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.lumen1024.domain.usecase.UserStateHolder
 import com.lumen1024.ui.navigation.Screen
 import com.lumen1024.ui.navigation.getCurrentScreenAsState
 import com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog
@@ -28,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FloatingButtonViewModel @Inject constructor(
-    val userStateHolder: UserStateHolder
+    //val userStateHolder: UserStateHolder // TODO: ref
 ) : ViewModel()
 
 @Composable
@@ -39,7 +38,7 @@ fun AppFloatingButton(
 ) {
     val currentScreen by navController.getCurrentScreenAsState()
 
-    val hasGroups by remember { derivedStateOf { !viewModel.userStateHolder.groups.value.isEmpty() } }
+    //val hasGroups by remember { derivedStateOf { !viewModel.userStateHolder.groups.value.isEmpty() } }
 
     var showAddGroupDialog by remember { mutableStateOf(false) }
 
@@ -47,7 +46,7 @@ fun AppFloatingButton(
         derivedStateOf {
             when (currentScreen) {
                 Screen.Groups -> true
-                Screen.Events -> hasGroups
+                Screen.Events -> true//hasGroups
                 else -> false
             }
         }
