@@ -1,5 +1,7 @@
 package com.lumen1024.ui.widgets.add_group.model
 
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.GroupColor
@@ -8,11 +10,11 @@ import com.lumen1024.domain.usecase.JoinGroupUseCase
 import com.lumen1024.ui.ToastService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class AddGroupUiState(
     val onDismissRequest: () -> Unit,
@@ -35,7 +37,7 @@ interface AddGroupUiActions {
 }
 
 @HiltViewModel(assistedFactory = AddGroupViewModel.Factory::class)
-class AddGroupViewModel @Inject constructor(
+class AddGroupViewModel @AssistedInject constructor(
     @Assisted private val onDismissRequest: () -> Unit,
     private val createGroupUseCase: CreateGroupUseCase,
     private val joinGroupUseCase: JoinGroupUseCase,
@@ -103,5 +105,17 @@ class AddGroupViewModel @Inject constructor(
     @AssistedFactory
     interface Factory {
         fun create(onDismissRequest: () -> Unit): AddGroupViewModel
+    }
+
+    companion object {
+
+        @Composable
+        private fun create(
+            onDismissRequest: () -> Unit
+        ): AddGroupViewModel {
+            return hiltViewModel { factory: Factory ->
+                factory.create(onDismissRequest)
+            }
+        }
     }
 }
