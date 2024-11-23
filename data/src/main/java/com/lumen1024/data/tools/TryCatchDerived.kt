@@ -1,4 +1,4 @@
-package com.lumen1024.data
+package com.lumen1024.data.tools
 
 internal inline fun <T> tryCatchDerived(exceptionHeader: String, block: () -> T): Result<T> {
     return try {

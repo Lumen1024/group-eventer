@@ -3,7 +3,7 @@ package com.lumen1024.data.implementation.service
 import android.net.Uri
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
-import com.lumen1024.data.tryCatchDerived
+import com.lumen1024.data.tools.tryCatchDerived
 import com.lumen1024.domain.service.AvatarService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
