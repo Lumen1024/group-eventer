@@ -1,10 +1,10 @@
 package com.lumen1024.domain.usecase
 
-import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.GroupRepository
 import com.lumen1024.domain.service.AuthService
+import com.lumen1024.domain.tools.FlowList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow

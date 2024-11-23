@@ -53,6 +53,7 @@ class GroupDetailsViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch {
+            val a = getUsersByGroupUseCase(group)
             getUsersByGroupUseCase(group).collect {
                 _state.value = _state.value.copy(users = it)
             }
