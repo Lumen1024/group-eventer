@@ -1,4 +1,4 @@
-package com.lumen1024.domain
+package com.lumen1024.domain.tools
 
 import kotlinx.coroutines.flow.Flow
 
