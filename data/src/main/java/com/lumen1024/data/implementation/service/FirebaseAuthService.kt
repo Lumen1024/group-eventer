@@ -4,7 +4,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
-import com.lumen1024.data.tryCatchDerived
+import com.lumen1024.data.tools.tryCatchDerived
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.UserRepository
 import com.lumen1024.domain.service.AuthService

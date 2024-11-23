@@ -5,7 +5,7 @@ import com.google.firebase.firestore.firestore
 import com.lumen1024.data.dto.UserDto
 import com.lumen1024.data.dto.toUser
 import com.lumen1024.data.dto.toUserDto
-import com.lumen1024.data.tryCatchDerived
+import com.lumen1024.data.tools.tryCatchDerived
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.UserRepository
 import com.lumen1024.domain.service.AvatarService
