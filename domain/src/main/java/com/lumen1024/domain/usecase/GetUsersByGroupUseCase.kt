@@ -1,10 +1,10 @@
 package com.lumen1024.domain.usecase
 
-import com.lumen1024.domain.FlowMap
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupRole
 import com.lumen1024.domain.data.User
 import com.lumen1024.domain.repository.UserRepository
+import com.lumen1024.domain.tools.FlowMap
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
