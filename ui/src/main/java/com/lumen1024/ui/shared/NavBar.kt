@@ -1,4 +1,4 @@
-package com.lumen1024.ui.navigation
+package com.lumen1024.ui.shared
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
@@ -16,6 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.lumen1024.ui.lib.navigator.Navigator
+import com.lumen1024.ui.navigation.HasIcon
+import com.lumen1024.ui.navigation.HasLabel
+import com.lumen1024.ui.navigation.Screen
+import com.lumen1024.ui.tools.getCurrentScreenAsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.data.GroupColor
 import com.lumen1024.domain.usecase.CreateGroupUseCase
 import com.lumen1024.domain.usecase.JoinGroupUseCase
-import com.lumen1024.ui.ToastService
+import com.lumen1024.ui.lib.toast.ToastService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

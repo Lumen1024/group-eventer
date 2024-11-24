@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.tab
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme

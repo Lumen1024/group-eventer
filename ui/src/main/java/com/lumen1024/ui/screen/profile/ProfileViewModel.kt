@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.lumen1024.domain.usecase.ChangeUserAvatarUseCase
 import com.lumen1024.domain.usecase.ChangeUserNameUseCase
 import com.lumen1024.domain.usecase.GetCurrentUserUseCase
-import com.lumen1024.ui.ToastService
-import com.lumen1024.ui.navigation.Navigator
+import com.lumen1024.ui.lib.navigator.Navigator
+import com.lumen1024.ui.lib.toast.ToastService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

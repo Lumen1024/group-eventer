@@ -11,9 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.lumen1024.ui.navigation.HOME_PAGE_BOTTOM_BAR_ITEMS
-import com.lumen1024.ui.navigation.NavBar
-import com.lumen1024.ui.navigation.getCurrentScreenAsState
+import com.lumen1024.ui.shared.NavBar
+import com.lumen1024.ui.tools.HOME_PAGE_BOTTOM_BAR_ITEMS
+import com.lumen1024.ui.tools.getCurrentScreenAsState
 
 @Composable
 fun AppBottomBar(

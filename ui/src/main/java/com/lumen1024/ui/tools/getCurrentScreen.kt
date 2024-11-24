@@ -1,4 +1,4 @@
-package com.lumen1024.ui.navigation
+package com.lumen1024.ui.tools
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -7,6 +7,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
+import com.lumen1024.ui.navigation.Screen
 
 @Composable
 fun NavHostController.getCurrentScreenAsState(): State<Screen?> {
