@@ -1,4 +1,4 @@
-package com.lumen1024.ui.shared
+package com.lumen1024.ui.shared.tab
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box

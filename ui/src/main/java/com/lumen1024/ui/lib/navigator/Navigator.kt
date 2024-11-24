@@ -1,6 +1,7 @@
-package com.lumen1024.ui.navigation
+package com.lumen1024.ui.lib.navigator
 
 import androidx.navigation.NavOptionsBuilder
+import com.lumen1024.ui.navigation.Screen
 import kotlinx.coroutines.channels.Channel
 
 interface Navigator {

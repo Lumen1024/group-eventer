@@ -12,11 +12,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.lumen1024.domain.service.AuthService
-import com.lumen1024.ui.navigation.Navigator
+import com.lumen1024.ui.lib.navigator.Navigator
 import com.lumen1024.ui.navigation.Screen
-import com.lumen1024.ui.navigation.getCurrentScreenAsState
 import com.lumen1024.ui.screen.events.EventsTopBar
 import com.lumen1024.ui.screen.profile.ProfileTopBar
+import com.lumen1024.ui.tools.getCurrentScreenAsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

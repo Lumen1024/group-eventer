@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.lumen1024.ui.navigation.Screen
-import com.lumen1024.ui.navigation.getCurrentScreenAsState
+import com.lumen1024.ui.tools.getCurrentScreenAsState
 import com.lumen1024.ui.widgets.add_group.ui.AddGroupDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.lumen1024.ui.navigation
+package com.lumen1024.ui.lib.navigator
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

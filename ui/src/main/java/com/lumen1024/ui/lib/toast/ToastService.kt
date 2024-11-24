@@ -1,4 +1,4 @@
-package com.lumen1024.ui
+package com.lumen1024.ui.lib.toast
 
 import android.content.Context
 import com.lumen1024.ui.tools.showToast
