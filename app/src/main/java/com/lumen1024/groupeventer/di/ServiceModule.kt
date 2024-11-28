@@ -3,6 +3,7 @@ package com.lumen1024.groupeventer.di
 import com.lumen1024.data.implementation.service.FirebaseAuthService
 import com.lumen1024.data.implementation.service.FirebaseAvatarService
 import com.lumen1024.domain.service.AuthService
+import com.lumen1024.domain.service.AvatarService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,5 +17,5 @@ abstract class ServiceModule {
     abstract fun bindAuthService(service: FirebaseAuthService): AuthService
 
     @Binds
-    abstract fun bindAvatarService(service: FirebaseAvatarService): FirebaseAvatarService
+    abstract fun bindAvatarService(service: FirebaseAvatarService): AvatarService
 }

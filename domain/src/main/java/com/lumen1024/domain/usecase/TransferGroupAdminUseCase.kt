@@ -4,8 +4,9 @@ import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupRole
 import com.lumen1024.domain.repository.GroupRepository
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class TransferGroupAdminUseCase(
+class TransferGroupAdminUseCase @Inject constructor(
     private val groupRepository: GroupRepository,
 ) {
 
