@@ -52,10 +52,12 @@ class FirebaseAuthService @Inject constructor(
         }
     }
 
-    override suspend fun register(name: String, email: String, password: String): Result<Unit> {
+    override suspend fun register(email: String, password: String): Result<String> {
         return tryCatchDerived("Failed register") {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             authResult.user ?: throw Exception("User is null")
+            return@tryCatchDerived authResult.user?.uid
+                ?: throw Exception("User id is null")
         }
     }
 

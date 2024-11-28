@@ -9,6 +9,6 @@ interface AuthService {
     fun getCurrentUser(): Flow<User?>
 
     suspend fun login(email: String, password: String): Result<Unit>
-    suspend fun register(name: String, email: String, password: String): Result<Unit>
+    suspend fun register(email: String, password: String): Result<String>
     suspend fun logout(): Result<Unit>
 }
