@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.create_event
+package com.lumen1024.ui.screen.create_event.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

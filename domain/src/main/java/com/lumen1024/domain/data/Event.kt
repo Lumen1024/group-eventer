@@ -2,10 +2,12 @@ package com.lumen1024.domain.data
 
 import java.time.Duration
 import java.time.Instant
+import java.util.UUID
 
 data class Event(
-    val id: String,
-    val creator: String,
+    val id: String = UUID.randomUUID().toString(),
+    val creator: String = "",
+    val group: String = "",
 
     val name: String = "New Event",
     val status: GroupEventStatus = GroupEventStatus.Voting,
