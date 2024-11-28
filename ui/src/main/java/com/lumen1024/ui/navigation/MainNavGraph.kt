@@ -15,7 +15,7 @@ import com.lumen1024.domain.service.AuthService
 import com.lumen1024.ui.lib.navigator.NavigationEffects
 import com.lumen1024.ui.lib.navigator.Navigator
 import com.lumen1024.ui.screen.auth.AuthScreen
-import com.lumen1024.ui.screen.create_event.CreateEventScreen
+import com.lumen1024.ui.screen.create_event.ui.CreateEventScreen
 import com.lumen1024.ui.screen.events.EventsScreen
 import com.lumen1024.ui.screen.groups.GroupsScreen
 import com.lumen1024.ui.screen.profile.ProfileScreen
