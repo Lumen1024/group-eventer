@@ -93,9 +93,9 @@ fun EventCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 if (event.status == GroupEventStatus.Voting)
-                    EventCardTimeRange(timeRange = event.initialRange)
+                    EventCardTimeRange(timeRange = event.initialRange!!)
                 else
-                    EventCardTime(time = event.startTime)
+                    EventCardTime(time = event.startTime!!)
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)

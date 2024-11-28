@@ -6,9 +6,9 @@ import com.lumen1024.data.dto.EventDto
 import com.lumen1024.data.dto.toEvent
 import com.lumen1024.data.dto.toEventDto
 import com.lumen1024.data.tools.tryCatchDerived
-import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Event
 import com.lumen1024.domain.repository.EventRepository
+import com.lumen1024.domain.tools.FlowList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
