@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.canhub.cropper.CropImageContract
 import com.lumen1024.ui.shared.Avatar
 import com.lumen1024.ui.shared.Username
@@ -63,4 +66,13 @@ fun ProfileScreen(
             )
         }
     }
+}
+
+@Composable
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val actions = viewModel
+    ProfileScreen(state, actions)
 }

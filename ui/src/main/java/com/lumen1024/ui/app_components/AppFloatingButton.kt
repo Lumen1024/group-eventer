@@ -74,5 +74,5 @@ fun AppFloatingButton(
     }
 
     if (showAddGroupDialog)
-        AddGroupDialog(onDismiss = { showAddGroupDialog = false })
+        AddGroupDialog(onDismissRequest = { showAddGroupDialog = false })
 }

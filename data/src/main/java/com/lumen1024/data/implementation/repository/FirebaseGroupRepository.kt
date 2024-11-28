@@ -6,9 +6,9 @@ import com.lumen1024.data.dto.GroupDto
 import com.lumen1024.data.dto.toGroup
 import com.lumen1024.data.dto.toGroupDto
 import com.lumen1024.data.tools.tryCatchDerived
-import com.lumen1024.domain.FlowList
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.repository.GroupRepository
+import com.lumen1024.domain.tools.FlowList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

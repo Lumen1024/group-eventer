@@ -21,14 +21,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.ui.screen.create_event.model.CreateEventUiAction
 import com.lumen1024.ui.screen.create_event.model.CreateEventUiState
+import com.lumen1024.ui.screen.create_event.model.CreateEventViewModel
 import com.lumen1024.ui.screen.create_event.model.TimePickerState
 import com.lumen1024.ui.shared.tab.SimpleTabSwitch
 import com.lumen1024.ui.shared.tab.TextSelect
@@ -158,5 +161,14 @@ fun CreateEventScreen(
     } else {
         CircularProgressIndicator()
     }
+}
+
+@Composable
+fun CreateEventScreen(
+    viewModel: CreateEventViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsState()
+    val actions = viewModel::onAction
+    CreateEventScreen(state, actions)
 }
 

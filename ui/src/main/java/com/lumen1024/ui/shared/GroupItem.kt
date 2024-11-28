@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.lumen1024.domain.data.Group
 import com.lumen1024.domain.data.GroupColor
-import com.lumen1024.domain.data.MemberData
+import com.lumen1024.domain.data.GroupRole
 import com.lumen1024.ui.config.GroupEventerTheme
 import java.util.UUID
 
@@ -81,8 +81,8 @@ fun GroupCardPreview() {
                         name = "Dota 2",
                         color = GroupColor.RED,
                         members = mapOf(
-                            UUID.randomUUID().toString() to MemberData(),
-                            UUID.randomUUID().toString() to MemberData()
+                            UUID.randomUUID().toString() to GroupRole.Admin,
+                            UUID.randomUUID().toString() to GroupRole.Member
                         )
                     ),
                     modifier = Modifier

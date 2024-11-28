@@ -1,5 +1,7 @@
 package com.lumen1024.domain.data
 
+import java.util.UUID
+
 enum class GroupColor(val hex: Long) {
     RED(0xFFE53935),
     PINK(0xFFD81B60),
@@ -11,7 +13,7 @@ enum class GroupColor(val hex: Long) {
 }
 
 data class Group(
-    val id: String,
+    val id: String = UUID.randomUUID().toString(),
 
     val name: String = "New Group",
     val color: GroupColor = GroupColor.RED,
