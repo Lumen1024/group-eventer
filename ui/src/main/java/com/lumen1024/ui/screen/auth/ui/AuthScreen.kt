@@ -1,4 +1,4 @@
-package com.lumen1024.ui.screen.auth
+package com.lumen1024.ui.screen.auth.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -30,11 +30,9 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -45,6 +43,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lumen1024.presentation.R
+import com.lumen1024.ui.screen.auth.model.AuthMethod
+import com.lumen1024.ui.screen.auth.model.AuthUiAction
+import com.lumen1024.ui.screen.auth.model.AuthUiState
+import com.lumen1024.ui.screen.auth.model.AuthViewModel
 import com.lumen1024.ui.shared.text_field.EmailTextField
 import com.lumen1024.ui.shared.text_field.NameTextField
 import com.lumen1024.ui.shared.text_field.PasswordTextField
@@ -52,20 +54,18 @@ import com.lumen1024.ui.tools.systemPadding
 
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel = hiltViewModel(),
+    state: AuthUiState,
+    onAction: (AuthUiAction) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-
-    val isLoading = viewModel.isLoading.collectAsState()
-    val nameError by viewModel.nameError.collectAsState()
-    val passwordError by viewModel.passwordError.collectAsState()
-    val emailError by viewModel.emailError.collectAsState()
-
-    var name by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    val selectedTabIndex by remember(state.authMethod) {
+        derivedStateOf {
+            when (state.authMethod) {
+                AuthMethod.Login -> 0
+                AuthMethod.Register -> 1
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.systemPadding()
@@ -74,17 +74,23 @@ fun AuthScreen(
             modifier = Modifier
                 .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TabRow(
-                selectedTabIndex = selectedTabIndex
-            ) {
+
+            TabRow(selectedTabIndex = selectedTabIndex) {
                 val tabModifier = Modifier.padding(vertical = 20.dp)
-                Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }) {
+
+                Tab(
+                    selected = selectedTabIndex == 0,
+                    onClick = { onAction(AuthUiAction.OnAuthMethodChanged(AuthMethod.Login)) }
+                ) {
                     Text(
                         text = stringResource(R.string.sign_in),
                         modifier = tabModifier
                     )
                 }
-                Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }) {
+                Tab(
+                    selected = selectedTabIndex == 1,
+                    onClick = { onAction(AuthUiAction.OnAuthMethodChanged(AuthMethod.Register)) }
+                ) {
                     Text(
                         modifier = tabModifier,
                         text = stringResource(R.string.sign_up),
@@ -108,43 +114,37 @@ fun AuthScreen(
                 ) {
                     NameTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = name, onChange = {
-                            name = it
-                        },
-                        nameErrorState = nameError,
+                        value = state.name,
+                        onChange = { onAction(AuthUiAction.OnNameChanged(it)) },
+                        //nameErrorState = nameError,
                         keyboardAction = ImeAction.Next to { focusManager.moveFocus(FocusDirection.Down) }
                     )
                 }
 
                 EmailTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = email,
-                    onChange = { email = it },
-                    emailErrorState = emailError,
+                    value = state.email,
+                    onChange = { onAction(AuthUiAction.OnEmailChanged(it)) },
+                    //emailErrorState = emailError,
                     keyboardAction = ImeAction.Next to { focusManager.moveFocus(FocusDirection.Down) }
                 )
                 PasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = password,
-                    onChange = { password = it },
-                    passwordErrorState = passwordError
+                    value = state.password,
+                    onChange = { onAction(AuthUiAction.OnPasswordChanged(it)) },
+                    //passwordErrorState = passwordError
                 )
 
-                IconButton(onClick = { viewModel.googleClicked() }) {
+                IconButton(onClick = { onAction(AuthUiAction.OnGoogleClicked) }) {
                     Icon(imageVector = Icons.Default.Build, "")
                 }
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        if (selectedTabIndex == 0)
-                            viewModel.handleLogin(email, password)
-                        else
-                            viewModel.handleRegister(email, name, password)
-                    },
-                    enabled = !isLoading.value
+                    onClick = { onAction(AuthUiAction.OnConfirmClicked) },
+                    enabled = !state.isLoading
                 ) {
-                    if (isLoading.value) {
+                    if (state.isLoading) {
                         CircularProgressIndicator()
                     } else {
                         AnimatedContent(
@@ -181,5 +181,14 @@ fun AuthScreen(
             }
         }
     }
+}
+
+@Composable
+fun AuthScreen(
+    viewModel: AuthViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsState()
+    val action = viewModel::onAction
+    AuthScreen(state, action)
 }
 
